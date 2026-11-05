@@ -202,3 +202,13 @@ label.lbl { display: block; font: 600 var(--t-sm)/1.3 var(--font-sans); margin-b
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- v1.0 additions (SAT-13 final specs). Additive only: no v0.1 value changed. ---------- */
+:root {
+  --z-gate: 20; --z-dock: 30; --z-scrim: 40; --z-sheet: 50; --z-toast: 60;
+  --tap-coarse: 2.75rem;      /* chips and small buttons grow to 44px on pointer: coarse */
+  --cell: 1.625rem;           /* heat-strip cell minimum, 26px (>= 24px, WCAG 2.2 SC 2.5.8) */
+  --sheet-w: 26rem;
+  --gate-h: 0px;              /* runtime: height of the sticky approval gate (ResizeObserver) */
+  --dock-h: 0px;              /* runtime: height of the mobile approval dock */
+}
