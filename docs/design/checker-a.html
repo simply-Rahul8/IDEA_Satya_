@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checker A · Editorial Paper · Satya (draft design)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+  /* Variant A: one calm column. Writing happens on "paper"; underlines draw in place. */
+  main { padding-block: var(--s-6) var(--s-9); }
+  .hero { max-width: 44rem; margin-inline: auto; text-align: center; }
+  .hero h1 { font-size: var(--t-3xl); margin: var(--s-3) 0 var(--s-4); }
+  .hero h1 em { font-style: italic; color: var(--accent-ink); }
+  .hero p { font-size: var(--t-md); color: var(--ink-2); max-width: 36rem; margin-inline: auto; }
+  .sheet-wrap { max-width: 44rem; margin: var(--s-7) auto 0; }
+  .paper { position: relative; background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: var(--shadow-2); }
+  .paper:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .backdrop, .paper textarea { font: 400 var(--t-lg)/1.7 var(--font-display); padding: var(--s-5); margin: 0; border: 0; white-space: pre-wrap; overflow-wrap: anywhere; width: 100%; min-height: 15rem; letter-spacing: 0; }
+  .backdrop { position: absolute; inset: 0; color: transparent; pointer-events: none; overflow: hidden; }
+  .backdrop .hl { padding: 0; }
+  .paper textarea { position: relative; display: block; background: transparent; color: var(--ink); resize: none; overflow: hidden; outline: none; }
+  .paper textarea::placeholder { color: var(--ink-3); }
+  .paper-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); justify-content: space-between; padding: var(--s-3) var(--s-5); border-top: 1px solid var(--line); }
+  .paper-foot .acts { display: flex; gap: var(--s-2); }
+  .count { font: 500 var(--t-xs)/1 var(--font-mono); color: var(--ink-3); }
+  .verdict { margin-top: var(--s-6); padding: var(--s-6) var(--s-5); display: none; }
+  .verdict.is-on { display: block; animation: rise var(--dur-3) var(--ease) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .v-top { display: grid; gap: var(--s-4); }
+  .v-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-3); }
+  .v-label h2 { font-size: var(--t-2xl); }
+  .v-label span { font-size: var(--t-md); color: var(--ink-2); }
+  .tally-row { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .flags { list-style: none; margin: var(--s-5) 0 0; padding: 0; display: grid; gap: var(--s-2); }
+  .flags button { width: 100%; text-align: start; display: grid; grid-template-columns: auto 1fr auto; gap: var(--s-3); align-items: center; min-height: var(--tap); padding: var(--s-3) var(--s-4); background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-md); color: var(--ink); font: inherit; cursor: pointer; }
+  .flags button:hover { border-color: var(--accent); }
+  .flags q { font-family: var(--font-display); font-size: var(--t-md); }
+  .flags small { display: block; color: var(--ink-2); font-size: var(--t-xs); }
+  .fine { max-width: 44rem; margin: var(--s-6) auto 0; display: grid; gap: var(--s-3); font-size: var(--t-xs); color: var(--ink-2); }
+  @media (max-width: 30rem) { .flags button { grid-template-columns: 1fr auto; } .flags .flag { grid-column: 1 / -1; justify-self: start; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to checker</a>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Checker · variant A of 3 · <a href="index.html">all variants</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <p class="eyebrow">Is my claim safe?</p>
+      <h1>Check your listing copy <em>before</em> a marketplace does.</h1>
+      <p>Paste your product description. Risky phrases are underlined as you type, each with the rule behind it. No login, nothing stored.</p>
+    </section>
+
+    <section class="sheet-wrap" aria-labelledby="lbl">
+      <label class="sr-only" id="lbl" for="txt">Product listing copy to check</label>
+      <div class="paper">
+        <div class="backdrop" id="bd" aria-hidden="true"></div>
+        <textarea id="txt" spellcheck="false" placeholder="Paste or type your product copy here…" aria-describedby="live"></textarea>
+        <div class="paper-foot">
+          <span class="count" id="count">0 / 5,000</span>
+          <div class="acts">
+            <button class="btn btn-ghost btn-sm" type="button" id="clear">Clear</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="sample">Try a sample</button>
+          </div>
+        </div>
+      </div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+
+      <article class="card verdict" id="verdict" aria-labelledby="v-title">
+        <div class="v-top">
+          <p class="eyebrow" id="v-title">Verdict · rule set <span id="rs"></span></p>
+          <div class="v-label"><h2 id="v-head"></h2><span id="v-sub"></span></div>
+          <div id="v-meter"></div>
+          <div class="tally-row" id="v-tally"></div>
+        </div>
+        <ul class="flags" id="v-flags"></ul>
+      </article>
+    </section>
+
+    <div class="fine">
+      <p class="draft"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span><strong>Draft rule set.</strong> Awaiting sign-off from our regulatory consultant, so this checker is not yet public. "No flagged risks" never means a listing is approved or compliant. Not legal advice.</span></p>
+    </div>
+  </main>
+</div>
+
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$, txt = $('#txt'), bd = $('#bd'), verdict = $('#verdict');
+  let seen = new Set(), sig = '';
+  const grow = () => { txt.style.height = 'auto'; txt.style.height = Math.max(txt.scrollHeight, 240) + 'px'; };
+  const run = () => {
+    const text = txt.value, r = Satya.check(text);
+    $('#count').textContent = text.length.toLocaleString('en-IN') + ' / 5,000';
+    const keys = new Set(r.spans.map((s) => s.id + '|' + s.text.toLowerCase()));
+    let html = '', at = 0;
+    r.spans.forEach((s) => {
+      const fresh = !seen.has(s.id + '|' + s.text.toLowerCase());
+      html += Satya.esc(text.slice(at, s.start)) + `<mark class="hl hl-${s.sev}${fresh ? ' is-new' : ''}">${Satya.esc(text.slice(s.start, s.end))}</mark>`; at = s.end;
+    });
+    bd.innerHTML = html + Satya.esc(text.slice(at)) + '\n'; seen = keys; grow();
+    if (!text.trim()) { verdict.classList.remove('is-on'); sig = ''; $('#live').textContent = ''; return; }
+    const nsig = r.level + '|' + r.spans.map((s) => s.id + s.text).join();
+    if (nsig === sig) return; sig = nsig;
+    verdict.classList.add('is-on');
+    $('#rs').textContent = Satya.RULESET;
+    $('#v-head').textContent = r.spans.length ? r.label + ' risk' : 'No flagged risks';
+    $('#v-sub').textContent = r.spans.length ? `${r.spans.length} phrase${r.spans.length > 1 ? 's' : ''} flagged` : `under rule set ${Satya.RULESET}`;
+    $('#v-meter').innerHTML = Satya.meterHTML(r.level);
+    $('#v-tally').innerHTML = (r.red ? `<span class="flag flag-red">${Satya.icon('block')}${r.red} blocked</span>` : '') + (r.amber ? `<span class="flag flag-amber">${Satya.icon('warn')}${r.amber} to review</span>` : '') + (!r.spans.length ? `<span class="flag flag-green">${Satya.icon('ok')}Nothing flagged</span>` : '');
+    $('#v-flags').innerHTML = r.spans.map((s, i) => `<li><button type="button" data-i="${i}">${Satya.flagBadge(s.sev, s.id)}<span><q>${Satya.esc(s.text)}</q><small>${Satya.esc(Satya.RULES[s.id].label)}</small></span>${Satya.icon('arrow')}</button></li>`).join('');
+    $('#live').textContent = r.spans.length ? `${r.red} blocked, ${r.amber} to review. ${r.label} risk.` : 'No flagged risks under this rule set.';
+    verdict._r = r;
+  };
+  txt.addEventListener('input', Satya.debounce(run, 120));
+  $('#sample').addEventListener('click', () => { txt.value = Satya.SAMPLE; run(); txt.focus(); });
+  $('#clear').addEventListener('click', () => { txt.value = ''; seen = new Set(); run(); txt.focus(); });
+  $('#v-flags').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const s = verdict._r.spans[+b.dataset.i]; Satya.sheet.open(s.id, s.text, b); });
+  addEventListener('resize', grow);
+  if (new URLSearchParams(location.search).has('demo')) { txt.value = Satya.SAMPLE; }
+  run();
+});
+</script>
+</body>
+</html>

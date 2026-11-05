@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Satya design system · tokens and components (draft v0.1)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/review-parts.css">
+<style>
+  main { padding-block: var(--s-4) var(--s-9); display: grid; gap: var(--s-8); }
+  section > h2 { font-size: var(--t-xl); margin-bottom: var(--s-4); }
+  section > h2 + p { margin: calc(var(--s-2) * -1) 0 var(--s-4); color: var(--ink-2); max-width: 46rem; }
+  .sw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--s-3); }
+  .swatch { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; background: var(--surface); font-size: var(--t-xs); }
+  .swatch i { display: block; height: 3.5rem; border-bottom: 1px solid var(--line); }
+  .swatch div { padding: var(--s-2) var(--s-3); }
+  .swatch code { color: var(--ink-3); font-family: var(--font-mono); }
+  .type-row { display: grid; grid-template-columns: 7rem 1fr; gap: var(--s-4); align-items: baseline; padding-block: var(--s-3); border-bottom: 1px solid var(--line); }
+  .type-row small { color: var(--ink-3); font: 500 var(--t-xs)/1.3 var(--font-mono); }
+  .demo { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
+  .bar-s { background: var(--accent); height: .75rem; border-radius: var(--r-pill); }
+  .radius-box { width: 5rem; height: 3.5rem; border: 2px solid var(--accent); background: var(--accent-soft); display: grid; place-items: center; font-size: var(--t-xs); }
+  .motion-dot { width: 1rem; height: 1rem; border-radius: 50%; background: var(--accent); }
+  .go .motion-dot { transform: translateX(10rem); }
+  .motion-dot { transition: transform var(--dur-4) var(--ease); }
+  .two { display: grid; gap: var(--s-5); } @media (min-width: 48rem) { .two { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Design system · draft v0.1 · <a href="index.html">index</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+  <main id="main">
+    <div>
+      <p class="eyebrow">Design system · draft v0.1</p>
+      <h1 style="font-size:var(--t-3xl);margin-top:var(--s-2)">Calm, warm, exact.</h1>
+      <p class="muted" style="margin-top:var(--s-4);max-width:46rem;font-size:var(--t-md)">Warm paper neutrals, one plum accent ("Jamun"), editorial serif for display and a legible sans for everything you read twice. Use the toggle top right to see dark. Full rationale in <a href="design-system.md">design-system.md</a>.</p>
+    </div>
+
+    <section aria-labelledby="c-h"><h2 id="c-h">Colour</h2>
+      <p>Severity colours are reserved for flags and always travel with an icon and a word. The accent is never used for severity.</p>
+      <div class="sw-grid" id="swatches"></div></section>
+
+    <section aria-labelledby="t-h"><h2 id="t-h">Type</h2>
+      <p>Display: Fraunces (fallback Newsreader, Georgia). Body: Inter (fallback Noto Sans, system). Hindi: Noto Sans Devanagari at 1.75 line-height. Fluid sizes from 360px up. Specimen below uses the fallback stack because fonts are not bundled in this draft.</p>
+      <div class="type-row"><small>3xl · 40–72</small><h1 style="font-size:var(--t-3xl)">Claim-safe copy</h1></div>
+      <div class="type-row"><small>2xl · 32–52</small><h2 style="font-size:var(--t-2xl)">Review each sentence</h2></div>
+      <div class="type-row"><small>xl · 24–32</small><h3 style="font-size:var(--t-xl)">Where your listings are at risk</h3></div>
+      <div class="type-row"><small>lg · 20–24</small><p style="font:var(--t-lg)/1.45 var(--font-display)">Sentence text in review uses the serif so copy reads like copy.</p></div>
+      <div class="type-row"><small>md · 18</small><p style="font-size:var(--t-md)">Reading text, citations and explanations in the sans.</p></div>
+      <div class="type-row"><small>base · 16</small><p>Body text. Minimum size for anything a user must read. 1.6 line-height, 66ch measure.</p></div>
+      <div class="type-row"><small>sm · 15 / xs · 13</small><p style="font-size:var(--t-sm)">Secondary text, <span style="font-size:var(--t-xs)">labels and metadata (never below 13px).</span></p></div>
+      <div class="type-row"><small>हिन्दी · deva</small><p lang="hi" style="font-size:var(--t-md)">यह उत्पाद त्वचा को नमी देता है। प्रयोग से पहले पैच टेस्ट करें।</p></div>
+    </section>
+
+    <section aria-labelledby="s-h"><h2 id="s-h">Space, radii, motion</h2>
+      <div class="two">
+        <div><p class="eyebrow" style="margin-bottom:var(--s-3)">Space · 4px base</p>
+          <div id="space" style="display:grid;gap:var(--s-2)"></div></div>
+        <div><p class="eyebrow" style="margin-bottom:var(--s-3)">Radii</p>
+          <div class="demo"><div class="radius-box" style="border-radius:var(--r-sm)">sm 6</div><div class="radius-box" style="border-radius:var(--r-md)">md 12</div><div class="radius-box" style="border-radius:var(--r-lg)">lg 20</div><div class="radius-box" style="border-radius:var(--r-pill)">pill</div></div>
+          <p class="eyebrow" style="margin:var(--s-5) 0 var(--s-3)">Motion · 120 / 220 / 420 / 700 ms, one ease-out</p>
+          <button class="btn btn-secondary btn-sm" type="button" id="play">Play</button>
+          <div id="motion" style="margin-top:var(--s-3)"><div class="motion-dot"></div></div>
+          <p class="muted" style="font-size:var(--t-xs);margin-top:var(--s-2)">Under <code>prefers-reduced-motion</code> every duration collapses to ~0 and the dot jumps.</p></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="k-h"><h2 id="k-h">Components</h2>
+      <p>Inventory of what the Jinja components in <code>web/components/</code> will implement. Variants reuse these; nothing here is variant-specific.</p>
+      <div class="two">
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Button</p>
+          <div class="demo"><button class="btn btn-primary" type="button">Primary</button><button class="btn btn-secondary" type="button">Secondary</button><button class="btn btn-ghost" type="button">Ghost</button><button class="btn btn-primary" aria-disabled="true" type="button">Disabled</button></div></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Flag badge: icon + label + rule id</p>
+          <div class="demo" id="flags"></div></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Chip · anchor, type, filter</p>
+          <div class="demo"><button class="chip" type="button" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-anchor"/></svg> C4 · Claim</button><button class="chip" type="button" aria-pressed="true">Selected</button><span class="chip chip-type">Ingredient</span><span class="chip is-unanchored"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg> No source claim</span></div></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Inline highlight · pattern differs, not just hue</p>
+          <p style="font:var(--t-lg)/1.8 var(--font-display)">It <mark class="hl hl-red">cures acne scars</mark> and is <mark class="hl hl-amber">100% natural</mark>.</p></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Severity meter · 5 steps + words</p>
+          <div id="meters" style="display:grid;gap:var(--s-3)"></div></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Citation sheet · right on desktop, bottom on mobile</p>
+          <button class="btn btn-secondary" type="button" id="open-sheet"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg> Open sample citation</button>
+          <p class="draft" style="margin-top:var(--s-4)"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>Draft banner: regulatory text stays draft until consultant sign-off.</span></p></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Form field</p>
+          <label class="lbl" for="f1">Reason to keep this wording</label><input class="field" id="f1" placeholder="e.g. test report TR-2291 attached" style="padding:var(--s-3) var(--s-4)"></div>
+        <div class="card" style="padding:var(--s-5)"><p class="eyebrow" style="margin-bottom:var(--s-3)">Also in inventory</p>
+          <p class="muted" style="font-size:var(--t-sm)">FlagPanel and ClaimItem (see review screens), ApprovalBar, Tally, Toast, TopBar, ThemeToggle, HeatStrip cell, DataTable, Dialog sheet. Specs in design-system.md §5.</p></div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$;
+  const groups = { 'Surfaces': ['bg', 'surface', 'surface-2', 'sunken', 'line', 'line-strong'], 'Ink': ['ink', 'ink-2', 'ink-3'], 'Accent': ['accent', 'accent-hover', 'accent-soft', 'on-accent', 'focus'], 'Severity': ['red-fg', 'red-bg', 'amber-fg', 'amber-bg', 'green-fg', 'green-bg'] };
+  const paint = () => { const cs = getComputedStyle(document.documentElement);
+    $('#swatches').innerHTML = Object.entries(groups).map(([g, ks]) => ks.map((k) => `<div class="swatch"><i style="background:var(--${k})"></i><div><strong>${k}</strong><br><code>${cs.getPropertyValue('--' + k).trim()}</code><br><span class="muted">${g}</span></div></div>`).join('')).join(''); };
+  paint(); new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  $('#space').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `<div style="display:flex;gap:var(--s-3);align-items:center;font:500 var(--t-xs) var(--font-mono);color:var(--ink-3)"><span style="width:3.5rem">s-${n}</span><i class="bar-s" style="width:var(--s-${n})"></i></div>`).join('');
+  $('#flags').innerHTML = Satya.flagBadge('red', 'DRG-01') + Satya.flagBadge('amber', 'EVD-01') + Satya.flagBadge('green') + '<span class="flag flag-ink"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>Draft</span>';
+  $('#meters').innerHTML = [[0, 'No flagged risks'], [2, 'Moderate'], [4, 'High'], [5, 'Severe']].map(([l, t]) => `<div style="display:grid;grid-template-columns:8.5rem 1fr;gap:var(--s-3);align-items:center;font-size:var(--t-sm)"><span>${t}</span>${Satya.meterHTML(l)}</div>`).join('');
+  $('#play').addEventListener('click', () => { const m = $('#motion'); m.classList.toggle('go'); });
+  $('#open-sheet').addEventListener('click', (e) => Satya.sheet.open('DRG-01', 'cures acne scars', e.currentTarget));
+});
+</script>
+</body>
+</html>

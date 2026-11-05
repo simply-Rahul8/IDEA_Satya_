@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Satya design drafts · SAT-7</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+  main { padding-block: var(--s-5) var(--s-9); display: grid; gap: var(--s-7); }
+  h1 { font-size: var(--t-3xl); margin-top: var(--s-2); }
+  .grid { display: grid; gap: var(--s-4); } @media (min-width: 48rem) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .v { padding: var(--s-5); display: grid; gap: var(--s-3); align-content: start; }
+  .v h3 { font-size: var(--t-lg); } .v p { font-size: var(--t-sm); color: var(--ink-2); }
+  .v .btn { justify-self: start; }
+  h2 { font-size: var(--t-xl); margin-bottom: var(--s-4); }
+  .shot { width: 100%; height: 11rem; object-fit: cover; object-position: top; border-radius: var(--r-sm); border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+  <header class="topbar"><a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a><button class="icon-btn" type="button" data-theme-toggle></button></header>
+  <main id="main">
+    <div>
+      <p class="eyebrow">SAT-7 · design drafts · for board review</p>
+      <h1>Three ways to feel awestruck.</h1>
+      <p class="muted" style="max-width:46rem;margin-top:var(--s-4);font-size:var(--t-md)">Static, local-only prototypes of the public checker and the review screen, plus a heat-strip sketch. Everything shares one token set. All six screens are live: paste or edit text and the mock rules re-check it. No variant is recommended here; the trade-offs are in <a href="COMPARISON.md">COMPARISON.md</a>. Pick one per screen in the separate decision task.</p>
+    </div>
+
+    <section aria-labelledby="ck"><h2 id="ck">Public checker · "Is my claim safe?" (journey step 10)</h2>
+      <div class="grid">
+        <article class="card v"><img class="shot" src="screenshots/checker-a-1280-light.png" alt="Checker A: large serif headline, paper-like text box with underlined phrases, verdict card below"><h3>A · Editorial Paper</h3><p>One calm column. Underlines draw in place as you type; verdict card rises below.</p><a class="btn btn-secondary btn-sm" href="checker-a.html?demo">Open A</a></article>
+        <article class="card v"><img class="shot" src="screenshots/checker-b-360-light.png" alt="Checker B on mobile: input, gauge and annotated read-out"><h3>B · Split Atelier</h3><p>Workbench: input left, live gauge and clickable annotated read-out right.</p><a class="btn btn-secondary btn-sm" href="checker-b.html?demo">Open B</a></article>
+        <article class="card v"><img class="shot" src="screenshots/checker-c-1280-light.png" alt="Checker C: deep plum hero, counters, annotated copy with numbered margin notes"><h3>C · Marginalia</h3><p>Plum hero, big counters, copy returned as an editor's proof with numbered notes.</p><a class="btn btn-secondary btn-sm" href="checker-c.html?demo">Open C</a></article>
+      </div></section>
+
+    <section aria-labelledby="rv"><h2 id="rv">Review screen (journey step 7)</h2>
+      <div class="grid">
+        <article class="card v"><img class="shot" src="screenshots/review-a-1280-light.png" alt="Review A: one card per sentence with flag, rewrite and reason inside"><h3>A · Sentence Cards</h3><p>One card per sentence; fix lives in the card; Product Truth in a side rail; bottom approval bar.</p><a class="btn btn-secondary btn-sm" href="review-a.html">Open A</a></article>
+        <article class="card v"><img class="shot" src="screenshots/review-b-1280-light.png" alt="Review B: Product Truth ledger beside the copy, progress strip above"><h3>B · Truth ↔ Copy</h3><p>Evidence-first: claim ledger beside the copy; anchors cross-highlight; sticky approval gate.</p><a class="btn btn-secondary btn-sm" href="review-b.html">Open B</a></article>
+        <article class="card v"><img class="shot" src="screenshots/review-c-1280-light.png" alt="Review C: product page preview with sentence inspector panel"><h3>C · Document + Inspector</h3><p>Reads like the live product page; select a sentence and an inspector explains and fixes it.</p><a class="btn btn-secondary btn-sm" href="review-c.html?demo">Open C</a></article>
+      </div></section>
+
+    <section aria-labelledby="ot"><h2 id="ot">System and sketch</h2>
+      <div class="grid">
+        <article class="card v"><h3>Design system</h3><p>Tokens, type, space, motion and component inventory, light and dark.</p><a class="btn btn-secondary btn-sm" href="system.html">Open specimen</a> <a href="design-system.md">design-system.md</a></article>
+        <article class="card v"><img class="shot" src="screenshots/audit-heatstrip-1280-light.png" alt="Audit heat-strip sketch: three counters and a strip of 120 squares"><h3>Audit heat-strip (sketch)</h3><p>One square per SKU, sorted by risk, with filters, tooltip and a table view.</p><a class="btn btn-secondary btn-sm" href="audit-heatstrip.html">Open sketch</a></article>
+      </div></section>
+    <p class="draft"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>All rule text, sources and sample data are illustrative drafts. Regulatory content stays draft until consultant sign-off (plan P20). Nothing here says a listing is compliant.</span></p>
+  </main>
+</div>
+<script src="assets/proto.js"></script>
+</body>
+</html>
