@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audit dashboard · heat-strip sketch · Satya (draft design)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+  /* Sketch only (journey step 3). One cell per SKU. Severity = fill pattern + icon in legend/tooltip/table, never hue alone. */
+  main { padding-block: var(--s-4) var(--s-9); display: grid; gap: var(--s-6); }
+  h1 { font-size: var(--t-2xl); }
+  .counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: var(--s-3); }
+  .stat { padding: var(--s-4); display: grid; gap: var(--s-2); }
+  .stat b { font: 500 var(--t-2xl)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+  .stat .flag { justify-self: start; }
+  .controls { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); align-items: center; justify-content: space-between; }
+  .controls .group { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+  .strip-card { padding: var(--s-5); }
+  .strip { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; }
+  @media (min-width: 48rem) { .strip { grid-template-columns: repeat(40, minmax(0, 1fr)); } }
+  .cell { aspect-ratio: 1; min-height: 1rem; border: 0; padding: 0; border-radius: 3px; cursor: pointer; transition: opacity var(--dur-2), transform var(--dur-1); }
+  .cell:hover { transform: scale(1.35); position: relative; z-index: 2; box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+  .cell[data-s="red"] { background: var(--red-fg); }
+  .cell[data-s="amber"] { background: repeating-linear-gradient(45deg, var(--amber-fg) 0 2px, var(--amber-bg) 2px 5px); }
+  .cell[data-s="green"] { background: var(--green-bg); box-shadow: inset 0 0 0 1px var(--green-line); }
+  .cell.dim { opacity: .18; }
+  .legend { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); margin-top: var(--s-4); font-size: var(--t-xs); color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: var(--s-2); }
+  .sw { width: 1rem; height: 1rem; border-radius: 3px; display: inline-block; }
+  .sw[data-s="red"] { background: var(--red-fg); } .sw[data-s="amber"] { background: repeating-linear-gradient(45deg, var(--amber-fg) 0 2px, var(--amber-bg) 2px 5px); } .sw[data-s="green"] { background: var(--green-bg); box-shadow: inset 0 0 0 1px var(--green-line); }
+  .tip { position: fixed; z-index: 70; pointer-events: none; background: var(--ink); color: var(--bg); border-radius: var(--r-md); padding: var(--s-2) var(--s-3); font-size: var(--t-xs); line-height: 1.4; max-width: 15rem; opacity: 0; transition: opacity var(--dur-1); }
+  .tip.on { opacity: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
+  th, td { text-align: start; padding: var(--s-3); border-bottom: 1px solid var(--line); }
+  th { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .tbl { overflow-x: auto; }
+  .sk { font-family: var(--font-mono); font-size: var(--t-xs); }
+  @media (max-width: 40rem) { .hide-sm { display: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to audit</a>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Audit dashboard · sketch · <a href="index.html">all screens</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+
+  <main id="main">
+    <div>
+      <p class="eyebrow">Step 3 · Audit · catalogue of 120 products</p>
+      <h1 style="margin-top:var(--s-2)">Where your listings are at risk.</h1>
+      <p class="muted" style="margin-top:var(--s-3);max-width:44rem">Each square is one product, sorted by risk. Hover or focus a square for the reason; filter without leaving the page.</p>
+    </div>
+
+    <section class="counters" aria-label="Totals" id="counters"></section>
+
+    <section class="card strip-card" aria-labelledby="strip-h">
+      <div class="controls">
+        <h2 id="strip-h" style="font-size:var(--t-lg)">Risk heat-strip</h2>
+        <div class="group" role="group" aria-label="Filter by severity" id="filters">
+          <button class="chip" type="button" data-f="all" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-f="red" aria-pressed="false">Blocked</button>
+          <button class="chip" type="button" data-f="amber" aria-pressed="false">Review</button>
+          <button class="chip" type="button" data-f="green" aria-pressed="false">Clear</button>
+        </div>
+        <button class="btn btn-secondary btn-sm" type="button" id="sort" aria-pressed="true">Sorted by risk</button>
+      </div>
+      <div class="strip" id="strip" role="group" aria-label="One square per product" style="margin-top:var(--s-4)"></div>
+      <div class="legend" aria-label="Legend">
+        <span><i class="sw" data-s="red"></i><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg> Blocked: a rule that cannot be overridden</span>
+        <span><i class="sw" data-s="amber"></i><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg> Review: needs a reason or evidence</span>
+        <span><i class="sw" data-s="green"></i><svg class="ic" aria-hidden="true"><use href="#i-ok"/></svg> Clear: no flagged risks under rule set v0.1-draft</span>
+      </div>
+    </section>
+
+    <section class="card strip-card" aria-labelledby="t-h">
+      <h2 id="t-h" style="font-size:var(--t-lg);margin-bottom:var(--s-3)">Highest risk first <span class="muted" style="font:400 var(--t-sm) var(--font-sans)">(table view of the same data)</span></h2>
+      <div class="tbl"><table><thead><tr><th scope="col">SKU</th><th scope="col">Product</th><th scope="col">Status</th><th scope="col" class="hide-sm">Flags</th></tr></thead><tbody id="rows"></tbody></table></div>
+    </section>
+    <p class="draft"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>Sample data. Draft rule set; the printable audit report is stamped "not legal advice · rule set v0.1-draft".</span></p>
+  </main>
+</div>
+<div class="tip" id="tip" role="presentation"></div>
+
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$;
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const NAMES = ['Rosewater Dew Serum', 'Vitamin C Glow Cream', 'Aloe Gel Cleanser', 'Kajal Smudgeproof', 'Shine Control Toner', 'Lip Balm SPF 20', 'Night Repair Oil', 'Clay Face Mask'];
+  const WHY = { red: ['DRG-01 treatment claim', 'FAIR-01 fairness claim', 'DMR-01 named disease'], amber: ['EVD-01 needs evidence', 'ABS-01 absolute wording', 'TIME-01 time-bound result'] };
+  const items = Array.from({ length: 120 }, (_, i) => {
+    const r = rnd(), s = r < .17 ? 'red' : r < .52 ? 'amber' : 'green', n = s === 'green' ? 0 : 1 + Math.floor(rnd() * 3);
+    return { i, sku: 'SKU-' + String(1001 + i), name: NAMES[Math.floor(rnd() * NAMES.length)], s, n, why: s === 'green' ? 'No flagged risks' : WHY[s][Math.floor(rnd() * 3)] };
+  });
+  const order = { red: 0, amber: 1, green: 2 };
+  let f = 'all', sorted = true;
+  const LAB = { red: 'Blocked', amber: 'Review', green: 'Clear' };
+  const cnt = (s) => items.filter((x) => x.s === s).length;
+  $('#counters').innerHTML = [['red', 'block'], ['amber', 'warn'], ['green', 'ok']].map(([s, ic]) => `<div class="card stat"><span class="flag flag-${s}">${Satya.icon(ic)}${LAB[s]}</span><b data-n="${cnt(s)}">0</b><span class="muted" style="font-size:var(--t-xs)">of 120 products</span></div>`).join('');
+  Satya.$$('[data-n]').forEach((el) => Satya.counters(el, +el.dataset.n));
+  const draw = () => {
+    const list = items.slice().sort((a, b) => (sorted ? order[a.s] - order[b.s] : 0) || a.i - b.i);
+    $('#strip').innerHTML = list.map((x) => `<button class="cell${f !== 'all' && x.s !== f ? ' dim' : ''}" type="button" data-s="${x.s}" data-i="${x.i}" aria-label="${x.sku}, ${x.name}: ${LAB[x.s]}. ${x.why}"></button>`).join('');
+    $('#rows').innerHTML = list.filter((x) => x.s !== 'green').slice(0, 8).map((x) => `<tr><td class="sk">${x.sku}</td><td>${x.name}</td><td>${Satya.flagBadge(x.s)}</td><td class="hide-sm">${x.n} · ${x.why}</td></tr>`).join('');
+  };
+  draw();
+  $('#filters').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; f = b.dataset.f; Satya.$$('#filters .chip').forEach((c) => c.setAttribute('aria-pressed', String(c === b))); draw(); });
+  $('#sort').addEventListener('click', (e) => { sorted = !sorted; e.currentTarget.setAttribute('aria-pressed', String(sorted)); e.currentTarget.textContent = sorted ? 'Sorted by risk' : 'Catalogue order'; draw(); });
+  const tip = $('#tip'), show = (c) => { const x = items[+c.dataset.i], r = c.getBoundingClientRect(); tip.innerHTML = `<strong>${x.sku}</strong> · ${LAB[x.s]}<br>${x.name}<br>${x.why}`; tip.style.left = Math.min(innerWidth - 250, Math.max(8, r.left - 40)) + 'px'; tip.style.top = (r.bottom + 10) + 'px'; tip.classList.add('on'); };
+  $('#strip').addEventListener('mouseover', (e) => { const c = e.target.closest('.cell'); if (c) show(c); });
+  $('#strip').addEventListener('focusin', (e) => { const c = e.target.closest('.cell'); if (c) show(c); });
+  $('#strip').addEventListener('mouseleave', () => tip.classList.remove('on'));
+  $('#strip').addEventListener('focusout', () => tip.classList.remove('on'));
+  $('#strip').addEventListener('click', (e) => { const c = e.target.closest('.cell'); if (c) show(c); });
+});
+</script>
+</body>
+</html>

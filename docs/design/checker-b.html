@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checker B · Split Atelier · Satya (draft design)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+  /* Variant B: workbench. Input left, live annotated read-out + gauge right. */
+  main { padding-block: var(--s-5) 7rem; }
+  .intro { max-width: 40rem; margin-bottom: var(--s-6); }
+  .intro h1 { font-size: var(--t-2xl); margin: var(--s-2) 0 var(--s-3); }
+  .intro p { color: var(--ink-2); }
+  .bench { display: grid; gap: var(--s-5); }
+  @media (min-width: 60rem) { .bench { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; } .col-r { position: sticky; top: var(--s-4); } }
+  .pane { padding: var(--s-5); }
+  .pane h2 { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+  .pane textarea.field { min-height: 16rem; font-family: var(--font-sans); font-size: var(--t-md); }
+  .pane-foot { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s-3); gap: var(--s-3); flex-wrap: wrap; }
+  .count { font: 500 var(--t-xs)/1 var(--font-mono); color: var(--ink-3); }
+  .gauge-wrap { display: grid; grid-template-columns: auto 1fr; gap: var(--s-5); align-items: center; padding-bottom: var(--s-5); border-bottom: 1px solid var(--line); margin-bottom: var(--s-5); }
+  .gauge { width: min(11rem, 38vw); position: relative; }
+  .gauge svg { display: block; width: 100%; overflow: visible; }
+  .gauge .track { stroke: var(--sunken); }
+  .gauge .val { stroke: var(--green-fg); transition: stroke-dashoffset var(--dur-4) var(--ease), stroke var(--dur-2); }
+  .gauge[data-level="2"] .val, .gauge[data-level="3"] .val { stroke: var(--amber-fg); }
+  .gauge[data-level="4"] .val, .gauge[data-level="5"] .val { stroke: var(--red-fg); }
+  .gauge-num { position: absolute; inset: auto 0 0; text-align: center; line-height: 1; }
+  .gauge-num b { font: 500 var(--t-2xl)/1 var(--font-display); display: block; }
+  .gauge-num span { font-size: var(--t-xs); color: var(--ink-2); }
+  .gauge-copy h3 { font-size: var(--t-xl); margin-bottom: var(--s-2); }
+  .gauge-copy .tally { margin-top: var(--s-3); }
+  .readout { font: 400 var(--t-lg)/1.75 var(--font-display); white-space: pre-wrap; overflow-wrap: anywhere; min-height: 8rem; }
+  .readout .hl { padding: .05em .25em; border-radius: 6px; background-image: none; border: 1px solid; }
+  .readout .hl-red { border-color: var(--red-line); color: var(--red-fg); font-weight: 500; }
+  .readout .hl-amber { border-style: dashed; border-color: var(--amber-line); color: var(--amber-fg); }
+  .empty { color: var(--ink-3); font-family: var(--font-sans); font-size: var(--t-sm); }
+  .dock { position: fixed; inset: auto 0 0; z-index: 30; background: var(--surface); border-top: 1px solid var(--line-strong); box-shadow: 0 -6px 20px rgb(0 0 0 / .08); padding: var(--s-3) 1rem calc(var(--s-3) + env(safe-area-inset-bottom)); }
+  .dock-in { display: flex; align-items: center; gap: var(--s-3); max-width: 72rem; margin-inline: auto; }
+  .dock .meter { flex: 1; min-width: 4rem; }
+  @media (max-width: 30rem) { #d-meter { display: none; } .dock-in { justify-content: space-between; } }
+  @media (min-width: 60rem) { .dock { display: none; } main { padding-bottom: var(--s-9); } }
+  @media (max-width: 38rem) { .gauge-wrap { grid-template-columns: 1fr; justify-items: start; } .gauge { width: 9rem; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to checker</a>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Checker · variant B of 3 · <a href="index.html">all variants</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+
+  <main id="main">
+    <div class="intro">
+      <p class="eyebrow">Is my claim safe?</p>
+      <h1>Paste on the left. See the risk on the right.</h1>
+      <p>A deterministic check against a draft cosmetics rule set. Tap any marked phrase to read the citation.</p>
+    </div>
+
+    <div class="bench">
+      <section class="card pane col-l" aria-labelledby="h-in">
+        <h2 id="h-in">Your copy</h2>
+        <label class="sr-only" for="txt">Product listing copy to check</label>
+        <textarea class="field" id="txt" spellcheck="false" placeholder="Paste or type your product copy…"></textarea>
+        <div class="pane-foot">
+          <span class="count" id="count">0 / 5,000</span>
+          <span><button class="btn btn-ghost btn-sm" type="button" id="clear">Clear</button>
+          <button class="btn btn-secondary btn-sm" type="button" id="sample">Try a sample</button></span>
+        </div>
+      </section>
+
+      <div class="col-r">
+        <section class="card pane" aria-labelledby="h-out" id="out">
+          <h2 id="h-out">Live verdict · rule set <span id="rs"></span></h2>
+          <div class="gauge-wrap">
+            <div class="gauge" id="gauge" data-level="0">
+              <svg viewBox="0 0 200 108" aria-hidden="true">
+                <path class="track" d="M12 100 A88 88 0 0 1 188 100" fill="none" stroke-width="14" stroke-linecap="round"/>
+                <path class="val" id="arc" d="M12 100 A88 88 0 0 1 188 100" fill="none" stroke-width="14" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
+              </svg>
+              <div class="gauge-num"><b id="g-n">0</b><span>flags</span></div>
+            </div>
+            <div class="gauge-copy" aria-live="polite">
+              <h3 id="g-head">Waiting for copy</h3>
+              <p class="muted" id="g-sub">Results appear as you type.</p>
+              <div class="tally" id="g-tally"></div>
+            </div>
+          </div>
+          <div class="readout" id="readout"><span class="empty">Your annotated copy will appear here.</span></div>
+        </section>
+        <p class="draft" style="margin-top:var(--s-4)"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span><strong>Draft rule set.</strong> Pending consultant sign-off. "No flagged risks" is not approval. Not legal advice.</span></p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="dock" aria-label="Verdict summary">
+  <div class="dock-in">
+    <span id="d-tally" class="tally"></span>
+    <div id="d-meter" style="flex:1"></div>
+    <a class="btn btn-primary btn-sm" href="#out">Details</a>
+  </div>
+</div>
+
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$, txt = $('#txt'), LEN = 276.46;
+  let last = null;
+  const run = () => {
+    const text = txt.value, r = Satya.check(text); last = r;
+    $('#count').textContent = text.length.toLocaleString('en-IN') + ' / 5,000';
+    $('#rs').textContent = Satya.RULESET;
+    $('#gauge').dataset.level = r.level;
+    $('#arc').style.strokeDashoffset = LEN * (1 - r.level / 5);
+    $('#g-n').textContent = r.spans.length;
+    const has = text.trim().length > 0;
+    $('#g-head').textContent = !has ? 'Waiting for copy' : r.spans.length ? r.label + ' risk' : 'No flagged risks';
+    $('#g-sub').textContent = !has ? 'Results appear as you type.' : r.spans.length ? 'Tap a marked phrase for its citation.' : `under rule set ${Satya.RULESET}`;
+    const tally = (r.red ? `<span class="flag flag-red">${Satya.icon('block')}${r.red} blocked</span>` : '') + (r.amber ? `<span class="flag flag-amber">${Satya.icon('warn')}${r.amber} to review</span>` : '') + (has && !r.spans.length ? `<span class="flag flag-green">${Satya.icon('ok')}Nothing flagged</span>` : '');
+    $('#g-tally').innerHTML = tally; $('#d-tally').innerHTML = tally || '<span class="muted">Waiting for copy</span>';
+    $('#d-meter').innerHTML = Satya.meterHTML(r.level);
+    $('#readout').innerHTML = has ? Satya.markHTML(text, r.spans, { icons: true, interactive: true }) : '<span class="empty">Your annotated copy will appear here.</span>';
+  };
+  txt.addEventListener('input', Satya.debounce(run, 120));
+  $('#sample').addEventListener('click', () => { txt.value = Satya.SAMPLE; run(); });
+  $('#clear').addEventListener('click', () => { txt.value = ''; run(); txt.focus(); });
+  const open = (el) => { const s = last.spans[+el.dataset.i]; Satya.sheet.open(s.id, s.text, el); };
+  $('#readout').addEventListener('click', (e) => { const m = e.target.closest('mark'); if (m) open(m); });
+  $('#readout').addEventListener('keydown', (e) => { const m = e.target.closest('mark'); if (m && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(m); } });
+  if (new URLSearchParams(location.search).has('demo')) txt.value = Satya.SAMPLE;
+  run();
+});
+</script>
+</body>
+</html>
