@@ -1,6 +1,6 @@
 # Satya design system, draft v0.1 (SAT-7)
 
-Status: **draft for board review.** Tokens are stable enough to prototype against; the final spec is written after the board picks variants (separate task). Source of truth for values: [`assets/tokens.css`](assets/tokens.css). Visual specimen: [`system.html`](system.html).
+Status: **v0.1 draft, superseded for build by the final specs in [`final/`](final/README.md) (SAT-13)** after the board's pick (checker A, review B). Tokens are unchanged apart from additive v1.0 custom properties; where this file and `final/` differ, `final/` wins. Source of truth for values: [`assets/tokens.css`](assets/tokens.css). Visual specimen: [`system.html`](system.html).
 
 Plan references: §4 (the "awestruck" bar), §3 journey steps 3, 7, 10.
 
