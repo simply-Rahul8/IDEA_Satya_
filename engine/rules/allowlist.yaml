@@ -1,0 +1,34 @@
+# Safe-phrase allowlist (P24). DRAFT until consultant sign-off (P20).
+# For the rule ids an entry names, words inside the phrase cannot trigger that rule. A claim outside the phrase still flags.
+# Entries that touch non-overridable rules are called out in the consultant pack for explicit review.
+allowlist:
+  - id: AL-001
+    phrases:
+      - "not intended to diagnose treat cure or prevent any disease"
+      - "not intended to diagnose treat or cure any disease"
+      - "not meant to diagnose treat cure or prevent any disease"
+      - "does not claim to treat cure or prevent any disease"
+      - "does not treat cure or prevent any disease"
+      - "this product does not treat or cure any disease"
+    applies_to: ["EN-DRUG-001", "EN-DRUG-002", "EN-DMR-001"]
+    note: "Standard negative disclaimer. It denies the drug claim, so it must not be flagged as one."
+    examples:
+      - "Not intended to diagnose, treat, cure or prevent any disease."
+
+  - id: AL-002
+    phrases:
+      - "whiter teeth"
+      - "whiter smile"
+    applies_to: ["EN-FAIR-001"]
+    note: "Teeth whitening is not skin lightening."
+    examples:
+      - "Get whiter teeth in a week with this toothpaste."
+
+  - id: AL-003
+    phrases:
+      - "fairest shade"
+      - "fairest shades"
+    applies_to: ["EN-FAIR-001"]
+    note: "Foundation shade range description, not a skin-colour change."
+    examples:
+      - "Get the fairest shade in our foundation range."

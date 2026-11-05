@@ -1,0 +1,139 @@
+# Product-type gate signals (P23). DRAFT until consultant sign-off (P20).
+# v1 handles cosmetics only. Ayurvedic, AYUSH and OTC-drug products are refused with an explanation.
+# `hard` signals refuse the product. `weak` signals need a review, or a brand declaration of 'cosmetic'.
+# A weak phrase that contains a hard term masks that term (e.g. 'ayurveda-inspired' does not hit 'ayurved*').
+product_type_gate:
+  version_note: "Signals are keyword-based. The gate cannot verify a licence; it reads the listing text and the brand's declared type."
+  types:
+    otc_drug:
+      label: "OTC or prescription drug"
+      hard:
+        - "otc"
+        - "over the counter"
+        - "over-the-counter"
+        - "prescription only"
+        - "rx only"
+        - "schedule h"
+        - "schedule g"
+        - "drug licence"
+        - "drug license"
+        - "minoxidil"
+        - "ketoconazole"
+        - "clotrimazole"
+        - "miconazole"
+        - "terbinafine"
+        - "fluconazole"
+        - "hydrocortisone"
+        - "clobetasol"
+        - "betamethasone"
+        - "mometasone"
+        - "tretinoin"
+        - "adapalene"
+        - "isotretinoin"
+        - "clindamycin"
+        - "mupirocin"
+        - "benzoyl peroxide"
+        - "hydroquinone"
+        - "povidone iodine"
+        - "povidone-iodine"
+        - "permethrin"
+        - "ivermectin"
+        - "lidocaine"
+        - "benzocaine"
+        - "paracetamol"
+        - "ibuprofen"
+        - "diclofenac"
+        - "antiseptic"
+        - "antibiotic"
+        - "antifungal"
+        - "analgesic"
+        - "pain relief"
+        - "pain relieving"
+        - "pain reliever"
+      weak:
+        - "ointment"
+        - "medicinal"
+        - "herbal remedy"
+        - "remedy"
+      explanation: "This looks like a drug (for example it names a drug ingredient or says OTC, antiseptic or pain relief). Drugs are regulated differently from cosmetics, so Satya v1 does not review or write listings for them."
+      examples:
+        positive:
+          - "Minoxidil 5% solution for the scalp."
+          - "OTC antifungal cream."
+        negative:
+          - "Vitamin C face serum."
+          - "Moisturising cream with shea butter."
+    ayush:
+      label: "AYUSH product"
+      hard:
+        - "ayush"
+        - "siddha"
+        - "unani"
+        - "homeopathic"
+        - "homoeopathic"
+        - "homeopathy"
+        - "homoeopathy"
+        - "asu drug"
+      weak: []
+      explanation: "This looks like an AYUSH product (Ayurveda, Yoga, Unani, Siddha, Homeopathy). Those products have their own regulator and rules, so Satya v1 does not review or write listings for them."
+      examples:
+        positive:
+          - "AYUSH licensed herbal oil."
+          - "Unani hair tonic."
+        negative:
+          - "Gentle face wash with aloe."
+          - "Hair oil with coconut and curry leaf."
+    ayurvedic:
+      label: "Ayurvedic product"
+      hard:
+        - "ayurved*"
+      weak:
+        - "ayurveda-inspired"
+        - "ayurvedic-inspired"
+        - "ayurveda inspired"
+        - "inspired by ayurveda"
+        - "inspired by ayurvedic"
+        - "rooted in ayurveda"
+        - "ayurvedic principles"
+        - "ayurvedic wisdom"
+        - "ayurveda principles"
+        - "ancient ayurvedic"
+      explanation: "This product is described as Ayurvedic. Ayurvedic products are regulated as AYUSH drugs, not cosmetics, so Satya v1 does not review or write listings for them. If the product is a cosmetic that is only inspired by Ayurveda, declare it as a cosmetic and remove the Ayurvedic wording."
+      examples:
+        positive:
+          - "Kumkumadi Ayurvedic face oil."
+          - "Classical Ayurveda formulation."
+        negative:
+          - "Face oil with saffron and sesame."
+          - "Nourishing hair mask."
+    other_non_cosmetic:
+      label: "Supplement, food or other non-cosmetic product"
+      hard:
+        - "dietary supplement"
+        - "health supplement"
+        - "food supplement"
+        - "nutraceutical"
+        - "nutraceuticals"
+        - "fssai"
+        - "multivitamin"
+        - "protein powder"
+        - "collagen powder"
+        - "gummy"
+        - "gummies"
+        - "capsule"
+        - "capsules"
+        - "tablet"
+        - "tablets"
+        - "softgel"
+        - "softgels"
+        - "syrup"
+        - "medical device"
+      weak: []
+      explanation: "This looks like a supplement, food or other non-cosmetic product. Satya v1 reviews cosmetics only."
+      examples:
+        positive:
+          - "Biotin hair gummies."
+          - "Collagen powder with vitamin C."
+        negative:
+          - "Lip balm with beeswax."
+          - "Body lotion with vitamin E."

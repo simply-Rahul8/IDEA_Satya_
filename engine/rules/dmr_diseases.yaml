@@ -1,0 +1,176 @@
+# NON-OVERRIDABLE (P17). Diseases and conditions covered by the Drugs and Magic Remedies (Objectionable
+# Advertisements) Act, 1954. DRAFT until consultant sign-off (P20).
+# The condition list below was drafted from the agent's knowledge of the Schedule. It has NOT been checked line by line
+# against the current Schedule text. The consultant must verify it (see consultant pack, open questions).
+anchors:
+  dmr_act: &dmr_act
+    ref: "Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954"
+    provision: "s.3(d) and the Schedule (diseases, disorders and conditions)"
+    verified: false
+  dmr_act_abc: &dmr_act_abc
+    ref: "Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954"
+    provision: "s.3(a), (b), (c): miscarriage and conception, sexual pleasure, menstrual disorder"
+    verified: false
+  dmr_conditions: &dmr_conditions
+    - "diabet*"
+    - "cancer"
+    - "cancers"
+    - "cancerous"
+    - "cataract*"
+    - "glaucoma"
+    - "epilepsy"
+    - "epileptic"
+    - "paralysis"
+    - "leprosy"
+    - "leucoderma"
+    - "vitiligo"
+    - "tuberculosis"
+    - "tb"
+    - "asthma"
+    - "asthmatic"
+    - "bronchial"
+    - "hypertension"
+    - "hypotension"
+    - "blood pressure"
+    - "bp"
+    - "heart disease*"
+    - "heart attack*"
+    - "cardiac"
+    - "arteriosclerosis"
+    - "jaundice"
+    - "goitre"
+    - "goiter"
+    - "hernia"
+    - "rheumatism"
+    - "rheumatic"
+    - "arthritis"
+    - "deafness"
+    - "blindness"
+    - "hysteria"
+    - "insanity"
+    - "appendicitis"
+    - "lupus"
+    - "impotence"
+    - "impotency"
+    - "sterility"
+    - "infertility"
+    - "varicose"
+    - "gallstones"
+    - "gall bladder stones"
+    - "kidney stones"
+    - "bladder stones"
+    - "venereal"
+    - "syphilis"
+    - "gonorrhoea"
+    - "sexually transmitted"
+    - "stds"
+    - "hiv"
+    - "fever"
+    - "fevers"
+    - "malaria"
+    - "dengue"
+    - "typhoid"
+    - "hepatitis"
+    - "cirrhosis"
+    - "piles"
+    - "hemorrhoids"
+    - "ulcer"
+    - "ulcers"
+    - "blood poisoning"
+    - "baldness"
+    - "obesity"
+
+rules:
+  - id: EN-DMR-001
+    category: dmr_disease
+    title: "Cure, treatment or prevention of a disease listed in the DMR Act"
+    severity: red
+    overridable: false
+    explanation: "Advertising a product as treating, curing or preventing a disease named in the Drugs and Magic Remedies Act is prohibited."
+    rewrite_hint: "Remove the disease. A cosmetic listing cannot refer to these conditions."
+    patterns:
+      - kind: verb_condition
+        verbs: ["cure*", "treat*", "heal", "heals", "healed", "healing", "prevent*", "reverse*", "reversing", "relieve*", "alleviate*", "mitigate*", "eliminate*", "fight", "fights", "fighting", "combat*", "remedy", "remedies", "diagnos*", "manage", "manages", "managing", "control", "controls", "controlling", "help", "helps", "helping"]
+        conditions: *dmr_conditions
+        max_gap: 4
+      - kind: verb_condition
+        verbs: ["for"]
+        conditions: *dmr_conditions
+        max_gap: 2
+    sources: [*dmr_act]
+    examples:
+      positive:
+        - "Cures diabetes naturally."
+        - "Helps in controlling high blood pressure."
+        - "Our oil is good for cancer patients."
+        - "Treatment for leucoderma at home."
+      negative:
+        - "Rich moisturiser for dry skin."
+        - "A daily cream that helps skin feel soft."
+    open_questions:
+      - "Verify the condition list against the current Schedule text and any amendment since 2020. Add or remove items."
+      - "Items such as 'baldness' and 'obesity' are included from memory and are NOT confirmed to be in the Schedule. Confirm or drop them."
+      - "Is 'for <disease>' (e.g. 'for diabetic feet') always a violation, or only when it suggests treatment?"
+
+  - id: EN-DMR-002
+    category: dmr_disease
+    title: "Miscarriage, conception, sexual pleasure or menstrual disorder claims"
+    severity: red
+    overridable: false
+    explanation: "Advertising a product for miscarriage, conception, sexual pleasure or correcting menstrual disorder is prohibited under the DMR Act."
+    rewrite_hint: "Remove the claim. If the product is intimate hygiene, describe cleansing only."
+    patterns:
+      - kind: verb_condition
+        verbs: ["improve*", "enhance*", "boost*", "increase*", "restore*", "correct*", "regulate*", "induce*", "prevent*", "cure*", "treat*", "help", "helps", "helping", "for"]
+        conditions:
+          - "sexual pleasure"
+          - "sexual performance"
+          - "sexual stamina"
+          - "sexual desire"
+          - "libido"
+          - "virility"
+          - "erectile"
+          - "menstrual disorder*"
+          - "menstrual problems"
+          - "irregular periods"
+          - "miscarriage"
+          - "conception"
+          - "contraception"
+          - "foetus"
+          - "fetus"
+        max_gap: 3
+    sources: [*dmr_act_abc]
+    examples:
+      positive:
+        - "Boosts sexual stamina and performance."
+        - "Corrects menstrual disorders naturally."
+        - "Helps prevent conception."
+      negative:
+        - "Gentle intimate wash for daily external use."
+        - "Soothing body oil for a relaxing massage."
+    open_questions:
+      - "Are intimate-wash listings that mention 'feminine freshness' acceptable? The draft does not flag them."
+
+  - id: EN-DMR-003
+    category: dmr_disease
+    title: "Premature greying of hair"
+    severity: red
+    overridable: false
+    explanation: "Claims to treat or reverse premature greying of hair are drug claims (listed in the DMR Act Schedule, to be confirmed)."
+    rewrite_hint: "Remove the claim. A hair colour product may describe covering grey hair as a colouring effect."
+    patterns:
+      - kind: verb_condition
+        verbs: ["cure*", "treat*", "prevent*", "reverse*", "stop*", "reduce*", "delay*", "restore*", "fix*"]
+        conditions: ["premature greying", "premature graying", "premature grey", "premature gray", "greying", "graying", "grey hair", "gray hair", "white hair"]
+        max_gap: 3
+    sources: [*dmr_act]
+    examples:
+      positive:
+        - "Prevents premature greying of hair."
+        - "Reverses grey hair naturally."
+      negative:
+        - "Hair colour that covers grey hair in 10 minutes."
+        - "Shampoo for coloured hair."
+    open_questions:
+      - "Confirm that premature greying is in the Schedule. If not, downgrade to an overridable claim."
+      - "Does 'covers grey hair' for a colour product need an allowlist entry? The draft does not flag 'covers'."

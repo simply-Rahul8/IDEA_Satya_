@@ -1,0 +1,8 @@
+# Rule set identity. status stays DRAFT until the consultant signs off (P20) and the sign-off is logged in README.md.
+# Bump `version` whenever any rule, allowlist entry or gate signal changes; reports quote it as "rule set vX".
+rule_set:
+  name: satya-en
+  version: "0.1.0"
+  status: DRAFT
+  language: en
+  updated: "2026-11-05"
