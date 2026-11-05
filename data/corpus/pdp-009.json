@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-009",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Kesari Roots",
+  "category": "hair",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Kesari Roots Lightweight Hair Oil with Bhringraj",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Blend of coconut, sesame and bhringraj oils.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Absorbs quickly and does not weigh hair down.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Pleasant herbal scent from natural fragrance.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Warm slightly and massage into the scalp before washing.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Patch test before first use.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

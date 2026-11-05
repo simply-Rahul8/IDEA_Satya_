@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-047",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Bahu Beauty",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Bahu Beauty Herbal Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "100% safe for all with no side effects.",
+      "label": "red",
+      "rule_ids": [
+        "EN-CLAIM-001"
+      ]
+    },
+    {
+      "text": "A chemical-free formula.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-007"
+      ]
+    },
+    {
+      "text": "Made with plant-derived ingredients.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply daily.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

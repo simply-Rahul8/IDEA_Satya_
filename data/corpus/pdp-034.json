@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-034",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Daksha Derma",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Daksha 2% Retinol Night Serum",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Absolutely safe with zero side effects.",
+      "label": "red",
+      "rule_ids": [
+        "EN-CLAIM-001"
+      ]
+    },
+    {
+      "text": "Encapsulated retinol with squalane.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Start with two nights a week.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Always use sunscreen during the day.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-016",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Sagar Soaps",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Sagar Oatmeal and Honey Body Wash",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Gentle body wash with colloidal oatmeal and honey.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Creamy lather that rinses off easily.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fresh, mild fragrance.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use daily in the shower.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Avoid contact with eyes.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

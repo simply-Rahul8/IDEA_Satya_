@@ -1,0 +1,33 @@
+{
+  "pdp_id": "pdp-031",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Shikakai Studio",
+  "category": "hair",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Shikakai Studio Silk Serum",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Permanent frizz removal in one wash.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-002"
+      ]
+    },
+    {
+      "text": "Lightweight serum with silicones and argan oil.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply to damp hair ends.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

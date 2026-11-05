@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-028",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Mayur Hair Studio",
+  "category": "hair",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Mayur Anti-Dandruff Shampoo with Neem",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Kills 99.9% germs that cause dandruff.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-011"
+      ]
+    },
+    {
+      "text": "Contains neem, tea tree oil and zinc pyrithione.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Lather, leave for two minutes and rinse.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use twice a week.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

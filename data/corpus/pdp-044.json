@@ -1,0 +1,47 @@
+{
+  "pdp_id": "pdp-044",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Ghana Kesh",
+  "category": "hair",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Ghana Kesh Rosemary Hair Tonic",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Regrow hair in 30 days.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-005"
+      ]
+    },
+    {
+      "text": "Contains rosemary oil and redensyl.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Clinically visible hair regrowth.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-005"
+      ]
+    },
+    {
+      "text": "Stops hair fall in 2 weeks.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-010"
+      ]
+    },
+    {
+      "text": "Spray on scalp daily.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "pdp_id": "pdp-049",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Kaya Kalp Clinic",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Kaya Kalp Wellness Day Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Cures eczema and psoriasis.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-001"
+      ]
+    },
+    {
+      "text": "Prevents skin infections and viral infections.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-002"
+      ]
+    },
+    {
+      "text": "The world's best skin cream.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-012"
+      ]
+    },
+    {
+      "text": "Apply once daily.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

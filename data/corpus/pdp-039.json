@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-039",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Swasth Sutra",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Swasth Sutra Turmeric Balm",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Prevents skin infections naturally.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-002"
+      ]
+    },
+    {
+      "text": "Protects your family against viral infections.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-002"
+      ]
+    },
+    {
+      "text": "Made with turmeric and aloe.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use on clean skin.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

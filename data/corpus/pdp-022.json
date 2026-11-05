@@ -1,0 +1,45 @@
+{
+  "pdp_id": "pdp-022",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Jeevan Skin Labs",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Jeevan Anti-Acne Spot Gel",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Clears pimples overnight.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-011"
+      ]
+    },
+    {
+      "text": "Gel with 2% salicylic acid and tea tree oil.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Dab a small amount on the spot at bedtime.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Do not use on broken skin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Safe for all skin types.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-008"
+      ]
+    }
+  ]
+}

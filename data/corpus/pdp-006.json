@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-006",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Itra House",
+  "category": "fragrance",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Itra House Midnight Jasmine Eau de Parfum, 50 ml",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Top notes of bergamot, a heart of jasmine and a base of sandalwood.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Long lasting for a fragrance of this concentration, results vary by skin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Comes in a recyclable glass bottle with a magnetic cap.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Spray on pulse points from 15 cm away.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Flammable, keep away from flame.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

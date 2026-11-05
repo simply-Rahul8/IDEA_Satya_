@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-043",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Kalakesh Colour Care",
+  "category": "hair",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Kalakesh Herbal Hair Oil",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Prevents premature greying of hair.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DMR-003"
+      ]
+    },
+    {
+      "text": "Reverses grey hair naturally.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DMR-003"
+      ]
+    },
+    {
+      "text": "Enriched with bhringraj and amla.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Massage on scalp twice a week.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

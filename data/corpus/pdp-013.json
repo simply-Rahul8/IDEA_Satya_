@@ -1,0 +1,36 @@
+{
+  "pdp_id": "pdp-013",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Nilgiri Naturals",
+  "category": "hair",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Nilgiri Naturals Argan Leave-In Hair Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Lightweight cream that helps control frizz and adds shine.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Contains argan oil and shea butter.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply to towel-dried hair and style as usual.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Rinse eyes with water if contact occurs.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

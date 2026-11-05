@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-025",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Vriksha Wellness",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Vriksha Firming Body Gel with Caffeine",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Burns belly fat while you sleep.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-013"
+      ]
+    },
+    {
+      "text": "Cooling gel with caffeine and green tea extract.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Massage in circular motions after your shower.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use with a healthy diet and regular exercise.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

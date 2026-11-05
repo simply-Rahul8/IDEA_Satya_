@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-017",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Ambar Atelier",
+  "category": "fragrance",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Ambar Atelier Sandal Roll-On Perfume Oil",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Alcohol-free perfume oil in a 10 ml roll-on bottle.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Warm sandalwood and vanilla notes.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Slim enough to slip into a pocket.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply to pulse points.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Perform a patch test before first use.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

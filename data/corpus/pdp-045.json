@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-045",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Medicare Skin",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Medicare Skin Gel",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Doctor-prescribed strength anti-acne gel.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-004"
+      ]
+    },
+    {
+      "text": "Medicated shampoo for the scalp.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-004"
+      ]
+    },
+    {
+      "text": "Contains aloe and tea tree oil.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use as directed.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}
