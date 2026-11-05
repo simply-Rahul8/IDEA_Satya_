@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-035",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Tej Beauty",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Tej Radiance Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Whitens your skin in 7 days.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-001"
+      ]
+    },
+    {
+      "text": "Enriched with saffron and licorice extract.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fair skin for a perfect wedding day.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-003"
+      ]
+    },
+    {
+      "text": "Apply twice daily after cleansing.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-024",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Mamta Baby Care",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Mamta Gentle Baby Lotion",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Safe for babies and kids of all ages.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-008"
+      ]
+    },
+    {
+      "text": "Soft, light lotion with almond oil.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Dermatologically tested.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-004"
+      ]
+    },
+    {
+      "text": "Apply after bath on damp skin.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

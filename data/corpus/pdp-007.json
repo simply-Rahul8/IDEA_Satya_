@@ -1,0 +1,36 @@
+{
+  "pdp_id": "pdp-007",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Chandni Cosmetics",
+  "category": "other",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Chandni Whiter Smile Charcoal Toothpaste",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Get whiter teeth in a week with this toothpaste.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Contains activated charcoal and 1000 ppm fluoride.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fresh mint flavour that lasts through the morning.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Brush twice a day for two minutes.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

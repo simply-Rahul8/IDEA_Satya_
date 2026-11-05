@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-036",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Sundari Fairness Lab",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Sundari Glow Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Say goodbye to dark skin with this cream.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-002"
+      ]
+    },
+    {
+      "text": "Get fairer skin with saffron and milk proteins.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-001"
+      ]
+    },
+    {
+      "text": "Cream base with glycerin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply at night.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

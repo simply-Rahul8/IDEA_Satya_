@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-008",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Neelkanth Botanicals",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Neelkanth Lip Balm with Shea and Cocoa Butter",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Moisturises dry lips with shea butter, cocoa butter and vitamin E.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Smooth glide with a light vanilla scent.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Comes in a pocket-friendly tube.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply as often as needed.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Discontinue use if irritation occurs.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

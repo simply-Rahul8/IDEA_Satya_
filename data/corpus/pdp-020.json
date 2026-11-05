@@ -1,0 +1,43 @@
+{
+  "pdp_id": "pdp-020",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Anandi Organics",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Anandi Organics Kumkumadi Face Oil",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "A 100% natural, chemical-free face oil.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-007"
+      ]
+    },
+    {
+      "text": "Blend of sesame, almond and saffron-infused oils.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Absorbs well and leaves skin soft.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use two to three drops at night.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Patch test before use.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

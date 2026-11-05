@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-027",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Tilak Naturals",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Tilak Naturals Wrinkle Defence Night Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Erases wrinkles overnight.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-003"
+      ]
+    },
+    {
+      "text": "Contains retinyl palmitate and peptides.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Smooth cream that sinks in without residue.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Guaranteed results in 7 days.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-002"
+      ]
+    }
+  ]
+}

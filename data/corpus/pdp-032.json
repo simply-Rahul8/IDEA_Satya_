@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-032",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Mitti Mantra",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Mitti Mantra Multani Mitti Face Mask",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Completely chemical-free multani mitti, straight from the earth.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-007"
+      ]
+    },
+    {
+      "text": "Natural clay with rose water.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use once a week.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Do not let the mask dry completely on the skin.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

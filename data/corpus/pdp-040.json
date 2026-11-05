@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-040",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Amrit Ayur",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Amrit Ayur Ashwagandha Body Oil",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Boosts your immunity from the first use.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-003"
+      ]
+    },
+    {
+      "text": "Balances hormones naturally.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-003"
+      ]
+    },
+    {
+      "text": "Blend of sesame and ashwagandha oils.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Massage before bath.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-004",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Amlaveda Co",
+  "category": "hair",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Amlaveda Smoothing Shampoo with Amla and Aloe",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "A sulphate-free shampoo for dry and frizzy hair.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Nourishes hair from root to tip with amla extract and aloe vera.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Leaves hair soft and easy to comb.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Massage into wet hair, lather and rinse thoroughly.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Avoid contact with eyes.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

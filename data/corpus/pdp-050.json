@@ -1,0 +1,42 @@
+{
+  "pdp_id": "pdp-050",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Ojas Organics",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Ojas Herbal Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fixes dusky skin tone.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-002"
+      ]
+    },
+    {
+      "text": "Guaranteed results in 7 days.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-002"
+      ]
+    },
+    {
+      "text": "Balances hormones naturally.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DRUG-003"
+      ]
+    },
+    {
+      "text": "Apply daily.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

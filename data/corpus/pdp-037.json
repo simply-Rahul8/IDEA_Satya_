@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-037",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Gauri Gold",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Gauri Gold Gel",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fairness that wins you a better job.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-003"
+      ]
+    },
+    {
+      "text": "Light gel with vitamin B3.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fixes dusky skin tone for good.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-002"
+      ]
+    },
+    {
+      "text": "Apply thinly.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

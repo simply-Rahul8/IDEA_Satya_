@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-005",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Tarang Skin",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Tarang Sunscreen Gel SPF 50 PA++++",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Lightweight broad-spectrum sunscreen with a matte finish.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Offers SPF 50 PA++++ protection when applied as directed.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Reapply every two to three hours when outdoors.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Non-greasy and layers well under makeup.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Keep out of reach of children.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

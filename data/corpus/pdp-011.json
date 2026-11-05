@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-011",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Sindoor Studio",
+  "category": "makeup",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Sindoor Studio Matte Liquid Lipstick in Brick Red",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Highly pigmented colour in a single swipe.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Comfortable matte finish that does not feel drying.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Available in 18 shades inspired by Indian festivals.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Wear it alone or layer over a liner.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Remove with oil-based makeup remover.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}
