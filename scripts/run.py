@@ -1,0 +1,29 @@
+"""Cross-platform task runner (the Windows host has no make). Usage: python scripts/run.py <task>."""
+
+import os
+import subprocess
+import sys
+
+TASKS = {
+    "test": [["uv", "run", "pytest"]],
+    "lint": [["uv", "run", "ruff", "check", "."], ["uv", "run", "ruff", "format", "--check", "."]],
+    "format": [["uv", "run", "ruff", "check", "--fix", "."], ["uv", "run", "ruff", "format", "."]],
+    "bench": [["uv", "run", "python", "-m", "bench"]],
+    "dev": [["uv", "run", "uvicorn", "asgi:app", "--reload"]],
+}
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) != 2 or argv[1] not in TASKS:
+        print(f"usage: run.py {{{'|'.join(TASKS)}}}", file=sys.stderr)
+        return 2
+    env = {**os.environ, "SATYA_LLM": os.environ.get("SATYA_LLM", "mock")}
+    for cmd in TASKS[argv[1]]:
+        code = subprocess.call(cmd, env=env)
+        if code:
+            return code
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
