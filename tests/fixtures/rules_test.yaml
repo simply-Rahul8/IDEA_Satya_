@@ -1,0 +1,27 @@
+# TEST FIXTURE ONLY. Not regulatory content; real rules live in engine/rules (Rules agent, draft).
+version: "test-0"
+status: draft
+rules:
+  - id: T-DRUG
+    category: drug_treatment
+    severity: red
+    overridable: false
+    reason: "Treatment claim"
+    citation: "fixture"
+    suggestion: "Describe the product, not a treatment"
+    patterns:
+      - {verb: "cures?|treats?", condition: "acne|eczema", window: 40}
+    allowlist: ["for acne-prone skin"]
+    examples:
+      positive: ["This serum cures acne fast"]
+      negative: ["Made for acne-prone skin", "Cures nothing, smells nice"]
+  - id: T-WARN
+    category: other
+    severity: orange
+    reason: "Absolute word"
+    citation: "fixture"
+    patterns:
+      - {regex: "\\b100% (?:safe|natural)"}
+    examples:
+      positive: ["100% natural glow"]
+      negative: ["Made with natural oils"]
