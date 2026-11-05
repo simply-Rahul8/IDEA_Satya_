@@ -16,5 +16,7 @@ def test_mock_is_deterministic():
 
 def test_live_mode_not_silently_mocked(monkeypatch):
     monkeypatch.setenv("SATYA_LLM", "live")
-    with pytest.raises(NotImplementedError):
+    monkeypatch.delenv("SARVAM_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    with pytest.raises(providers.ProviderConfigError):
         providers.get_provider()
