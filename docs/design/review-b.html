@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review B · Truth ↔ Copy · Satya (draft design)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/review-parts.css">
+<style>
+  /* Variant B: evidence-first. The Product Truth ledger sits beside the PDP copy; anchors cross-highlight both. */
+  main { padding-block: var(--s-3) var(--s-9); }
+  .gate { z-index: 20; background: var(--bg); padding-block: var(--s-3); border-bottom: 1px solid var(--line); }
+  @media (min-width: 48rem) { .gate { position: sticky; top: 0; } }
+  .gate-in { display: grid; gap: var(--s-3); }
+  @media (min-width: 48rem) { .gate-in { grid-template-columns: 1fr auto; align-items: center; } }
+  .gate h1 { font-size: var(--t-xl); }
+  .gate .eyebrow { margin-bottom: var(--s-1); display: block; }
+  .prog { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; height: .55rem; margin-top: var(--s-3); }
+  .prog i { background: var(--sunken); border-radius: 3px; }
+  .prog i[data-s="red"] { background: var(--red-fg); }
+  .prog i[data-s="amber"] { background: repeating-linear-gradient(45deg, var(--amber-fg) 0 4px, var(--amber-bg) 4px 8px); }
+  .prog i[data-s="ack"], .prog i[data-s="ok"] { background: var(--green-fg); }
+  .gate-act { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+  .gate .note { font-size: var(--t-sm); font-weight: 600; display: flex; gap: var(--s-2); align-items: center; }
+  .tabs { display: flex; gap: var(--s-2); margin-block: var(--s-4); }
+  .tabs button { flex: 1; }
+  @media (min-width: 60rem) { .tabs { display: none; } }
+  @media (max-width: 59.99rem) { .pane.is-off { display: none; } }
+  .cols { display: grid; gap: var(--s-5); margin-top: var(--s-4); }
+  @media (min-width: 60rem) { .cols { grid-template-columns: 22rem minmax(0, 1fr); align-items: start; gap: var(--s-7); } .truth { position: sticky; top: 9.5rem; max-height: calc(100dvh - 11rem); overflow: auto; padding-inline-end: var(--s-2); } }
+  .col-h { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-3); }
+  .claims { display: grid; gap: var(--s-2); }
+  .claim { transition: background var(--dur-2), outline-color var(--dur-2); }
+  .copy .sec-h { font: 500 var(--t-xl)/1.1 var(--font-display); margin: var(--s-6) 0 var(--s-3); color: var(--ink-2); display: flex; align-items: baseline; gap: var(--s-3); }
+  .copy .sec-h:first-child { margin-top: 0; }
+  .copy .sec-h::after { content: ""; flex: 1; border-bottom: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: var(--s-3); padding: var(--s-3) var(--s-3) var(--s-3) 0; border-radius: var(--r-md); }
+  .row .gut { padding-top: .35rem; text-align: center; }
+  .row[data-status="red"] .gut { color: var(--red-fg); } .row[data-status="amber"] .gut { color: var(--amber-fg); } .row[data-status="ack"] .gut, .row[data-status="ok"] .gut { color: var(--green-fg); }
+  .row .sent-text { font-size: var(--t-lg); }
+  .row .anchors { margin-top: var(--s-2); }
+  .row [data-flags] { margin-top: var(--s-3); }
+  .row[data-status="ok"] [data-flags] .fp-ok { display: none; }
+  .row .meta { display: flex; gap: var(--s-2); align-items: center; flex-wrap: wrap; margin-top: var(--s-2); }
+  .row.is-linked { background: var(--accent-soft); box-shadow: none; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to review</a>
+<div class="wrap" id="app">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Review · variant B of 3 · <a href="index.html">all variants</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+
+  <div class="gate" role="region" aria-label="Approval gate">
+    <div class="gate-in">
+      <div>
+        <span class="eyebrow">Step 7 · Review · Rosewater Dew Serum</span>
+        <h1>Does every sentence trace to a confirmed claim?</h1>
+      </div>
+      <div class="gate-act">
+        <p class="note" data-approve-note aria-live="polite"></p>
+        <button class="btn btn-primary" type="button" data-approve aria-disabled="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Approve pack</button>
+      </div>
+    </div>
+    <div class="prog" id="prog" role="img" aria-label="Progress per sentence"></div>
+    <p class="recheck" data-recheck aria-live="polite" style="margin-top:var(--s-2)"></p>
+  </div>
+
+  <main id="main">
+    <div class="tabs" role="tablist" aria-label="Review panes">
+      <button class="btn btn-secondary btn-sm" role="tab" id="t-copy" aria-selected="true" aria-controls="p-copy" type="button">Copy · <span data-sum="total"></span> sentences</button>
+      <button class="btn btn-secondary btn-sm" role="tab" id="t-truth" aria-selected="false" aria-controls="p-truth" type="button">Product Truth · 7</button>
+    </div>
+    <div class="cols">
+      <section class="truth pane is-off" id="p-truth" role="tabpanel" aria-labelledby="t-truth">
+        <h2 class="col-h">Product Truth ledger</h2>
+        <div class="claims" id="claims"></div>
+        <p class="sr-only" id="claim-live" aria-live="polite"></p>
+      </section>
+      <section class="copy pane" id="p-copy" role="tabpanel" aria-labelledby="t-copy"><h2 class="sr-only">PDP copy</h2><div id="copy"></div></section>
+    </div>
+  </main>
+</div>
+
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$, rev = Satya.review(), root = document.body;
+  const groups = [['Title', ['s1']], ['Bullet points', ['s2', 's3', 's4', 's5']], ['How to use', ['s6']], ['Warnings and storage', ['s7']]];
+  const row = (s) => {
+    const r = rev.result(s.id), st = rev.status(s.id);
+    const anchors = s.anchors.length ? s.anchors.map((c) => `<button class="chip" type="button" data-act="anchor" data-claim="${c}" aria-pressed="false">${Satya.icon('anchor')} ${c.toUpperCase()}</button>`).join('') : `<span class="chip is-unanchored">${Satya.icon('warn')} No source claim</span>`;
+    return `<article class="row" data-sent="${s.id}" data-status="${st}" aria-label="${s.section}">
+      <span class="gut" data-badge-ic="${s.id}" aria-hidden="true"></span>
+      <div><div class="sent-text" data-edit="${s.id}" contenteditable="true" role="textbox" aria-multiline="true" aria-label="${s.section} text, editable" spellcheck="false">${Satya.markHTML(s.text, r.spans, { icons: true })}</div>
+        <div class="meta"><span class="chip chip-type">${s.type}</span><span data-badge="${s.id}">${Satya.sentBadge(st)}</span></div>
+        <div class="anchors" aria-label="Anchors">${anchors}</div>
+        <div data-flags="${s.id}">${Satya.flagPanelHTML(rev, s)}</div></div></article>`;
+  };
+  $('#copy').innerHTML = groups.map(([h, ids]) => `<h3 class="sec-h">${h}</h3>` + ids.map((id) => row(rev.byId(id))).join('')).join('');
+  $('#claims').innerHTML = Satya.CLAIMS.map((c) => `<div class="claim" data-claim="${c.id}"><div><span class="chip chip-type">${c.id.toUpperCase()} · ${c.kind}</span></div><strong>${Satya.esc(c.text)}</strong>${Satya.claimStateBadge(c.state)}<small>${Satya.esc(c.ev)}</small></div>`).join('');
+
+  const IC = { red: 'block', amber: 'warn', ack: 'ok', ok: 'ok' };
+  const drawProg = () => {
+    $('#prog').innerHTML = rev.sents.map((s) => `<i data-s="${rev.status(s.id)}"></i>`).join('');
+    rev.sents.forEach((s) => { $(`[data-badge-ic="${s.id}"]`).innerHTML = Satya.icon(IC[rev.status(s.id)]); });
+  };
+  drawProg();
+  const ctl = Satya.bindReview(root, rev, {
+    after: drawProg,
+    onClaim: (cid) => {
+      Satya.$$('[data-sent]', root).forEach((n) => n.classList.toggle('is-linked', rev.byId(n.dataset.sent).anchors.includes(cid)));
+      if (matchMedia('(max-width: 59.99rem)').matches) tab('truth');
+    },
+  });
+  // Mobile tabs
+  const tab = (w) => { ['copy', 'truth'].forEach((k) => { $('#p-' + k).classList.toggle('is-off', k !== w); $('#t-' + k).setAttribute('aria-selected', String(k === w)); }); };
+  $('#t-copy').onclick = () => tab('copy'); $('#t-truth').onclick = () => tab('truth');
+  tab('copy');
+});
+</script>
+</body>
+</html>

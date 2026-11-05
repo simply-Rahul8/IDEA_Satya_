@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review A · Sentence Cards · Satya (draft design)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/review-parts.css">
+<style>
+  /* Variant A: one card per sentence, flag and fix live inside the card. Product Truth in a side rail. */
+  main { padding-block: var(--s-4) 8rem; }
+  .head { display: grid; gap: var(--s-3); margin-bottom: var(--s-5); }
+  .head h1 { font-size: var(--t-2xl); }
+  .head .sub { color: var(--ink-2); }
+  .layout { display: grid; gap: var(--s-5); }
+  @media (min-width: 60rem) { .layout { grid-template-columns: minmax(0, 1fr) 21rem; align-items: start; } .rail { position: sticky; top: var(--s-4); } }
+  .rail { order: -1; }
+  @media (min-width: 60rem) { .rail { order: 0; } }
+  .cards { display: grid; gap: var(--s-4); }
+  .sc { padding: var(--s-4) var(--s-4) var(--s-4) var(--s-5); border-inline-start: 6px solid var(--line-strong); position: relative; }
+  .sc[data-status="red"] { border-inline-start-color: var(--red-fg); }
+  .sc[data-status="amber"] { border-inline-start: 6px dashed var(--amber-fg); }
+  .sc[data-status="ack"], .sc[data-status="ok"] { border-inline-start-color: var(--green-fg); }
+  .sc-head { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3); align-items: center; margin-bottom: var(--s-3); }
+  .sc-head .sec { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-inline-end: auto; }
+  .sc .anchors { margin-top: var(--s-3); }
+  .sc [data-flags] { margin-top: var(--s-4); }
+  .rail details { padding: var(--s-4); }
+  .rail summary { font: 600 var(--t-sm)/1.2 var(--font-sans); cursor: pointer; min-height: var(--tap); display: flex; align-items: center; justify-content: space-between; }
+  .rail .claims { display: grid; gap: var(--s-2); margin-top: var(--s-3); }
+  .bar { position: fixed; inset: auto 0 0; z-index: 30; background: var(--surface); border-top: 1px solid var(--line-strong); box-shadow: 0 -6px 20px rgb(0 0 0 / .08); padding: var(--s-3) 1rem calc(var(--s-3) + env(safe-area-inset-bottom)); }
+  .bar .approve-bar { max-width: 72rem; margin-inline: auto; }
+  .bar .note { color: var(--ink); }
+  @media (max-width: 30rem) { .bar .btn { width: 100%; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to review</a>
+<div class="wrap" id="app">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Review · variant A of 3 · <a href="index.html">all variants</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+
+  <main id="main">
+    <div class="head">
+      <p class="eyebrow">Step 7 · Review · Rosewater Dew Serum · SKU RDS-30</p>
+      <h1>Review each sentence before it ships.</h1>
+      <p class="sub">Blocked sentences stop approval. Amber ones need a reason. Edit any sentence and it is re-checked as you type. <span class="recheck" data-recheck aria-live="polite"></span></p>
+      <div class="tally" aria-label="Review tally">
+        <span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg><b data-sum="red"></b> blocked</span>
+        <span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg><b data-sum="amber"></b> need a reason</span>
+        <span class="flag flag-green"><svg class="ic" aria-hidden="true"><use href="#i-ok"/></svg><b data-sum="ok"></b> clear · <b data-sum="ack"></b> kept with reason</span>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section aria-label="PDP pack sentences"><div class="cards" id="cards"></div></section>
+      <aside class="rail" aria-label="Product Truth">
+        <details class="card" id="truth" open>
+          <summary>Product Truth · 7 claims <span class="muted" style="font-weight:400;font-size:var(--t-xs)">tap an anchor to trace</span></summary>
+          <div class="claims" id="claims"></div>
+        </details>
+        <p class="sr-only" id="claim-live" aria-live="polite"></p>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div class="bar" role="region" aria-label="Approval">
+  <div class="approve-bar">
+    <p class="note" data-approve-note aria-live="polite"></p>
+    <button class="btn btn-primary" type="button" data-approve aria-disabled="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Approve pack</button>
+  </div>
+</div>
+
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$, rev = Satya.review(), root = document.body;
+  $('#cards').innerHTML = rev.sents.map((s) => {
+    const r = rev.result(s.id), st = rev.status(s.id);
+    const anchors = s.anchors.length ? s.anchors.map((c) => `<button class="chip" type="button" data-act="anchor" data-claim="${c}" aria-pressed="false">${Satya.icon('anchor')} ${c.toUpperCase()} · ${Satya.esc(Satya.CLAIMS.find((x) => x.id === c).text)}</button>`).join('') : `<span class="chip is-unanchored">${Satya.icon('warn')} No source claim</span>`;
+    return `<article class="card sc" data-sent="${s.id}" data-status="${st}" aria-label="${s.section}">
+      <div class="sc-head"><span class="sec">${s.section}</span><span class="chip chip-type">${s.type}</span><span data-badge="${s.id}">${Satya.sentBadge(st)}</span></div>
+      <div class="sent-text" data-edit="${s.id}" contenteditable="true" role="textbox" aria-multiline="true" aria-label="${s.section} text, editable" spellcheck="false">${Satya.markHTML(s.text, r.spans, { icons: true })}</div>
+      <div class="anchors" aria-label="Anchors">${anchors}</div>
+      <div data-flags="${s.id}">${Satya.flagPanelHTML(rev, s)}</div></article>`;
+  }).join('');
+  $('#claims').innerHTML = Satya.CLAIMS.map((c) => `<div class="claim" data-claim="${c.id}"><div><span class="chip chip-type">${c.id.toUpperCase()} · ${c.kind}</span></div><strong>${Satya.esc(c.text)}</strong>${Satya.claimStateBadge(c.state)}<small>${Satya.esc(c.ev)}</small></div>`).join('');
+  const truth = $('#truth');
+  if (matchMedia('(max-width: 59.99rem)').matches) truth.open = false;
+  Satya.bindReview(root, rev, { onClaim: (cid) => { truth.open = true; Satya.$$('[data-sent]', root).forEach((n) => n.classList.toggle('is-linked', rev.byId(n.dataset.sent).anchors.includes(cid))); } });
+});
+</script>
+</body>
+</html>

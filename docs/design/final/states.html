@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final specs · state gallery · Satya (draft design)</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/review-parts.css">
+<link rel="stylesheet" href="final-parts.css">
+<style>
+  /* Gallery chrome only. Every .frame is a true 22.5rem (360px) column so each state is judged at the smallest width. */
+  main { padding-block: var(--s-5) var(--s-9); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+  h1 { font-size: var(--t-2xl); } h2.sec { font-size: var(--t-xl); border-bottom: 1px solid var(--line); padding-bottom: var(--s-2); }
+  .grid { display: flex; flex-wrap: wrap; gap: var(--s-5); align-items: flex-start; margin-top: var(--s-4); }
+  .frame { width: 22.5rem; max-width: 100%; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); align-content: start; }
+  .frame > figcaption { font: 600 var(--t-xs)/1.3 var(--font-sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  .frame > .box { border: 1px dashed var(--line-strong); border-radius: var(--r-md); padding: var(--s-3); background: var(--bg); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+  .frame .paper .backdrop, .frame .paper textarea { min-height: 9rem; font-size: var(--t-md); padding: var(--s-4); }
+  .frame .dock { position: static; display: grid; }
+  .frame .gate { position: static; }
+  .tabs-demo { display: flex; gap: var(--s-2); }
+  .tabs-demo .btn { flex: 1; }
+  .edit .backdrop, .edit textarea { font-size: var(--t-md); }
+  /* Frames always show the 360px variants, whatever the gallery viewport is. */
+  .frame .flags button { grid-template-columns: 1fr auto; } .frame .flags .flag { grid-column: 1 / -1; justify-self: start; }
+  .frame .chip-claim { display: flex; width: 100%; min-height: var(--tap); padding: var(--s-2) var(--s-3); border-radius: var(--r-md); }
+  .frame .chip-claim .txt { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+  .frame .peek { display: grid; }
+  .frame .row { grid-template-columns: minmax(0, 1fr); } .frame .row .gut { display: none; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to gallery</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+  <symbol id="i-spin" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V13M12 16.4v.1"/></symbol>
+  <symbol id="i-unchecked" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/><path d="M12 11v5M12 7.9v.1"/></symbol>
+</svg>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="../index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Final specs · state gallery · <a href="README.md">spec index</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+  <main id="main">
+    <div><p class="eyebrow">SAT-13 · v1.0 final specs</p><h1 style="margin-top:var(--s-2)">State gallery</h1>
+      <p class="muted" style="margin-top:var(--s-3);max-width:46rem">Static reference for the states the specs describe. Every frame is 360px wide. Use the moon button for dark. Rule text is illustrative draft; nothing here says "compliant".</p></div>
+
+<!-- ============================ CHECKER ============================ -->
+<section aria-labelledby="h-ck"><h2 class="sec" id="h-ck">Public checker (variant A, Editorial Paper)</h2>
+<div class="grid">
+  <figure class="frame"><figcaption>C1 · Empty</figcaption><div class="box">
+    <div class="paper"><div class="backdrop" aria-hidden="true"></div><textarea readonly placeholder="Paste or type your product copy here…" aria-label="Product listing copy to check"></textarea>
+      <div class="paper-foot"><span class="count">0 / 5,000</span><div style="display:flex;gap:var(--s-2)"><button class="btn btn-ghost btn-sm" type="button">Clear</button><button class="btn btn-secondary btn-sm" type="button">Try a sample</button></div></div></div>
+    <p class="draft"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span><strong>Draft rule set v0.1.0-draft.</strong> Not yet reviewed by a regulatory consultant. Not legal advice.</span></p></div></figure>
+
+  <figure class="frame"><figcaption>C2 · Checking (marks pause, text stays)</figcaption><div class="box">
+    <div class="paper"><div class="backdrop" aria-hidden="true">Our serum cures acne scars in 7 days.</div><textarea readonly aria-label="Product listing copy to check">Our serum cures acne scars in 7 days.</textarea>
+      <div class="paper-foot"><span class="count">37 / 5,000</span><span class="checking" role="status"><svg class="ic" aria-hidden="true"><use href="#i-spin"/></svg>Checking…</span></div></div></div></figure>
+
+  <figure class="frame"><figcaption>C3 · Flagged result</figcaption><div class="box">
+    <div class="paper"><div class="backdrop" aria-hidden="true">Our serum <mark class="hl hl-red">cures acne scars</mark> <mark class="hl hl-amber">in 7 days</mark>. Gentle formula.</div><textarea readonly aria-label="Product listing copy to check">Our serum cures acne scars in 7 days. Gentle formula.</textarea>
+      <div class="paper-foot"><span class="count">53 / 5,000</span><span class="checking" style="visibility:visible">Checked</span></div></div>
+    <article class="card verdict" aria-labelledby="v1"><div class="v-top"><p class="eyebrow" id="v1">Verdict · rule set v0.1.0-draft</p>
+      <div class="v-label"><h2>High risk</h2><span>2 phrases flagged</span></div>
+      <div class="meter" data-level="4" role="img" aria-label="Severity meter, level 4 of 5"><i class="on" style="--n:1"></i><i class="on" style="--n:2"></i><i class="on" style="--n:3"></i><i class="on" style="--n:4"></i><i></i></div>
+      <div class="tally-row"><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>1 blocked</span><span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>1 to review</span></div></div>
+      <ul class="flags"><li><button type="button"><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked <span class="id">EN-DRUG-001</span></span><span><q>cures acne scars</q><small>Treatment or cure claim</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+      <li><button type="button"><span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Review <span class="id">EN-CLAIM-003</span></span><span><q>in 7 days</q><small>Time-bound result</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li></ul></article></div></figure>
+
+  <figure class="frame"><figcaption>C4 · Clear result (never "compliant")</figcaption><div class="box">
+    <article class="card verdict"><div class="v-top"><p class="eyebrow">Verdict · rule set v0.1.0-draft</p>
+      <div class="v-label"><h2>No flagged risks</h2><span>under rule set v0.1.0-draft</span></div>
+      <div class="meter" data-level="0" role="img" aria-label="Severity meter, level 0 of 5"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="tally-row"><span class="flag flag-green"><svg class="ic" aria-hidden="true"><use href="#i-ok"/></svg>Nothing flagged</span></div>
+      <p class="muted" style="font-size:var(--t-sm)">This is a text check against a draft rule set. It does not mean the listing is approved by a marketplace or a regulator. Not legal advice.</p></div></article></div></figure>
+
+  <figure class="frame"><figcaption>C5 · Error (text is never lost)</figcaption><div class="box">
+    <div class="notice" role="alert" data-kind="error"><svg class="ic" aria-hidden="true"><use href="#i-error"/></svg><div><strong>We couldn't check this just now.</strong>Your text is still here. Check your connection and try again.<div class="acts"><button class="btn btn-secondary btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Try again</button></div></div></div></div></figure>
+
+  <figure class="frame"><figcaption>C6 · Rate limited · C7 · Over the cap</figcaption><div class="box">
+    <div class="notice" role="alert"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><div><strong>You've reached the check limit.</strong>Try again in about 10 minutes. Nothing you typed is lost.</div></div>
+    <div class="paper-foot card" style="border-radius:var(--r-md)"><span class="count is-over">5,412 / 5,000</span></div>
+    <div class="notice"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><div><strong>Only the first 5,000 characters were checked.</strong>Remove 412 characters to check the whole text.</div></div></div></figure>
+
+  <figure class="frame"><figcaption>C8 · Product-type gate: needs review</figcaption><div class="box">
+    <article class="card verdict"><div class="v-top"><p class="eyebrow">Out of scope for Satya v1</p>
+      <div class="v-label"><h2>This may not be a cosmetic</h2></div>
+      <p>The text has wording that may mean this is an Ayurvedic product. Satya v1 reviews cosmetics only. If it is a cosmetic, remove the Ayurvedic wording and check again.</p>
+      <div class="tally-row"><span class="flag flag-ink"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>Not reviewed</span></div></div></article></div></figure>
+</div></section>
+
+<!-- ============================ REVIEW ============================ -->
+<section aria-labelledby="h-rv"><h2 class="sec" id="h-rv">Review screen (variant B, Truth ↔ Copy): sentence card states</h2>
+<div class="grid">
+  <figure class="frame"><figcaption>R1 · Blocked, not overridable</figcaption><div class="box">
+    <article class="row" data-status="red"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-block"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true"><mark class="hl hl-red">Cures acne scars</mark> with regular use.</div><textarea readonly aria-label="Bullet 4 text, editable">Cures acne scars with regular use.</textarea></div>
+      <div class="meta" style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-2)"><span class="chip chip-type">Claim</span><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked</span></div>
+      <div class="anchors" style="margin-top:var(--s-2)"><button class="chip chip-claim" type="button" aria-pressed="false" data-state="blocked"><span class="id">C4</span><span class="txt">Cures acne scars</span><svg class="ic st" aria-hidden="true"><use href="#i-block"/></svg></button></div>
+      <ul class="fp-list" style="margin-top:var(--s-3)"><li class="fp-item fp-red"><div class="fp-head"><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked <span class="id">EN-DRUG-001</span></span><strong>Treatment or cure claim</strong></div>
+        <p class="fp-why"><q>Cures acne scars</q>. Says the product treats a skin condition. That is a drug-type claim.</p><button class="btn btn-ghost btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Citation</button></li></ul>
+      <p class="fp-note"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Cannot be overridden. Rewrite or remove it.</p>
+      <div class="fp-rw"><span class="eyebrow">Suggested rewrite</span><p>Helps skin look smoother and more even with regular use.</p><button class="btn btn-primary btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Use rewrite</button></div>
+      <div class="fp-foot"><button class="btn btn-ghost btn-sm" type="button" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-thumbdown"/></svg>Wrong flag?</button></div></div></article></div></figure>
+
+  <figure class="frame"><figcaption>R2 · Blocked, evidence can override</figcaption><div class="box">
+    <article class="row" data-status="red"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-block"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true"><mark class="hl hl-red">100% safe</mark> for all skin.</div><textarea readonly aria-label="Bullet 2 text, editable">100% safe for all skin.</textarea></div>
+      <div class="meta" style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-2)"><span class="chip chip-type">Claim</span><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked</span></div>
+      <ul class="fp-list" style="margin-top:var(--s-3)"><li class="fp-item fp-red"><div class="fp-head"><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked <span class="id">EN-CLAIM-001</span></span><strong>Absolute safety or "no side effects"</strong></div>
+        <p class="fp-why"><q>100% safe</q>. Absolute safety claims cannot be backed up for a cosmetic.</p><button class="btn btn-ghost btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Citation</button></li></ul>
+      <div class="fp-reason"><label class="lbl" for="ev1">Evidence reference to keep this wording <span class="muted">(required)</span></label>
+        <div class="fp-row"><input class="field" id="ev1" placeholder="e.g. document ID or uploaded report"><button class="btn btn-secondary btn-sm" type="button">Keep with evidence</button></div><p class="fp-err" role="alert"></p></div></div></article></div></figure>
+
+  <figure class="frame"><figcaption>R3 · Review (needs a reason)</figcaption><div class="box">
+    <article class="row" data-status="amber"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-warn"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true"><mark class="hl hl-amber">Dermatologically tested</mark> for sensitive skin.</div><textarea readonly aria-label="Bullet 2 text, editable">Dermatologically tested for sensitive skin.</textarea></div>
+      <div class="meta" style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-2)"><span class="chip chip-type">Claim</span><span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Needs a reason</span></div>
+      <div class="anchors" style="margin-top:var(--s-2)"><button class="chip chip-claim" type="button" aria-expanded="true" aria-pressed="true" data-state="needs_reference"><span class="id">C3</span><span class="txt">Dermatologically tested</span><svg class="ic st" aria-hidden="true"><use href="#i-warn"/></svg></button></div>
+      <div class="peek"><span class="flag flag-amber" style="justify-self:start"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Needs reference</span><span>Test report: reference missing</span><button class="btn btn-ghost btn-sm" type="button" style="justify-self:start">Open in Product Truth</button></div>
+      <ul class="fp-list" style="margin-top:var(--s-3)"><li class="fp-item fp-amber"><div class="fp-head"><span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Review <span class="id">EN-CLAIM-004</span></span><strong>Evidence required</strong></div>
+        <p class="fp-why"><q>Dermatologically tested</q>. A testing claim needs a test report reference.</p></li></ul>
+      <div class="fp-reason"><label class="lbl" for="rs3">Reason to keep this wording <span class="muted">(required)</span></label><div class="fp-row"><input class="field" id="rs3" aria-invalid="true" aria-describedby="e3" placeholder="e.g. test report TR-2291 attached"><button class="btn btn-secondary btn-sm" type="button">Keep with reason</button></div><p class="fp-err" id="e3" role="alert">Add a reason to keep this wording.</p></div></div></article></div></figure>
+
+  <figure class="frame"><figcaption>R4 · Kept with reason (not "clear")</figcaption><div class="box">
+    <article class="row" data-status="kept"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true"><mark class="hl hl-amber">Dermatologically tested</mark>. Report attached.</div><textarea readonly aria-label="Bullet 2 text, editable">Dermatologically tested. Report attached.</textarea></div>
+      <div class="meta" style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-2)"><span class="chip chip-type">Claim</span><span class="flag flag-ink"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Kept with reason</span></div>
+      <div class="fp-kept"><span class="eyebrow">Your reason</span><q>Test report TR-2291 attached.</q><button class="btn btn-ghost btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-pencil"/></svg>Edit reason</button></div></div></article></div></figure>
+
+  <figure class="frame"><figcaption>R5 · Clear · R6 · No source claim</figcaption><div class="box">
+    <article class="row" data-status="ok"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-ok"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true">Made with 5% niacinamide and Damask rose water.</div><textarea readonly aria-label="Bullet 1 text, editable">Made with 5% niacinamide and Damask rose water.</textarea></div>
+      <div class="meta" style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-2)"><span class="chip chip-type">Ingredient</span><span class="flag flag-green"><svg class="ic" aria-hidden="true"><use href="#i-ok"/></svg>Clear</span></div>
+      <p class="fp-ok" style="margin-top:var(--s-2)">No flagged risks under rule set v0.1.0-draft.</p></div></article>
+    <article class="row" data-status="amber"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-warn"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true">Loved by thousands of customers.</div><textarea readonly aria-label="Bullet 3 text, editable">Loved by thousands of customers.</textarea></div>
+      <div class="meta" style="display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-2)"><span class="chip chip-type">Claim</span><span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Needs a reason</span></div>
+      <div class="anchors" style="margin-top:var(--s-2)"><span class="chip is-unanchored"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>No source claim</span></div>
+      <p class="fp-why" style="margin-top:var(--s-2)">Nothing in Product Truth backs this sentence. Rewrite it, or keep it with a reason.</p></div></article></div></figure>
+
+  <figure class="frame"><figcaption>R7 · Re-check in flight · R8 · Re-check failed</figcaption><div class="box">
+    <article class="row" data-status="amber" aria-busy="true"><span class="gut" aria-hidden="true"><svg class="ic"><use href="#i-warn"/></svg></span><div>
+      <div class="edit"><div class="backdrop" aria-hidden="true">Visible glow in 7 days</div><textarea readonly aria-label="Title text, editable">Visible glow in 7 days</textarea></div>
+      <p class="checking" style="margin-top:var(--s-2)" role="status"><svg class="ic" aria-hidden="true"><use href="#i-spin"/></svg>Checking…</p></div></article>
+    <div class="notice" role="alert" data-kind="error"><svg class="ic" aria-hidden="true"><use href="#i-error"/></svg><div><strong>Couldn't re-check Title.</strong>Your edit is kept. Approval stays off until it is checked.<div class="acts"><button class="btn btn-secondary btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Retry check</button></div></div></div></div></figure>
+
+  <figure class="frame"><figcaption>R9 · Mobile: Copy / Product Truth tabs, ledger with reverse trace</figcaption><div class="box">
+    <div class="tabs-demo" role="tablist" aria-label="Review panes"><button class="btn btn-secondary btn-sm" role="tab" aria-selected="false" type="button">Copy · 7</button><button class="btn btn-primary btn-sm" role="tab" aria-selected="true" type="button">Product Truth · 7</button></div>
+    <button class="btn btn-ghost btn-sm" type="button" style="justify-self:start"><svg class="ic" aria-hidden="true" style="transform:rotate(180deg)"><use href="#i-arrow"/></svg>Back to Bullet 4</button>
+    <div class="claims" style="display:grid;gap:var(--s-2)">
+      <div class="claim is-source" data-claim="c4" data-state="blocked" tabindex="-1"><div><span class="chip chip-type">C4 · Claim</span></div><strong>Cures acne scars</strong><span class="flag flag-red" style="justify-self:start"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Cannot confirm</span><small>Hard-blocked, cannot be confirmed</small><div class="used">Used in: <button class="chip" type="button">Bullet 4</button></div></div>
+      <div class="claim" data-state="needs_reference"><div><span class="chip chip-type">C3 · Claim</span></div><strong>Dermatologically tested</strong><span class="flag flag-amber" style="justify-self:start"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Needs reference</span><small>Test report: reference missing</small><div class="used">Used in: <button class="chip" type="button">Bullet 2</button></div></div>
+      <div class="claim" data-state="unconfirmed"><div><span class="chip chip-type">C8 · Claim</span></div><strong>Suitable for sensitive skin</strong><span class="flag flag-ink" style="justify-self:start"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>Not confirmed</span><small>Extracted from your listing. Confirm it with evidence.</small><div class="used">Used in: nothing yet</div></div>
+      <div class="claim" data-state="confirmed"><div><span class="chip chip-type">C1 · Ingredient</span></div><strong>Contains 5% niacinamide</strong><span class="flag flag-green" style="justify-self:start"><svg class="ic" aria-hidden="true"><use href="#i-ok"/></svg>Confirmed</span><small>Label photo</small><div class="used">Used in: <button class="chip" type="button">Bullet 1</button></div></div></div></div></figure>
+
+  <figure class="frame"><figcaption>R10 · Approval: full gate (≥ 48rem) and mobile dock</figcaption><div class="box">
+    <div class="gate" role="region" aria-label="Approval gate"><div class="gate-in" style="display:grid;gap:var(--s-3)"><div class="gate-title"><span class="eyebrow">Step 7 · Review · Rosewater Dew Serum</span><h1 style="font-size:var(--t-xl)">Does every sentence trace to a confirmed claim?</h1></div>
+      <div class="gate-act" style="display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center"><p class="note" style="font-size:var(--t-sm);font-weight:600;display:flex;gap:var(--s-2);align-items:center"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>2 blocked and 2 need a reason.</p>
+        <button class="btn btn-secondary btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-down"/></svg>Next issue</button><button class="btn btn-primary" type="button" aria-disabled="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Approve pack</button></div></div>
+      <div class="prog" role="img" aria-label="Sentences: 2 blocked, 2 to review, 1 kept with reason, 2 clear"><i data-s="red"></i><i data-s="red"></i><i data-s="amber"></i><i data-s="amber"></i><i data-s="kept"></i><i data-s="ok"></i><i data-s="ok"></i></div></div>
+    <div class="dock" role="region" aria-label="Approval"><div class="prog" role="img" aria-label="Sentences: 2 blocked, 2 to review, 1 kept with reason, 2 clear" style="margin:0"><i data-s="red"></i><i data-s="red"></i><i data-s="amber"></i><i data-s="amber"></i><i data-s="kept"></i><i data-s="ok"></i><i data-s="ok"></i></div>
+      <div class="row-a"><p class="note"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>2 blocked · 2 to review</p><div style="display:flex;gap:var(--s-2)"><button class="btn btn-secondary btn-sm btn-icon" type="button" aria-label="Next issue"><svg class="ic" aria-hidden="true"><use href="#i-down"/></svg></button><button class="btn btn-primary btn-sm" type="button" aria-disabled="true">Approve</button></div></div></div></div></figure>
+</div></section>
+
+<!-- ============================ AUDIT ============================ -->
+<section aria-labelledby="h-au"><h2 class="sec" id="h-au">Audit dashboard (heat-strip as drafted, plus states)</h2>
+<div class="grid">
+  <figure class="frame"><figcaption>A1 · Empty: nothing uploaded yet</figcaption><div class="box">
+    <div class="dropzone"><svg class="ic" aria-hidden="true" style="width:2rem;height:2rem"><use href="#i-upload"/></svg><h2 style="font-size:var(--t-lg)">Audit your catalogue</h2><p class="muted" style="font-size:var(--t-sm)">Upload a Shopify product CSV or a Nykaa or Amazon catalogue download. Or paste listing text.</p>
+      <button class="btn btn-primary" type="button">Choose a file</button><button class="btn btn-ghost btn-sm" type="button">Paste text instead</button><p class="muted" style="font-size:var(--t-xs)">CSV or XLSX, up to 500 products.</p></div></div></figure>
+
+  <figure class="frame"><figcaption>A2 · Loading: stepwise job, cells resolve in place</figcaption><div class="box">
+    <div class="card strip-card"><div style="display:flex;justify-content:space-between;gap:var(--s-3);font-size:var(--t-sm)"><strong role="status">Checking 38 of 120 products</strong><button class="btn btn-ghost btn-sm" type="button">Cancel</button></div>
+      <div class="bar" style="margin-top:var(--s-3)" role="progressbar" aria-label="Audit progress" aria-valuemin="0" aria-valuemax="120" aria-valuenow="38"><i style="width:32%"></i></div>
+      <div class="strip" id="s-load" style="margin-top:var(--s-4)" aria-hidden="true"></div></div></div></figure>
+
+  <figure class="frame"><figcaption>A3 · Partial failure and out-of-scope products</figcaption><div class="box">
+    <div class="notice" role="alert"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><div><strong>5 products couldn't be checked and 3 aren't cosmetics.</strong>They are marked in the strip and left out of the risk counts.<div class="acts"><button class="btn btn-secondary btn-sm" type="button"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Retry 5</button></div></div></div>
+    <div class="card strip-card"><div class="strip" id="s-part" aria-hidden="true"></div>
+      <div class="legend"><span><i class="sw" data-s="error"></i><svg class="ic" aria-hidden="true"><use href="#i-unchecked"/></svg>Couldn't check</span><span><i class="sw" data-s="skipped"></i><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>Not a cosmetic, not reviewed</span></div></div></div></figure>
+
+  <figure class="frame"><figcaption>A4 · Loaded: counters, strip, inspector line</figcaption><div class="box">
+    <div class="counters" style="grid-template-columns:repeat(2,1fr)"><div class="card stat"><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked</span><b>21</b><span class="muted" style="font-size:var(--t-xs)">of 120 products</span></div><div class="card stat"><span class="flag flag-amber"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Review</span><b>42</b><span class="muted" style="font-size:var(--t-xs)">of 120 products</span></div></div>
+    <div class="card strip-card"><div class="strip" id="s-done" role="group" aria-label="One square per product. Use arrow keys to move."></div>
+      <div class="inspect" role="status"><span class="flag flag-red"><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked</span><strong>Rosewater Dew Serum</strong><span class="sk">SKU-1004</span><span>EN-DRUG-001 treatment claim</span><a href="#">Open report</a></div>
+      <div class="legend"><span><i class="sw" data-s="red"></i><svg class="ic" aria-hidden="true"><use href="#i-block"/></svg>Blocked</span><span><i class="sw" data-s="amber"></i><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg>Review</span><span><i class="sw" data-s="green"></i><svg class="ic" aria-hidden="true"><use href="#i-ok"/></svg>Clear</span></div></div></div></figure>
+</div></section>
+  </main>
+</div>
+<script src="../assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  // Gallery only: fill the sample strips (a seeded pattern, not data).
+  const mk = (el, n, fn) => { el.innerHTML = Array.from({ length: n }, (_, i) => fn(i)).join(''); };
+  const cell = (s, i) => `<button class="cell" type="button" data-s="${s}" ${i === 3 ? 'aria-current="true"' : ''} tabindex="-1" aria-label="Product ${i + 1}: ${s}"></button>`;
+  mk(document.getElementById('s-load'), 60, (i) => cell(i < 22 ? ['red', 'amber', 'green'][i % 3 === 0 ? 0 : i % 3 === 1 ? 1 : 2] : 'pending', i));
+  mk(document.getElementById('s-part'), 40, (i) => cell(i < 5 ? 'error' : i < 8 ? 'skipped' : i < 14 ? 'red' : i < 26 ? 'amber' : 'green', i));
+  mk(document.getElementById('s-done'), 60, (i) => cell(i < 7 ? 'red' : i < 22 ? 'amber' : 'green', i));
+  document.querySelectorAll('.cell').forEach((c) => { c.removeAttribute('tabindex'); });
+});
+</script>
+</body>
+</html>

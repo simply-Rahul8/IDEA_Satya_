@@ -1,0 +1,461 @@
+# OVERRIDABLE cosmetic claim rules. An override needs a reason (orange) or evidence (red). DRAFT until consultant sign-off.
+anchors:
+  asci_code: &asci_code
+    ref: "ASCI Code for Self-Regulation of Advertising Content in India"
+    provision: "Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed"
+    verified: false
+  ccpa: &ccpa
+    ref: "Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA)"
+    provision: "misleading advertisement; claim substantiation; endorsements"
+    verified: false
+  cpa: &cpa
+    ref: "Consumer Protection Act, 2019"
+    provision: "s.2(28) misleading advertisement"
+    verified: false
+  cosmetics_rules: &cosmetics_rules
+    ref: "Cosmetics Rules, 2020 (G.S.R. 426(E))"
+    provision: "labelling and claims provisions; rule numbers to be confirmed by the consultant"
+    verified: false
+  dc_act: &dc_act
+    ref: "Drugs and Cosmetics Act, 1940"
+    provision: "s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'"
+    verified: false
+
+rules:
+  - id: EN-CLAIM-001
+    category: cosmetic_claim
+    title: "Absolute safety or 'no side effects'"
+    severity: red
+    overridable: true
+    explanation: "Absolute safety claims cannot be backed up for a cosmetic. They are misleading unless you hold evidence."
+    rewrite_hint: "Say what is in or out of the formula, for example 'free from parabens', and avoid promising safety."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "100 safe"
+          - "100 percent safe"
+          - "completely safe"
+          - "totally safe"
+          - "absolutely safe"
+          - "guaranteed safe"
+          - "zero side effects"
+          - "no side effects"
+          - "no side-effects"
+          - "side effect free"
+          - "side-effect free"
+          - "side-effects free"
+          - "without side effects"
+          - "without any side effects"
+          - "risk free"
+          - "risk-free"
+          - "harmless"
+          - "safe for everyone"
+    sources: [*asci_code, *ccpa, *cpa]
+    examples:
+      positive:
+        - "100% safe for all."
+        - "Absolutely safe with zero side effects."
+      negative:
+        - "Free from parabens and sulphates."
+        - "Dermatologist-formulated gentle cleanser."
+    open_questions:
+      - "Should 'no side effects' be non-overridable? The draft keeps it overridable with evidence."
+
+  - id: EN-CLAIM-002
+    category: cosmetic_claim
+    title: "Guaranteed or permanent results"
+    severity: orange
+    overridable: true
+    explanation: "Guaranteed or permanent results cannot be promised for a cosmetic. Results vary and fade."
+    rewrite_hint: "Say what users may notice and over what period, for example 'visible results with regular use'."
+    patterns:
+      - kind: verb_condition
+        verbs: ["guarantee", "guarantees", "guaranteed", "guaranteeing"]
+        conditions: ["result", "results", "effect", "effects", "outcome", "outcomes", "improvement", "growth", "glow", "removal", "reduction"]
+        max_gap: 2
+      - kind: verb_condition
+        verbs: ["permanent", "permanently", "forever", "for life", "lifelong", "lifetime"]
+        conditions: ["result", "results", "removal", "remove", "removes", "reduction", "fix", "cure", "wrinkle", "wrinkles", "scars", "dark circles", "pigmentation", "spots", "marks", "glow"]
+        max_gap: 3
+        order: any
+    sources: [*asci_code, *ccpa]
+    examples:
+      positive:
+        - "Guaranteed results in 7 days."
+        - "Permanent hair removal at home."
+        - "Removes wrinkles permanently."
+      negative:
+        - "Visible results with regular use."
+        - "A long-lasting matte finish."
+    open_questions:
+      - "Is 'long-lasting' alone acceptable for make-up wear time? The draft allows it."
+
+  - id: EN-CLAIM-003
+    category: cosmetic_claim
+    title: "Absolute removal or reversal of skin signs"
+    severity: orange
+    overridable: true
+    explanation: "Claims to remove or erase wrinkles, spots, scars or fat are overstated for a cosmetic. Use 'reduces the look of'."
+    rewrite_hint: "Use 'visibly reduces the appearance of ...' and keep it to what a cosmetic can show."
+    patterns:
+      - kind: verb_condition
+        verbs: ["remove", "removes", "removing", "erase*", "eliminate*", "banish*", "get rid of", "gets rid of", "vanish*", "reverse*", "wipe out", "wipes out"]
+        conditions: ["wrinkle", "wrinkles", "fine lines", "dark circles", "dark spots", "pigmentation", "scar", "scars", "scarring", "stretch marks", "age spots", "pores", "blemish", "blemishes", "cellulite", "ageing", "aging", "signs of ageing", "signs of aging"]
+        max_gap: 3
+    sources: [*asci_code, *ccpa]
+    examples:
+      positive:
+        - "Erases wrinkles overnight."
+        - "Removes dark spots and pigmentation."
+        - "Reverse ageing with this cream."
+      negative:
+        - "Visibly reduces the appearance of fine lines."
+        - "Removes makeup and impurities gently."
+    open_questions:
+      - "Is 'reduces the appearance of ...' always safe? The draft allows it as the preferred rewrite."
+      - "'Anti-ageing' as a product type is not flagged. Confirm."
+
+  - id: EN-CLAIM-004
+    category: cosmetic_claim
+    title: "Tested, proven or recommended: evidence required"
+    severity: orange
+    overridable: true
+    explanation: "Claims like 'clinically proven' or 'dermatologically tested' need evidence you can show. A test report must have a reference (file or document ID)."
+    rewrite_hint: "Keep the claim only if you hold the test report, and cite what was tested. Otherwise drop it."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "clinically proven"
+          - "clinically tested"
+          - "clinically approved"
+          - "clinically shown"
+          - "clinically effective"
+          - "clinically verified"
+          - "dermatologically tested"
+          - "dermatologically proven"
+          - "dermatologically approved"
+          - "dermatologist tested"
+          - "dermatologist approved"
+          - "dermatologist recommended"
+          - "dermatologist-recommended"
+          - "recommended by dermatologists"
+          - "approved by dermatologists"
+          - "doctor recommended"
+          - "doctor approved"
+          - "recommended by doctors"
+          - "scientifically proven"
+          - "scientifically tested"
+          - "lab tested"
+          - "lab-tested"
+          - "laboratory tested"
+          - "patch tested"
+          - "allergy tested"
+          - "hypoallergenic"
+          - "non-comedogenic"
+          - "noncomedogenic"
+          - "non comedogenic"
+    sources: [*asci_code, *ccpa, *cosmetics_rules]
+    examples:
+      positive:
+        - "Clinically proven to hydrate."
+        - "Dermatologically tested and hypoallergenic."
+        - "Recommended by dermatologists."
+      negative:
+        - "Developed for everyday hydration."
+        - "Made with hyaluronic acid."
+    open_questions:
+      - "Which of these terms need a test report, and which need only a statement of how the test was done?"
+      - "Is 'dermatologist-formulated' (not tested) treated as a claim? The draft does not flag it."
+
+  - id: EN-CLAIM-005
+    category: cosmetic_claim
+    title: "Regulator approval claims"
+    severity: red
+    overridable: true
+    explanation: "Cosmetics are registered, not approved, by the regulator. 'FDA approved' or 'CDSCO approved' is misleading."
+    rewrite_hint: "If you hold a registration, state the registration number, not 'approved'."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "fda approved"
+          - "fda-approved"
+          - "cdsco approved"
+          - "cdsco-approved"
+          - "approved by fda"
+          - "approved by cdsco"
+          - "government approved"
+          - "govt approved"
+          - "approved by the government"
+    sources: [*dc_act, *cosmetics_rules, *ccpa]
+    examples:
+      positive:
+        - "FDA approved formula."
+        - "CDSCO-approved sunscreen."
+      negative:
+        - "Registered with CDSCO, registration number on pack."
+        - "Made in a GMP-certified facility."
+    open_questions:
+      - "Is 'CDSCO registered' acceptable on a listing? The draft allows it."
+
+  - id: EN-CLAIM-006
+    category: cosmetic_claim
+    title: "Statistics or survey results: evidence required"
+    severity: orange
+    overridable: true
+    explanation: "Percentages of users or '9 out of 10' claims need a study you can show, with the sample and method."
+    rewrite_hint: "Cite the study (sample size, method, date) or remove the number."
+    patterns:
+      - kind: regex
+        regex: '\b\d{1,3}(?:\.\d+)?\s?%\s+(?:of\s+)?(?:\w+\s+){0,2}?(?:users|women|men|people|customers|participants|respondents|volunteers|consumers)\b'
+      - kind: regex
+        regex: '\b\d{1,3}\s+(?:out\s+of|in)\s+\d{1,3}\s+(?:users|women|men|people|customers|consumers|dermatologists|doctors)\b'
+      - kind: regex
+        regex: '\b\d{1,3}(?:\.\d+)?\s?%\s+(?:saw|reported|noticed|agreed|felt|showed|experienced|reduction|improvement|increase)\b'
+    sources: [*asci_code, *ccpa]
+    examples:
+      positive:
+        - "93% of women saw smoother skin."
+        - "9 out of 10 users agree."
+        - "87% reduction in wrinkles."
+      negative:
+        - "Contains 2% niacinamide."
+        - "Available in 3 sizes."
+    open_questions:
+      - "Do ingredient percentages ('10% vitamin C') need their own rule? The draft does not flag them."
+
+  - id: EN-CLAIM-007
+    category: cosmetic_claim
+    title: "Natural, organic or chemical-free absolutes"
+    severity: orange
+    overridable: true
+    explanation: "'100% natural' and 'chemical-free' are not accurate for a formulated product and need a basis. 'Certified organic' needs a certificate."
+    rewrite_hint: "Name the natural ingredients, or say 'made with plant-derived ingredients'."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "100 natural"
+          - "100 percent natural"
+          - "100 organic"
+          - "100 pure"
+          - "chemical free"
+          - "chemical-free"
+          - "free from chemicals"
+          - "free of chemicals"
+          - "free from all chemicals"
+          - "toxin free"
+          - "toxin-free"
+          - "non toxic"
+          - "non-toxic"
+          - "nontoxic"
+          - "certified organic"
+          - "organic certified"
+    sources: [*asci_code, *ccpa, *cosmetics_rules]
+    examples:
+      positive:
+        - "100% natural face oil."
+        - "A chemical-free sunscreen."
+        - "Certified organic extracts."
+      negative:
+        - "Made with plant-derived ingredients."
+        - "Free from parabens and sulphates."
+    open_questions:
+      - "Is a bare 'natural' or 'organic' (without 100% or 'certified') a claim that needs evidence? The draft does not flag it."
+
+  - id: EN-CLAIM-008
+    category: cosmetic_claim
+    title: "Safety for pregnancy, babies or all skin types"
+    severity: orange
+    overridable: true
+    explanation: "Claims that a product is safe for pregnancy, babies or all skin types need testing evidence. Do not state them without it."
+    rewrite_hint: "Say 'ask your doctor if pregnant' or describe the testing done."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "safe for pregnancy"
+          - "safe during pregnancy"
+          - "safe in pregnancy"
+          - "pregnancy safe"
+          - "pregnancy-safe"
+          - "safe for pregnant women"
+          - "safe for breastfeeding"
+          - "safe for babies"
+          - "baby safe"
+          - "baby-safe"
+          - "safe for infants"
+          - "safe for newborns"
+          - "safe for children"
+          - "safe for kids"
+          - "safe for all skin types"
+          - "safe for all ages"
+          - "safe for sensitive skin"
+    sources: [*asci_code, *ccpa]
+    examples:
+      positive:
+        - "Pregnancy-safe body butter."
+        - "Safe for babies and kids."
+        - "Safe for all skin types."
+      negative:
+        - "Suitable for daily use."
+        - "Gentle on the skin."
+    open_questions:
+      - "Is 'suitable for all skin types' (without 'safe') acceptable? The draft allows it."
+
+  - id: EN-CLAIM-009
+    category: cosmetic_claim
+    title: "Sun protection overstatement"
+    severity: orange
+    overridable: true
+    explanation: "'Total' or 'complete' sun protection, SPF above 100, or 'sweatproof' sunscreen overstates what a sunscreen can do."
+    rewrite_hint: "State the tested SPF and PA rating, and say 'water resistant' only if tested."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "total sun protection"
+          - "complete sun protection"
+          - "full sun protection"
+          - "blocks all uv"
+          - "blocks 100 uv"
+          - "100 uv protection"
+          - "sunproof"
+          - "sweatproof sunscreen"
+          - "waterproof sunscreen"
+      - kind: regex
+        regex: '\bspf[\s-]*[1-9]\d{2,}\b'
+    sources: [*asci_code, *ccpa, *cosmetics_rules]
+    examples:
+      positive:
+        - "Total sun protection all day."
+        - "SPF 200 sunscreen."
+        - "Waterproof sunscreen for the beach."
+      negative:
+        - "SPF 50 PA++++ sunscreen."
+        - "Water resistant for up to 40 minutes."
+    open_questions:
+      - "What are the SPF and PA labelling and testing requirements for India, and do they cap the SPF that may be stated?"
+
+  - id: EN-CLAIM-010
+    category: cosmetic_claim
+    title: "Hair growth or hair-fall claims"
+    severity: orange
+    overridable: true
+    explanation: "Hair growth and hair-fall claims sit close to drug claims. They need evidence and careful wording."
+    rewrite_hint: "Say 'nourishes hair' or 'reduces breakage' and keep to what the product can show."
+    patterns:
+      - kind: verb_condition
+        verbs: ["promote*", "boost*", "stimulate*", "accelerate*", "speed up", "increase*", "enhance*"]
+        conditions: ["hair growth", "hair thickness", "hair density", "new hair"]
+        max_gap: 3
+      - kind: phrase
+        phrases:
+          - "stops hair fall"
+          - "stop hair fall"
+          - "stops hair loss"
+          - "stop hair loss"
+          - "prevents hair fall"
+          - "prevent hair fall"
+          - "prevents hair loss"
+          - "prevent hair loss"
+          - "reduces hair fall"
+          - "reduce hair fall"
+          - "reduces hair loss"
+          - "hair fall control"
+          - "hair fall treatment"
+          - "hair loss treatment"
+          - "anti hair fall"
+          - "anti-hair fall"
+    sources: [*dc_act, *asci_code, *ccpa]
+    examples:
+      positive:
+        - "Promotes hair growth."
+        - "Stops hair fall in 2 weeks."
+        - "An anti hair fall oil."
+      negative:
+        - "Nourishes hair from root to tip."
+        - "Helps reduce breakage."
+    open_questions:
+      - "Where is the line between a cosmetic hair-fall claim and a drug claim? Which of these should be red or non-overridable?"
+
+  - id: EN-CLAIM-011
+    category: cosmetic_claim
+    title: "Acne, dandruff or germ-killing efficacy claims"
+    severity: orange
+    overridable: true
+    explanation: "Claims to clear acne or dandruff, or to kill germs, are efficacy claims that need evidence and sit close to drug claims."
+    rewrite_hint: "Say 'cleanses excess oil' or 'for acne-prone skin' and avoid efficacy words."
+    patterns:
+      - kind: verb_condition
+        verbs: ["clear", "clears", "clearing", "eliminate*", "get rid of", "gets rid of", "kill", "kills", "killing", "fight", "fights", "fighting", "control", "controls", "reduce", "reduces", "reducing", "remove", "removes", "removing"]
+        conditions: ["acne", "pimple", "pimples", "dandruff", "breakouts", "blackheads", "whiteheads", "bacteria", "germs", "fungus"]
+        max_gap: 3
+    sources: [*dc_act, *asci_code, *ccpa]
+    examples:
+      positive:
+        - "Clears pimples overnight."
+        - "Kills 99.9% germs."
+        - "Fights acne-causing bacteria."
+        - "Removes dandruff from the first wash."
+      negative:
+        - "Gentle cleanser for acne-prone skin."
+        - "Cleanses excess oil that can clog pores."
+    open_questions:
+      - "Anti-dandruff shampoos are common cosmetic listings. Is 'removes dandruff' acceptable on a shampoo? Do 'antibacterial' soaps need their own treatment?"
+
+  - id: EN-CLAIM-012
+    category: cosmetic_claim
+    title: "Superlative or 'number one' claims"
+    severity: orange
+    overridable: true
+    explanation: "'Number one' and 'best in India' claims need proof, such as a named survey or ranking."
+    rewrite_hint: "Cite the ranking (source, period) or use a factual description."
+    patterns:
+      - kind: phrase
+        phrases:
+          - "number 1"
+          - "number one"
+          - "no 1"
+          - "world's best"
+          - "worlds best"
+          - "india's best"
+          - "best in india"
+          - "best in the world"
+          - "best in class"
+          - "unbeatable"
+          - "unmatched"
+          - "better than all"
+          - "better than any"
+          - "nothing works better"
+          - "no other product"
+    sources: [*asci_code, *ccpa, *cpa]
+    examples:
+      positive:
+        - "India's No. 1 face wash."
+        - "The world's best sunscreen."
+        - "Better than any other cream."
+      negative:
+        - "A gentle everyday face wash."
+        - "Loved by customers across India."
+    open_questions:
+      - "Is 'bestselling' acceptable without proof? The draft does not flag it."
+
+  - id: EN-CLAIM-013
+    category: cosmetic_claim
+    title: "Fat loss or body slimming claims"
+    severity: orange
+    overridable: true
+    explanation: "Claims to burn fat or reduce weight or inches are not cosmetic effects. They need evidence and sit close to drug claims."
+    rewrite_hint: "Describe skin feel, such as 'firming body lotion'. Do not mention fat or weight."
+    patterns:
+      - kind: verb_condition
+        verbs: ["burn", "burns", "burning", "melt", "melts", "melting", "dissolve*", "reduce", "reduces", "reducing", "lose", "shrink*", "slim", "slims"]
+        conditions: ["fat", "belly fat", "belly", "cellulite", "inches", "weight", "tummy", "thighs"]
+        max_gap: 3
+    sources: [*dc_act, *asci_code, *ccpa]
+    examples:
+      positive:
+        - "Burns belly fat while you sleep."
+        - "Melts cellulite and reduces inches."
+      negative:
+        - "Firming body lotion with caffeine."
+        - "Lightweight lotion that absorbs quickly."
+    open_questions:
+      - "Are 'slimming' and 'firming' body products acceptable? The draft flags only fat, weight and inch claims."

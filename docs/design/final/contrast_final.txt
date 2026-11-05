@@ -1,0 +1,54 @@
+
+== light ==
+PASS  text ink         on accent-soft 13.44  (need 4.5)  linked sentence row
+PASS  text ink-2       on accent-soft  7.76  (need 4.5)  highlighted claim, used-in text
+PASS  text ink-3       on accent-soft  5.15  (need 4.5)  claim evidence line while highlighted (small text)
+PASS  text ink-3       on surface-2    5.35  (need 4.5)  inspector secondary text
+PASS  text ink-2       on surface-2    8.06  (need 4.5)  notice, kept-with-reason panel, flag-ink
+PASS  text ink         on surface-2   13.97  (need 4.5)  inspector, notice body
+PASS  text bg          on ink         15.21  (need 4.5)  toast (inverse)
+PASS  text red-fg      on surface      7.62  (need 4.5)  over-limit counter
+PASS  text ink-2       on sunken       7.38  (need 4.5)  progress legend on track
+PASS  text accent-ink  on surface-2    8.39  (need 4.5)  ghost button on well
+PASS  text amber-fg    on surface      7.81  (need 4.5)  unanchored chip text on surface
+PASS  text on-accent   on accent       9.84  (need 4.5)  pressed anchor chip
+PASS  ui   ink-2       on bg           8.78  (need 3.0)  progress segment: kept
+PASS  ui   green-fg    on bg           6.13  (need 3.0)  progress segment: clear; clear cell outline
+PASS  ui   green-fg    on surface      6.45  (need 3.0)  clear cell outline on card
+PASS  ui   red-fg      on surface      7.62  (need 3.0)  progress/heat: blocked
+PASS  ui   amber-fg    on surface      7.81  (need 3.0)  heat: review hatch
+PASS  ui   line-strong on surface      4.36  (need 3.0)  pending cell outline, dropzone border
+PASS  ui   ink-3       on surface-2    5.35  (need 3.0)  skipped cell dots
+PASS  ui   ink-2       on surface-2    8.06  (need 3.0)  error cell stripes
+PASS  ui   ink         on surface     16.01  (need 3.0)  current-cell ring
+PASS  ui   accent      on surface      9.62  (need 3.0)  source-claim outline
+PASS  ui   accent      on bg           9.14  (need 3.0)  source-claim outline on page
+PASS  ui   ink-2       on surface      9.25  (need 3.0)  kept row dotted edge
+
+== dark ==
+PASS  text ink         on accent-soft 12.18  (need 4.5)  linked sentence row
+PASS  text ink-2       on accent-soft  7.76  (need 4.5)  highlighted claim, used-in text
+PASS  text ink-3       on accent-soft  5.47  (need 4.5)  claim evidence line while highlighted (small text)
+PASS  text ink-3       on surface-2    6.17  (need 4.5)  inspector secondary text
+PASS  text ink-2       on surface-2    8.75  (need 4.5)  notice, kept-with-reason panel, flag-ink
+PASS  text ink         on surface-2   13.74  (need 4.5)  inspector, notice body
+PASS  text bg          on ink         16.04  (need 4.5)  toast (inverse)
+PASS  text red-fg      on surface     10.26  (need 4.5)  over-limit counter
+PASS  text ink-2       on sunken      10.46  (need 4.5)  progress legend on track
+PASS  text accent-ink  on surface-2    8.77  (need 4.5)  ghost button on well
+PASS  text amber-fg    on surface     11.22  (need 4.5)  unanchored chip text on surface
+PASS  text on-accent   on accent       9.55  (need 4.5)  pressed anchor chip
+PASS  ui   ink-2       on bg          10.22  (need 3.0)  progress segment: kept
+PASS  ui   green-fg    on bg          11.32  (need 3.0)  progress segment: clear; clear cell outline
+PASS  ui   green-fg    on surface     10.59  (need 3.0)  clear cell outline on card
+PASS  ui   red-fg      on surface     10.26  (need 3.0)  progress/heat: blocked
+PASS  ui   amber-fg    on surface     11.22  (need 3.0)  heat: review hatch
+PASS  ui   line-strong on surface      4.53  (need 3.0)  pending cell outline, dropzone border
+PASS  ui   ink-3       on surface-2    6.17  (need 3.0)  skipped cell dots
+PASS  ui   ink-2       on surface-2    8.75  (need 3.0)  error cell stripes
+PASS  ui   ink         on surface     15.00  (need 3.0)  current-cell ring
+PASS  ui   accent      on surface      9.58  (need 3.0)  source-claim outline
+PASS  ui   accent      on bg          10.24  (need 3.0)  source-claim outline on page
+PASS  ui   ink-2       on surface      9.56  (need 3.0)  kept row dotted edge
+
+0 failing required pair(s)

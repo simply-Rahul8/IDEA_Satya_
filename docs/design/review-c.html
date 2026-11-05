@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review C · Document + Inspector · Satya (draft design)</title>
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/review-parts.css">
+<style>
+  /* Variant C: read it like the live product page. Select a sentence; the inspector explains it. */
+  main { padding-block: var(--s-4) 14rem; }
+  .strip { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-5); align-items: center; justify-content: space-between; margin-bottom: var(--s-5); }
+  .strip h1 { font-size: var(--t-xl); }
+  .nav { display: flex; gap: var(--s-2); align-items: center; flex-wrap: wrap; }
+  .seg { display: inline-grid; place-items: center; width: var(--tap); height: var(--tap); border-radius: var(--r-md); border: 1.5px solid var(--line-strong); background: var(--surface); cursor: pointer; color: var(--ink-2); font: 700 var(--t-xs)/1 var(--font-sans); position: relative; }
+  .seg[data-status="red"] { color: var(--red-fg); background: var(--red-bg); border-color: var(--red-fg); }
+  .seg[data-status="amber"] { color: var(--amber-fg); background: var(--amber-bg); border-color: var(--amber-fg); border-style: dashed; }
+  .seg[data-status="ack"], .seg[data-status="ok"] { color: var(--green-fg); background: var(--green-bg); border-color: var(--green-line); }
+  .seg[aria-current="true"] { box-shadow: 0 0 0 3px var(--focus); }
+  .layout { display: grid; gap: var(--s-6); }
+  @media (min-width: 64rem) { .layout { grid-template-columns: minmax(0, 1fr) 24rem; align-items: start; gap: var(--s-7); } .insp-col { position: sticky; top: var(--s-4); } main { padding-bottom: var(--s-9); } }
+  .page { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-1); padding: var(--s-6) var(--s-5) var(--s-7) calc(var(--s-5) + 1.5rem); }
+  .page .crumb { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-3); }
+  .page h2 { font-size: var(--t-xl); margin: var(--s-6) 0 var(--s-3); color: var(--ink-2); }
+  .dsent { position: relative; display: block; padding: .15em .4em .15em 0; border-radius: 4px; }
+  .dsent .g { position: absolute; left: -1.7rem; top: .45em; }
+  .dsent[data-status="red"] { background: color-mix(in srgb, var(--red-bg) 55%, transparent); box-shadow: -4px 0 0 var(--red-fg); }
+  .dsent[data-status="amber"] { box-shadow: -4px 0 0 var(--amber-fg); background-image: none; }
+  .dsent[data-status="red"] .g { color: var(--red-fg); } .dsent[data-status="amber"] .g { color: var(--amber-fg); } .dsent[data-status="ack"] .g, .dsent[data-status="ok"] .g { color: var(--green-fg); }
+  .dsent.is-sel { outline: 3px solid var(--accent); outline-offset: 4px; }
+  .dsent.is-linked { box-shadow: -4px 0 0 var(--accent); }
+  .page .sent-text { font-size: var(--t-lg); display: block; }
+  .page .title .sent-text { font-size: var(--t-xl); }
+  .page ul { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--s-2); }
+  .insp { padding: var(--s-5); display: grid; gap: var(--s-4); }
+  .insp h2 { font-size: var(--t-lg); }
+  .insp .hd { display: flex; gap: var(--s-2) var(--s-3); flex-wrap: wrap; align-items: center; }
+  .insp .hd .sec { margin-inline-end: auto; font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .insp .x { display: none; }
+  .insp-empty { color: var(--ink-2); font-size: var(--t-sm); display: grid; gap: var(--s-3); }
+  @media (max-width: 63.99rem) {
+    .insp-col { position: fixed; inset: auto 0 0; z-index: 35; padding: 0 var(--s-3) calc(var(--s-3) + env(safe-area-inset-bottom)); pointer-events: none; }
+    .insp { max-height: 58dvh; overflow: auto; box-shadow: var(--shadow-2); border-color: var(--line-strong); border-radius: var(--r-lg) var(--r-lg) var(--r-md) var(--r-md); pointer-events: auto; position: relative; }
+    .insp .x { display: inline-grid; position: absolute; top: var(--s-2); right: var(--s-2); }
+    .insp .hd { padding-inline-end: 3rem; }
+    .insp-col.is-idle { display: none; }
+  }
+  .ap { display: flex; gap: var(--s-3); align-items: center; flex-wrap: wrap; }
+  .ap .note { font-size: var(--t-sm); font-weight: 600; display: flex; gap: var(--s-2); align-items: center; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to review</a>
+<div class="wrap" id="app">
+  <header class="topbar">
+    <a class="brand" href="index.html"><b aria-hidden="true">स</b> Satya</a>
+    <span class="proto-nav">Review · variant C of 3 · <a href="index.html">all variants</a></span>
+    <button class="icon-btn" type="button" data-theme-toggle></button>
+  </header>
+
+  <main id="main">
+    <div class="strip">
+      <div><p class="eyebrow">Step 7 · Review</p><h1>Rosewater Dew Serum · listing pack</h1></div>
+      <nav class="nav" aria-label="Jump to sentence" id="nav"></nav>
+      <div class="ap">
+        <p class="note" data-approve-note aria-live="polite"></p>
+        <button class="btn btn-primary" type="button" data-approve aria-disabled="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Approve pack</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <article class="page" aria-label="Listing preview"><div id="doc"></div></article>
+      <div class="insp-col is-idle" id="inspcol"><aside class="card insp" id="insp" aria-label="Sentence inspector" aria-live="polite"></aside></div>
+    </div>
+    <p class="sr-only" id="claim-live" aria-live="polite"></p>
+  </main>
+</div>
+
+<script src="assets/proto.js"></script>
+<script>
+Satya.ready(() => {
+  const $ = Satya.$, rev = Satya.review(), root = document.body;
+  const IC = { red: 'block', amber: 'warn', ack: 'ok', ok: 'ok' };
+  const sent = (s) => { const r = rev.result(s.id), st = rev.status(s.id);
+    return `<span class="dsent" data-sent="${s.id}" data-status="${st}"><span class="g" data-gut="${s.id}" aria-hidden="true">${Satya.icon(IC[st])}</span><span class="sent-text" data-edit="${s.id}" contenteditable="true" role="textbox" aria-multiline="true" aria-label="${s.section} text, editable" spellcheck="false">${Satya.markHTML(s.text, r.spans, { icons: true })}</span></span>`; };
+  const S = (id) => sent(rev.byId(id));
+  $('#doc').innerHTML = `<p class="crumb">Nykaa-style preview · cosmetics · Face serums</p>
+    <div class="title">${S('s1')}</div>
+    <h2>Highlights</h2><ul>${['s2', 's3', 's4', 's5'].map((id) => `<li>${S(id)}</li>`).join('')}</ul>
+    <h2>How to use</h2>${S('s6')}
+    <h2>Warnings and storage</h2>${S('s7')}`;
+  const nav = () => { $('#nav').innerHTML = rev.sents.map((s, i) => `<button class="seg" type="button" data-nav="${s.id}" data-status="${rev.status(s.id)}" aria-label="${s.section}: ${{ red: 'blocked', amber: 'needs a reason', ack: 'kept with reason', ok: 'clear' }[rev.status(s.id)]}" ${sel === s.id ? 'aria-current="true"' : ''}>${Satya.icon(IC[rev.status(s.id)])}</button>`).join(''); rev.sents.forEach((s) => { const g = $(`[data-gut="${s.id}"]`); if (g) g.innerHTML = Satya.icon(IC[rev.status(s.id)]); }); };
+  let sel = null;
+  const inspect = (sid) => {
+    sel = sid; const s = rev.byId(sid), st = rev.status(sid);
+    $$all('.dsent').forEach((n) => n.classList.toggle('is-sel', n.dataset.sent === sid));
+    $('#inspcol').classList.remove('is-idle');
+    const claims = s.anchors.map((c) => Satya.CLAIMS.find((x) => x.id === c));
+    $('#insp').innerHTML = `<button class="icon-btn x" type="button" data-close-insp aria-label="Close inspector">${Satya.icon('close')}</button>
+      <div class="hd"><span class="sec">${s.section}</span><span class="chip chip-type">${s.type}</span><span data-badge="${sid}">${Satya.sentBadge(st)}</span></div>
+      <div><span class="eyebrow">Anchored to</span><div class="anchors" style="margin-top:var(--s-2)">${claims.length ? claims.map((c) => `<button class="chip" type="button" data-act="anchor" data-claim="${c.id}" aria-pressed="false">${Satya.icon('anchor')} ${c.id.toUpperCase()}</button>`).join('') : `<span class="chip is-unanchored">${Satya.icon('warn')} No source claim</span>`}</div></div>
+      ${claims.map((c) => `<div class="claim" data-claim="${c.id}"><div><span class="chip chip-type">${c.id.toUpperCase()} · ${c.kind}</span></div><strong>${Satya.esc(c.text)}</strong>${Satya.claimStateBadge(c.state)}<small>${Satya.esc(c.ev)}</small></div>`).join('')}
+      <div data-flags="${sid}">${Satya.flagPanelHTML(rev, s)}</div><p class="recheck" data-recheck></p>`;
+    nav(); Satya.updateSummary(root, rev);
+  };
+  nav();
+  document.addEventListener('focusin', (e) => { const el = e.target.closest && e.target.closest('[data-edit]'); if (el && el.dataset.edit !== sel) inspect(el.dataset.edit); });
+  document.addEventListener('click', (e) => {
+    const n = e.target.closest('[data-nav]'); if (n) { const t = $(`[data-edit="${n.dataset.nav}"]`); t.focus(); t.scrollIntoView({ block: 'center', behavior: Satya.reduced() ? 'auto' : 'smooth' }); }
+    if (e.target.closest('[data-close-insp]')) { sel = null; $('#inspcol').classList.add('is-idle'); $$all('.dsent').forEach((x) => x.classList.remove('is-sel')); nav(); }
+  });
+  const $$all = Satya.$$;
+  Satya.bindReview(root, rev, { after: nav, onClaim: (cid) => $$all('[data-sent]', root).forEach((n) => n.classList.toggle('is-linked', n.dataset.sent !== sel && rev.byId(n.dataset.sent).anchors.includes(cid))) });
+  if (new URLSearchParams(location.search).has('demo')) inspect('s5');
+});
+</script>
+</body>
+</html>
