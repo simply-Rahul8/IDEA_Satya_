@@ -2,7 +2,7 @@
 Documented in docs/engine-api.md. Owner: Engine."""
 
 from engine.extract import ExtractionError, extract_product_truth
-from engine.guardrails import ClaimGuardError, RuleSet, check_text, confirm_claim, load_ruleset
+from engine.guardrails import ClaimGuardError, RuleSet, check_text, confirm_claim, default_ruleset, load_ruleset
 from engine.models import (
     Claim,
     ClaimStatus,
@@ -34,5 +34,6 @@ __all__ = [
     "ExtractionError", "Flag", "GenerationError", "LLMCall", "PDPPack", "ProductTruth", "ProviderConfigError",
     "ProviderError", "ReviewError", "RuleSet", "Sentence", "SentenceType", "Severity", "VerificationReport",
     "approval_status", "check_text", "confirm_claim", "edit_sentence", "extract_product_truth", "generate_pack",
-    "generate_verified_pack", "get_provider", "load_ruleset", "override_flag", "recorder", "verify_pack",
+    "default_ruleset", "generate_verified_pack", "get_provider", "load_ruleset", "override_flag", "recorder",
+    "verify_pack",
 ]  # fmt: skip

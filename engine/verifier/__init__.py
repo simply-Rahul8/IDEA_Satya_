@@ -6,7 +6,7 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 from engine import prompts, telemetry
-from engine.guardrails import RuleSet, check_sentence, load_ruleset
+from engine.guardrails import RuleSet, check_sentence, default_ruleset
 from engine.models import ClaimStatus, Flag, PDPPack, ProductTruth, Sentence, SentenceType, Severity
 from engine.providers import LLMProvider, ProviderError, get_provider
 
@@ -60,7 +60,7 @@ def verify_pack(
     provider: LLMProvider | None = None,
     ruleset: RuleSet | None = None,
 ) -> VerificationReport:
-    ruleset = ruleset or load_ruleset()
+    ruleset = ruleset or default_ruleset()
     sections, items = [], []
     for sec in pack.sections:
         new = []
@@ -70,7 +70,7 @@ def verify_pack(
                 items.append({"index": len(items), "text": s.text, "sources": sources, "_ref": (sec.key, len(new))})
             new.append(checked)
         sections.append(sec.model_copy(update={"sentences": new}))
-    out = pack.model_copy(update={"sections": sections, "rule_set_version": ruleset.version, "verifier_passed": False})
+    out = pack.model_copy(update={"sections": sections, "rule_set_version": ruleset.label, "verifier_passed": False})
     if not items:
         return VerificationReport(pack=out.model_copy(update={"verifier_passed": True}), pass2_completed=True)
 

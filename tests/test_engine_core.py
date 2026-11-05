@@ -1,12 +1,9 @@
 """Engine core: guardrails runner, claim guards, extraction, generation, two-pass verifier, failover, telemetry."""
 
-from pathlib import Path
-
 import pytest
 
 from engine import api, telemetry
-from engine.guardrails import RuleSet, load_ruleset, verify_rule_examples
-from engine.guardrails.ruleset import DEFAULT_RULES_DIR
+from engine.guardrails import RuleSet, default_ruleset
 from engine.models import ClaimStatus, Evidence, EvidenceType, Severity
 from engine.providers import (
     AllProvidersFailed,
@@ -18,13 +15,12 @@ from engine.providers import (
     SarvamProvider,
 )
 
-FIXTURE = Path(__file__).parent / "fixtures" / "rules_test.yaml"
 LISTING = "Glow Serum\nThis serum cures acne fast.\nMade for acne-prone skin.\nVitamin C brightens dull skin."
 
 
 @pytest.fixture
 def rules() -> RuleSet:
-    return load_ruleset(FIXTURE)
+    return default_ruleset()
 
 
 @pytest.fixture(autouse=True)
@@ -34,38 +30,26 @@ def _clean_recorder():
     api.recorder.clear()
 
 
-# ---- rules schema + runner -------------------------------------------------------------------------------------
+# ---- guardrails adapter over engine.rules (ADR-9) --------------------------------------------------------------
 
 
-def test_fixture_rule_examples_hold(rules):
-    assert verify_rule_examples(rules) == []
+def test_every_shipped_rule_flags_positives_and_not_negatives_through_adapter(rules):
+    for rule in rules.rules:
+        for text in rule.examples.positive:
+            assert rule.id in [f.rule_id for f in api.check_text(text, rules)], (rule.id, text)
+        for text in rule.examples.negative:
+            assert rule.id not in [f.rule_id for f in api.check_text(text, rules)], (rule.id, text)
 
 
-@pytest.mark.parametrize("f", sorted(DEFAULT_RULES_DIR.glob("*.yaml")), ids=lambda f: f.name)
-def test_shipped_rules_load_and_examples_hold(f):
-    rs = load_ruleset(f)
-    assert verify_rule_examples(rs) == []
+def test_adapter_maps_flag_fields(rules):
+    (f,) = [f for f in api.check_text("Cures eczema in just 7 days.", rules) if f.rule_id == "EN-DRUG-001"]
+    assert f.severity == Severity.RED and not f.overridable
+    assert rules.label in f.citation and "compliant" not in f.citation.lower()
+    assert f.suggestion and f.reason and f.matched_text
 
 
-def test_verb_condition_and_allowlist(rules):
-    assert [f.rule_id for f in api.check_text("It cures acne.", rules)] == ["T-DRUG"]
-    assert api.check_text("Perfect for acne-prone skin", rules) == []
-    assert api.check_text("Cures nothing. Acne is common.", rules) == []  # sentence break between verb and condition
-
-
-def test_hard_block_rules_cannot_be_weakened(tmp_path):
-    bad = tmp_path / "r.yaml"
-    bad.write_text(
-        'version: "1"\nrules:\n- id: X\n  category: fairness\n  severity: orange\n  reason: r\n  citation: c\n'
-        '  patterns: [{regex: "fair"}]\n  examples: {positive: [fair], negative: [dark]}\n',
-        encoding="utf-8",
-    )
-    with pytest.raises(ValueError, match="overridable=false"):
-        load_ruleset(bad)
-
-
-def test_empty_rules_dir_loads(tmp_path):
-    assert load_ruleset(tmp_path).rules == []
+def test_allowlist_via_reference_matcher(rules):
+    assert api.check_text("Gentle face wash for acne-prone skin.", rules) == []
 
 
 # ---- claim guards (P25) ----------------------------------------------------------------------------------------
@@ -76,7 +60,7 @@ def test_extraction_leaves_all_claims_unconfirmed_and_screens_hard_blocks(rules)
     assert truth.product_name == "Glow Serum"
     assert {c.status for c in truth.claims} == {ClaimStatus.UNCONFIRMED}
     blocked = [c for c in truth.claims if c.hard_blocked]
-    assert [c.blocking_rule_ids for c in blocked] == [["T-DRUG"]]
+    assert [c.blocking_rule_ids for c in blocked] == [["EN-DRUG-001"]]
 
 
 def test_hard_blocked_claim_cannot_be_confirmed(rules):
@@ -122,7 +106,7 @@ def test_generate_verify_end_to_end_mock(rules):
     assert report.pass2_completed and pack.verifier_passed
     assert len([s for s in pack.sections if s.key.startswith("bullet_")]) == 5
     assert all(s.anchors for s in pack.sentences())
-    assert pack.rule_set_version == "test-0"
+    assert pack.rule_set_version == rules.label
     # the hard-blocked claim was never confirmed, so it never reaches the pack
     assert not any("cures" in s.text.lower() for s in pack.sentences())
     assert api.approval_status(pack, truth).approvable
@@ -144,12 +128,12 @@ def test_pass1_flags_unanchored_and_unconfirmed(rules):
 def test_pass1_runs_guardrail_rules_on_generated_text(rules):
     truth = _confirmed_truth(rules)
     pack = api.generate_pack(truth, provider=MockProvider())
-    pack.section("bullet_1").sentences[0].text = "This serum cures acne fast"
+    pack.section("bullet_1").sentences[0].text = "Cures eczema in just 7 days."
     report = api.verify_pack(pack, truth, provider=MockProvider(), ruleset=rules)
     flags = report.pack.section("bullet_1").sentences[0].flags
-    assert any(f.rule_id == "T-DRUG" and f.severity == Severity.RED for f in flags)
+    assert any(f.rule_id == "EN-DRUG-001" and f.severity == Severity.RED for f in flags)
     with pytest.raises(api.ReviewError):
-        api.override_flag(report.pack, "bullet_1", 0, "T-DRUG", "we really want it")
+        api.override_flag(report.pack, "bullet_1", 0, "EN-DRUG-001", "we really want it")
 
 
 class _Stub:
@@ -191,7 +175,7 @@ def test_verifier_unavailable_fails_closed(rules):
 def test_edit_rechecks_and_invalidates_verification(rules):
     truth = _confirmed_truth(rules)
     pack = api.generate_verified_pack(truth, provider=MockProvider(), ruleset=rules).pack
-    edited = api.edit_sentence(pack, "bullet_1", 0, "It cures acne.", truth, ruleset=rules)
+    edited = api.edit_sentence(pack, "bullet_1", 0, "Cures eczema in just 7 days.", truth, ruleset=rules)
     assert edited.section("bullet_1").sentences[0].severity == Severity.RED
     assert not edited.verifier_passed
 

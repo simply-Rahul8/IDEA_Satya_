@@ -3,22 +3,22 @@
 Import from `engine.api` only. Everything runs offline with `SATYA_LLM=mock`. `SATYA_LLM=live` builds a
 Sarvam-primary, Claude-failover chain from `SARVAM_API_KEY` / `ANTHROPIC_API_KEY` (either alone works; none raises
 `ProviderConfigError`). Optional `SARVAM_MODEL`, `ANTHROPIC_MODEL`. Output wording: "no flagged risks under rule set
-vX (draft)", never "compliant" (P20).
+vX-draft", never "compliant" (P20).
 
 ## Flow (plan section 3, steps 4-7)
 
 ```python
 from engine import api
 
-rules = api.load_ruleset()                                   # engine/rules/*.yaml
-truth = api.extract_product_truth(listing_text, ruleset=rules)   # all claims UNCONFIRMED; hard-blocked ones marked
+rules = api.load_ruleset()  # engine/rules/*.yaml
+truth = api.extract_product_truth(listing_text, ruleset=rules)  # all claims UNCONFIRMED; hard-blocked ones marked
 claim = api.confirm_claim(c, api.Evidence(type=api.EvidenceType.TEST_REPORT, reference="doc-1"), rules)
-                                                              # raises ClaimGuardError (P25)
-report = api.generate_verified_pack(truth, tone="professional", ruleset=rules)   # generate + two-pass verify (P4)
-pack = report.pack                                           # report.pass2_completed False => verifier unavailable
+# raises ClaimGuardError (P25)
+report = api.generate_verified_pack(truth, tone="professional", ruleset=rules)  # generate + two-pass verify (P4)
+pack = report.pack  # report.pass2_completed False => verifier unavailable
 pack = api.edit_sentence(pack, "bullet_1", 0, "new text", truth, ruleset=rules)  # live re-check, deterministic only
 pack = api.override_flag(pack, "bullet_2", 0, "VERIFIER-UNSUPPORTED", "reason")  # orange only
-status = api.approval_status(pack, truth)                    # .approvable, .blockers (list[str])
+status = api.approval_status(pack, truth)  # .approvable, .blockers (list[str])
 ```
 
 Replace the confirmed claim into `truth.claims` yourself (models are immutable-by-convention copies).
@@ -39,14 +39,12 @@ Red blocks approval and cannot be overridden (all non-overridable rules are red)
 The pack must be `verifier_passed` (cleared by any edit). `override_flag` raises `ReviewError` on red.
 Failed verifier call => fail closed (`pass2_completed=False`).
 
-## Rule file schema (agreed with Rules agent; see `engine/guardrails/ruleset.py`)
-Top level `version`, `status` (`draft|final`), `rules[]`. Per rule: `id`, `category`
-(`drug_treatment|dmr_disease|fairness|other`), `severity` (`red|orange`), `overridable`, `language`, `reason`,
-`citation`, `suggestion`, `patterns[]` (`{verb, condition, window}` or `{regex}`), `allowlist[]` (regexes; a match
-overlapping the flagged span suppresses it), `examples: {positive[], negative[]}` (both required).
-The three hard-block categories MUST be `severity: red, overridable: false` or the loader rejects the file.
-All files in `engine/rules/` must share one `version`. `tests/test_engine_core.py` runs every shipped YAML's
-examples automatically. Test fixture: `tests/fixtures/rules_test.yaml`.
+## Rules (owned by the Rules agent; ADR-9)
+Rule files, schema, matcher and P17/P25 policy live in `engine/rules` (`engine.rules.evaluate`, `policy.hard_blocks`).
+`engine.guardrails.check_text(text, ruleset=None)` is a thin adapter that turns `engine.rules` flags into
+`engine.models.Flag` (`citation` = the rule's sources + `[rule set vX-draft]`, `suggestion` = `rewrite_hint`, one flag
+per rule per text). `api.load_ruleset` / `api.default_ruleset` re-export the `engine.rules` loaders;
+`PDPPack.rule_set_version` holds the label (e.g. `v0.1.0-draft`).
 
 ## Telemetry (`llm_calls`, P26)
 All LLM calls go through `engine.telemetry.call_llm`, which records one `LLMCall` per provider attempt (failover

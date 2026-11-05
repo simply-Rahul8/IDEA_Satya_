@@ -5,7 +5,7 @@ from __future__ import annotations
 from pydantic import ValidationError
 
 from engine import prompts, telemetry
-from engine.guardrails import RuleSet, load_ruleset, screen_claim
+from engine.guardrails import RuleSet, default_ruleset, screen_claim
 from engine.models import Claim, ClaimStatus, ProductTruth
 from engine.providers import LLMProvider, get_provider
 
@@ -19,7 +19,7 @@ def extract_product_truth(
 ) -> ProductTruth:
     """One LLM call, no retries. Claims are forced to `unconfirmed` whatever the model says, and screened against
     the hard-block rules so the UI can show them as un-confirmable up front."""
-    ruleset = ruleset or load_ruleset()
+    ruleset = ruleset or default_ruleset()
     system, prompt = prompts.extract_prompt(listing_text)
     resp = telemetry.call_llm(
         provider or get_provider(), prompt, system=system,

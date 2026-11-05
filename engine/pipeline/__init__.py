@@ -5,7 +5,7 @@ from __future__ import annotations
 from pydantic import BaseModel, ValidationError
 
 from engine import prompts, telemetry
-from engine.guardrails import RuleSet, load_ruleset
+from engine.guardrails import RuleSet, default_ruleset
 from engine.models import SECTION_KEYS, ClaimStatus, PDPPack, ProductTruth, Section, Sentence, Severity
 from engine.providers import LLMProvider, get_provider
 from engine.verifier import VerificationReport, pass1, verify_pack
@@ -55,7 +55,7 @@ def edit_sentence(
     pack: PDPPack, key: str, index: int, new_text: str, truth: ProductTruth, *, ruleset: RuleSet | None = None
 ) -> PDPPack:
     """Live re-check after a user edit: deterministic only (fast). The pack must be re-verified before approval."""
-    ruleset = ruleset or load_ruleset()
+    ruleset = ruleset or default_ruleset()
     sec = pack.section(key)
     if not 0 <= index < len(sec.sentences):
         raise ReviewError("no such sentence")
