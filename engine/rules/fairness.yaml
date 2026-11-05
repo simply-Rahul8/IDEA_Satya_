@@ -1,0 +1,113 @@
+# NON-OVERRIDABLE (P17). Fairness / skin-lightening and colourism. DRAFT until consultant sign-off (P20).
+anchors:
+  asci_fairness: &asci_fairness
+    ref: "ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products"
+    provision: "advertisements must not depict darker skin as inferior or link skin colour to success; edition in force to be confirmed"
+    verified: false
+  asci_code: &asci_code
+    ref: "ASCI Code for Self-Regulation of Advertising Content in India"
+    provision: "Chapter III (advertisements must not offend against public decency or portray groups adversely); clause numbers to be confirmed"
+    verified: false
+  cpa: &cpa
+    ref: "Consumer Protection Act, 2019"
+    provision: "s.2(28) misleading advertisement; s.21 powers of the Central Consumer Protection Authority"
+    verified: false
+
+rules:
+  - id: EN-FAIR-001
+    category: fairness
+    title: "Claim to lighten, whiten or make skin fairer"
+    severity: red
+    overridable: false
+    explanation: "Claims that a product makes skin fairer, lighter or whiter are blocked. They imply lighter skin is better and are not allowed in listings."
+    rewrite_hint: "Describe the care benefit instead, for example 'helps skin look even and radiant' or 'visibly fades the look of dark spots'."
+    patterns:
+      - kind: verb_condition
+        verbs: ["whiten*", "lighten*"]
+        conditions: ["skin", "complexion", "tone", "skintone", "colour", "color", "face", "body", "underarm", "underarms", "neck"]
+        max_gap: 2
+      - kind: verb_condition
+        verbs: ["make", "makes", "making", "get", "gets", "getting", "become", "becomes", "turn", "turns", "achieve", "achieving"]
+        conditions: ["fair", "fairer", "fairest", "whiter"]
+        max_gap: 5
+      - kind: phrase
+        phrases:
+          - "fairness"
+          - "fairer skin"
+          - "whiter skin"
+          - "skin whitening"
+          - "skin lightening"
+          - "skin-whitening"
+          - "skin-lightening"
+          - "whitening cream"
+          - "whitening serum"
+          - "whitening lotion"
+          - "whitening soap"
+          - "whitening face wash"
+          - "whitening mask"
+    sources: [*asci_fairness, *asci_code, *cpa]
+    examples:
+      positive:
+        - "Whitens your skin in 7 days."
+        - "Get fairer skin with saffron."
+        - "A fairness cream for glowing faces."
+        - "Skin whitening serum with vitamin C."
+        - "Lightens skin tone visibly."
+      negative:
+        - "Foundation in 24 shades from fair to deep."
+        - "Fades the look of dark spots for a more even finish."
+        - "Brightening vitamin C serum for dull skin."
+    open_questions:
+      - "Is 'brightening' acceptable when it does not mention skin colour? The draft allows it. Please confirm, and say whether 'glow' and 'radiance' are also fine."
+      - "Is 'lightens dark spots / pigmentation' acceptable? The draft allows it because it does not name skin colour."
+      - "Face bleach and underarm lightening products: flag, allow, or flag only with colour claims? The draft flags 'lighten* underarm'."
+      - "Foundation shade names and ranges ('fair', 'fairest', 'fair to deep') are treated as shade description and allowed (AL-003). Confirm."
+
+  - id: EN-FAIR-002
+    category: fairness
+    title: "Darker skin presented as a problem to remove or fix"
+    severity: red
+    overridable: false
+    explanation: "Presenting dark or dusky skin as a problem to fix or remove is blocked. It portrays darker skin as inferior."
+    rewrite_hint: "Describe the care benefit without referring to skin colour as a flaw."
+    patterns:
+      - kind: verb_condition
+        verbs: ["remove*", "eliminate*", "get rid of", "fix", "fixes", "fixing", "correct*", "cure*", "treat*", "say goodbye to", "bye bye", "hide*", "end", "ends"]
+        conditions: ["dark skin", "dusky skin", "dark complexion", "dusky complexion", "dark skin tone", "dusky", "dark-skinned"]
+        max_gap: 2
+    sources: [*asci_fairness, *asci_code]
+    examples:
+      positive:
+        - "Say goodbye to dark skin."
+        - "Fixes dusky skin tone."
+        - "Get rid of dark complexion."
+      negative:
+        - "Foundation shades for dark skin tones."
+        - "Removes dark circles under the eyes."
+    open_questions:
+      - "Is 'dark circles' and 'dark spots' always out of this rule? The draft does not treat them as skin colour."
+
+  - id: EN-FAIR-003
+    category: fairness
+    title: "Fair or light skin linked to success, marriage, jobs or confidence"
+    severity: red
+    overridable: false
+    explanation: "Linking fair or light skin to marriage, a job, success or confidence is blocked. It implies skin colour decides life outcomes."
+    rewrite_hint: "Remove the link between skin colour and the life outcome."
+    patterns:
+      - kind: verb_condition
+        verbs: ["fair skin", "fairer skin", "fairness", "whiter skin", "lighter skin", "light skin", "fair complexion", "fair face"]
+        conditions: ["marriage", "wedding", "groom", "bride", "husband", "boyfriend", "job", "career", "success", "successful", "confidence", "confident", "popular", "popularity", "get married", "interview", "rishta"]
+        max_gap: 5
+        order: any
+    sources: [*asci_fairness, *asci_code]
+    examples:
+      positive:
+        - "Fair skin for a perfect wedding day."
+        - "Fairness that wins you a better job."
+        - "Be more confident with lighter skin."
+      negative:
+        - "Wedding day radiance kit for all skin tones."
+        - "Confidence in every shade."
+    open_questions:
+      - "Should 'fair skin tones' in a make-up shade context near 'wedding' ever be flagged? The draft flags only close pairs (up to 5 words apart)."
