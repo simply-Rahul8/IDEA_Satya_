@@ -1,6 +1,6 @@
 # Design self-critique (SAT-13)
 
-**Method note.** The task asks for a `/design-critique` self-check. That skill is not installed for this agent (the same was true of `/design-consultation` and `/design-shotgun` in SAT-7; it is not in this session's skill list). I ran the critique by hand against the usual axes: hierarchy and mood against the plan §4 bar, consistency, states and edge cases, accessibility (WCAG 2.2 AA), mobile at 360px, performance, copy and regulatory wording. I rendered every state at 360px and 1280px, light and dark ([`states.html`](states.html), screenshots in [`../screenshots/`](../screenshots/) as `final-states-*`), and ran the contrast script on the new colour pairs. **Not done:** a real-device pass, a Lighthouse run, and a screen-reader pass. Those need the built pages and belong to the Frontend and QA tasks (acceptance checklist in README §5).
+**Method note.** The task asks for a `/design-critique` self-check. The skill was not in my skill list during the first run, so I first critiqued by hand; it became available on resume and I then ran it (results in the last section). The manual pass covered the usual axes: hierarchy and mood against the plan §4 bar, consistency, states and edge cases, accessibility (WCAG 2.2 AA), mobile at 360px, performance, copy and regulatory wording. I rendered every state at 360px and 1280px, light and dark ([`states.html`](states.html), screenshots in [`../screenshots/`](../screenshots/) as `final-states-*`), and ran the contrast script on the new colour pairs. **Not done:** a real-device pass, a Lighthouse run, and a screen-reader pass. Those need the built pages and belong to the Frontend and QA tasks (acceptance checklist in README §5).
 
 ## Findings, and what the specs now do about each
 
@@ -37,3 +37,14 @@
 - `python -I docs/design/final/contrast_final.py`: 0 failing required pairs, light and dark ([`contrast_final.txt`](contrast_final.txt)). The SAT-7 report remains 0 failing.
 - Rendered `states.html` at 360px and 1280px, light and dark, headless Chrome (`tools/shots.sh`).
 - `git diff` of `assets/tokens.css` is additive only (new custom properties).
+
+## `/design-critique` run (after resume)
+Context given: checker visitor; catalogue owner at an Indian D2C beauty brand for review and audit. **Must-fix: none.** Should-fix (open, for the Frontend/board to take or leave):
+1. Disabled Approve uses `opacity: .55`; use a flat `surface-2` fill with `ink-2` text so the label keeps contrast.
+2. While blocked, make **Next issue** primary and Approve secondary; swap when ready.
+3. C8 out-of-scope notice is display-size and too loud; use `--t-xl`.
+4. "Approve pack" may read as legal approval; test "Mark review complete" with the board.
+5. Audit loading (A2) could show running red/amber tallies beside the progress bar.
+
+Nice-to-fix: textarea `min-height` 2.4em; faint tick for clear rows; "Show full text" collapse past 6 lines on phones.
+Strengths to keep: icon+word+pattern on every flag and no "compliant" wording; claim text in the 360px anchor chip; no override control on non-overridable flags; heat-strip patterns, inspector line and single tab stop; server-owned highlight offsets with an unswapped textarea.
