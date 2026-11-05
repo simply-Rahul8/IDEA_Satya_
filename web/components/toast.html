@@ -1,0 +1,4 @@
+{#- One toast per page; text is mirrored into #sr-status by the server, so this is never the only place. -#}
+{% macro toast() -%}
+<div class="toast" id="toast" role="status" x-data="satyaToast"></div>
+{%- endmacro %}

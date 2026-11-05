@@ -1,0 +1,42 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/severity_meter.html" import severity_meter %}
+{% from "components/flag_list_item.html" import flag_list_item %}
+{% from "components/icon.html" import icon %}
+{#- v: dict with variant (flagged|clear|out_of_scope), level, risk_label, rows [(flag, title, sev)], red, orange,
+    gate_title, gate_text. Wording never says safe, compliant, approved or passed. -#}
+{% macro verdict_card(v, ruleset) -%}
+<article class="card verdict" id="verdict" aria-labelledby="verdict-h" data-variant="{{ v.variant }}" data-sig="{{ v.sig }}">
+  <p class="eyebrow">Verdict · rule set {{ ruleset.label }}</p>
+  {%- if v.variant == "out_of_scope" %}
+  <div class="v-top">
+    <div class="v-label"><h2 id="verdict-h">{{ v.gate_title }}</h2></div>
+    {{ flag_badge("ink", label="Not reviewed", icon_name="info") }}
+    <p>{{ v.gate_text }}</p>
+  </div>
+  {%- else %}
+  <div class="v-top">
+    <div class="v-label"><h2 id="verdict-h">{{ v.risk_label }}</h2>
+      <span>{% if v.rows %}{{ v.rows | length }} phrase{{ "" if v.rows | length == 1 else "s" }} flagged{% else %}under rule set {{ ruleset.label }}{% endif %}</span></div>
+    {{ severity_meter(v.level, v.risk_label) }}
+    <div class="tally-row">
+      {%- if v.red %}{{ flag_badge("red", label=v.red ~ " blocked") }}{% endif %}
+      {%- if v.orange %}{{ flag_badge("amber", label=v.orange ~ " to review") }}{% endif %}
+      {%- if not v.rows %}{{ flag_badge("green", label="Nothing flagged") }}{% endif %}
+    </div>
+  </div>
+  {%- if v.rows %}
+  <ul class="flags">{% for flag, title, sev in v.rows %}{{ flag_list_item(flag, title, sev, ruleset.label) }}{% endfor %}</ul>
+  {%- else %}
+  <p class="caveat">Nothing in this text matched a rule in the rule set. That is a text check only: it does not cover your label, claims you have not pasted here, or what a marketplace decides.</p>
+  {%- endif %}
+  {%- endif %}
+  <div class="v-foot">
+    <p>This is a text check against {{ "the" if ruleset.is_signed_off else "a draft" }} rule set. It does not mean the listing is approved by a marketplace or a regulator. Not legal advice.</p>
+    {%- if v.variant != "out_of_scope" %}
+    <div class="v-acts">
+      <button class="btn btn-ghost btn-sm" type="button" x-data="satyaCopy" x-on:click="copy" data-copy="{{ v.summary }}">{{ icon("copy") }}Copy summary</button>
+    </div>
+    {%- endif %}
+  </div>
+</article>
+{%- endmacro %}

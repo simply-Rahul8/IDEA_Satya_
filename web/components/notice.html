@@ -1,0 +1,10 @@
+{% from "components/icon.html" import icon %}
+{#- System message. Never uses severity colours. actions: list of (label, attrs dict). -#}
+{% macro notice(title, body, kind="info", actions=None, id=None) -%}
+<div class="notice" data-kind="{{ kind }}" role="{{ 'alert' if kind == 'error' else 'status' }}"{% if id %} id="{{ id }}"{% endif %}>
+  {{ icon("error" if kind == "error" else "info") }}
+  <div><strong>{{ title }}</strong><p>{{ body }}</p>
+  {%- if actions %}<div class="acts">{% for label, attrs in actions %}<button class="btn btn-secondary btn-sm" type="button"{% for k, v in attrs.items() %} {{ k }}="{{ v }}"{% endfor %}>{{ label }}</button>{% endfor %}</div>{% endif -%}
+  </div>
+</div>
+{%- endmacro %}

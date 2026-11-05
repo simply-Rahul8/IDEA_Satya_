@@ -1,0 +1,13 @@
+{% from "components/verdict_card.html" import verdict_card %}
+{% from "components/notice.html" import notice %}
+{% macro verdict_slot(r, ruleset) -%}
+{%- if r.verdict %}{{ verdict_card(r.verdict, ruleset) }}{% else %}<div id="verdict"></div>{% endif -%}
+{%- endmacro %}
+{% macro count(r, max_chars, oob=False) -%}
+<span id="count" class="count{% if r.over %} is-over{% endif %}"{% if oob %} hx-swap-oob="outerHTML"{% endif %}>{{ "{:,}".format(r.count) }} / {{ "{:,}".format(max_chars) }}{% if r.over %} · {{ "{:,}".format(r.over) }} over{% endif %}</span>
+{%- endmacro %}
+{% macro cap_notice(r, max_chars, oob=False) -%}
+<div id="cap-notice"{% if oob %} hx-swap-oob="outerHTML"{% endif %}>
+{%- if r.over %}{{ notice("Only the first " ~ "{:,}".format(max_chars) ~ " characters were checked.", "Remove " ~ "{:,}".format(r.over) ~ " characters to check the whole text.") }}{% endif -%}
+</div>
+{%- endmacro %}

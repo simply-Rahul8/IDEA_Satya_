@@ -1,0 +1,8 @@
+{% from "components/icon.html" import icon %}
+{#- One native <dialog> per page; content arrives by HTMX from GET /rules/{id}/sheet (no user text in it). -#}
+{% macro citation_sheet() -%}
+<dialog id="sheet" class="sheet-dlg" aria-labelledby="sheet-title">
+  <button class="icon-btn sheet-close" type="button" id="sheet-close" aria-label="Close citation">{{ icon("close") }}</button>
+  <div id="sheet-body" aria-live="polite"></div>
+</dialog>
+{%- endmacro %}

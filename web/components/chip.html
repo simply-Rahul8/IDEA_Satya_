@@ -1,0 +1,7 @@
+{% macro chip(label, kind="type", pressed=None, attrs=None) -%}
+{%- if kind == "filter" -%}
+<button class="chip" type="button" aria-pressed="{{ 'true' if pressed else 'false' }}"{% for k, v in (attrs or {}).items() %} {{ k }}="{{ v }}"{% endfor %}>{{ label }}</button>
+{%- else -%}
+<span class="chip chip-type">{{ label }}</span>
+{%- endif -%}
+{%- endmacro %}

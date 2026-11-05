@@ -1,0 +1,12 @@
+{% from "components/icon.html" import icon %}
+{% macro theme_toggle() -%}
+<button class="icon-btn" type="button" x-data="satyaTheme" x-on:click="toggle" x-bind:aria-pressed="pressed" aria-pressed="false">
+  <span class="sr-only">Dark theme</span>{{ icon("moon") }}
+</button>
+{%- endmacro %}
+{% macro topbar(nav=None) -%}
+<header class="topbar">
+  <a class="brand" href="/check"><b aria-hidden="true">स</b> Satya</a>
+  <div class="topbar-end">{% if nav %}{{ nav }}{% endif %}{{ theme_toggle() }}</div>
+</header>
+{%- endmacro %}

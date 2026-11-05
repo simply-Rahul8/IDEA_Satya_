@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="htmx-config" content='{{ htmx_config }}'>
+<title>{{ title }}</title>
+<script>{{ theme_snippet }}</script>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="{{ page.css_url }}">
+<script src="{{ page.htmx_url }}" defer></script>
+<script src="{{ page.app_js_url }}" defer></script>
+<script src="{{ page.alpine_url }}" defer></script>
+{% block head %}{% endblock %}
+</head>
+<body{% block body_attrs %}{% endblock %}>
+<a class="skip" href="#main">Skip to content</a>
+{{ sprite }}
+{% block body %}{% endblock %}
+<div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

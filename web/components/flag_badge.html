@@ -1,0 +1,7 @@
+{% from "components/icon.html" import icon %}
+{#- sev: red|amber|green|ink. The word always sits beside the icon; colour is never the only signal. -#}
+{% macro flag_badge(sev, label=None, rule_id=None, icon_name=None) -%}
+{%- set words = {"red": "Blocked", "amber": "Review", "green": "Clear", "ink": "Info"} -%}
+{%- set icons = {"red": "block", "amber": "warn", "green": "ok", "ink": "info"} -%}
+<span class="flag flag-{{ sev }}">{{ icon(icon_name or icons[sev]) }}<span>{{ label or words[sev] }}</span>{% if rule_id %} <span class="id" aria-label="rule {{ rule_id }}">{{ rule_id }}</span>{% endif %}</span>
+{%- endmacro %}

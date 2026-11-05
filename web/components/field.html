@@ -1,0 +1,13 @@
+{% macro field(id, label, value="", error=None, hint=None, required=False, multiline=False, name=None, maxlength=None, attrs=None) -%}
+{%- set desc = ((id ~ '-hint ') if hint else '') ~ id ~ '-err' -%}
+<div>
+  <label class="lbl" for="{{ id }}">{{ label }}{% if required %} (required){% endif %}</label>
+  {%- if hint %}<p class="hint" id="{{ id }}-hint">{{ hint }}</p>{% endif %}
+  {%- if multiline %}
+  <textarea class="field" id="{{ id }}" name="{{ name or id }}" rows="2" aria-describedby="{{ desc }}"{% if error %} aria-invalid="true"{% endif %}{% if maxlength %} maxlength="{{ maxlength }}"{% endif %}{% for k, v in (attrs or {}).items() %} {{ k }}="{{ v }}"{% endfor %}>{{ value }}</textarea>
+  {%- else %}
+  <input class="field" id="{{ id }}" name="{{ name or id }}" value="{{ value }}" aria-describedby="{{ desc }}"{% if error %} aria-invalid="true"{% endif %}{% if maxlength %} maxlength="{{ maxlength }}"{% endif %}{% for k, v in (attrs or {}).items() %} {{ k }}="{{ v }}"{% endfor %}>
+  {%- endif %}
+  <p class="fp-err" id="{{ id }}-err" role="alert">{{ error or "" }}</p>
+</div>
+{%- endmacro %}

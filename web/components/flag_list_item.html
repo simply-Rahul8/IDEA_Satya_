@@ -1,0 +1,12 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/icon.html" import icon %}
+{#- One flagged phrase in the checker verdict. Opens the citation sheet; the cacheable sheet holds no user text, so the
+    phrase travels in data-quote and is written into the sheet client-side. -#}
+{% macro flag_list_item(flag, title, sev, ruleset_label) -%}
+<li><button type="button" data-sheet="/rules/{{ flag.rule_id }}/sheet?v={{ ruleset_label }}" data-quote="{{ flag.text }}"
+  aria-label="{{ flag.text }}: {{ 'Blocked' if sev == 'red' else 'Review' }}, {{ title }}. Open citation">
+  {{ flag_badge(sev, rule_id=flag.rule_id) }}
+  <span><q>{{ flag.text }}</q><small>{{ title }}</small></span>
+  {{ icon("arrow") }}
+</button></li>
+{%- endmacro %}

@@ -1,0 +1,11 @@
+{% from "checker/_parts.html" import verdict_slot, count, cap_notice %}
+{% from "components/notice.html" import notice %}
+{%- if rate_limited -%}
+<div id="verdict">{{ notice("You've reached the check limit.", "Try again in about " ~ wait_minutes ~ " minute" ~ ("" if wait_minutes == 1 else "s") ~ ". Nothing you typed is lost.") }}</div>
+{%- else -%}
+{{ verdict_slot(r, ruleset) }}
+<div id="backdrop-text" class="backdrop" aria-hidden="true" hx-swap-oob="outerHTML">{{ r.backdrop }}</div>
+{{ count(r, max_chars, oob=True) }}
+{{ cap_notice(r, max_chars, oob=True) }}
+<div id="sr-status" class="sr-only" role="status" aria-live="polite" hx-swap-oob="outerHTML">{{ r.announce }}</div>
+{%- endif -%}

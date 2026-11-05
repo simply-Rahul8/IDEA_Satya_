@@ -1,0 +1,5 @@
+{% macro severity_meter(level, label) -%}
+<div class="meter" role="img" aria-label="Severity: {{ label }}, level {{ level }} of 5" data-level="{{ level }}">
+  {%- for n in range(1, 6) %}<i{% if n <= level or level == 0 %} class="on" data-n="{{ n - 1 }}"{% endif %}></i>{% endfor -%}
+</div>
+{%- endmacro %}

@@ -1,0 +1,11 @@
+{% from "components/icon.html" import icon %}
+{#- kind: primary|secondary|ghost. size: md|sm. attrs: dict of extra HTML attributes (values are escaped). -#}
+{% macro button(label, kind="primary", size="md", icon_name=None, href=None, type="button", disabled_reason=None, attrs=None, id=None) -%}
+{%- set cls = "btn btn-" ~ kind ~ (" btn-sm" if size == "sm" else "") -%}
+{%- if href -%}
+<a class="{{ cls }}" href="{{ href }}"{% for k, v in (attrs or {}).items() %} {{ k }}="{{ v }}"{% endfor %}>{% if icon_name %}{{ icon(icon_name) }}{% endif %}{{ label }}</a>
+{%- else -%}
+<button class="{{ cls }}" type="{{ type }}"{% if id %} id="{{ id }}"{% endif %}{% if disabled_reason %} aria-disabled="true" aria-describedby="{{ id }}-why"{% endif %}{% for k, v in (attrs or {}).items() %} {{ k }}="{{ v }}"{% endfor %}>{% if icon_name %}{{ icon(icon_name) }}{% endif %}{{ label }}</button>
+{%- if disabled_reason %}<span class="sr-only" id="{{ id }}-why">{{ disabled_reason }}</span>{% endif -%}
+{%- endif -%}
+{%- endmacro %}

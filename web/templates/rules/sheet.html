@@ -1,0 +1,16 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/draft_banner.html" import draft_banner %}
+<div class="sheet-content">
+  {{ flag_badge(sev, rule_id=rule.id) }}
+  <h2 id="sheet-title" tabindex="-1">{{ rule.title }}</h2>
+  <blockquote class="quote" id="sheet-quote" hidden></blockquote>
+  <dl>
+    <div><dt>Why it is flagged</dt><dd>{{ rule.explanation }}</dd></div>
+    <div><dt>Source</dt><dd>
+      {%- for s in rule.sources %}<p>{{ s.ref }}, {{ s.provision }}{% if not s.verified %} <span class="chip chip-type">Not yet verified</span>{% endif %}</p>{% endfor -%}
+    </dd></div>
+    <div><dt>What to do</dt><dd>{{ rule.rewrite_hint }}</dd></div>
+    <div><dt>Can it be overridden?</dt><dd>{{ override_long }}</dd></div>
+  </dl>
+  {{ draft_banner(ruleset) }}
+</div>

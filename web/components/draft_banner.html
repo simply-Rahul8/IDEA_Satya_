@@ -1,0 +1,7 @@
+{% from "components/icon.html" import icon %}
+{% macro draft_banner(ruleset, compact=False) -%}
+<p class="draft">{{ icon("info") }}<span>
+{%- if ruleset.is_signed_off -%}Rule set {{ ruleset.label }}. Not legal advice.
+{%- else -%}<strong>Draft rule set {{ ruleset.label }}.</strong> Not yet reviewed by a regulatory consultant. Not legal advice.{%- endif -%}
+</span></p>
+{%- endmacro %}

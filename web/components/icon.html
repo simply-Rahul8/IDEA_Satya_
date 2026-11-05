@@ -1,0 +1,7 @@
+{% macro icon(name, label=None, cls="") -%}
+{%- if label -%}
+<svg class="ic {{ cls }}" role="img" aria-label="{{ label }}" focusable="false"><use href="#i-{{ name }}"/></svg>
+{%- else -%}
+<svg class="ic {{ cls }}" aria-hidden="true" focusable="false"><use href="#i-{{ name }}"/></svg>
+{%- endif -%}
+{%- endmacro %}

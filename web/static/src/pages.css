@@ -1,0 +1,60 @@
+/* Page layout and the pieces the final specs describe in prose. Uses only tokens from tokens.css. */
+.sprite { position: absolute; }
+[x-cloak] { display: none !important; }
+.topbar-end { display: flex; align-items: center; gap: var(--s-3); }
+.hint { font-size: var(--t-xs); color: var(--ink-2); margin: 0 0 var(--s-2); }
+main { padding-block: var(--s-6) var(--s-9); }
+.stamp { margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--line); font-size: var(--t-xs); color: var(--ink-2); display: grid; gap: var(--s-2); }
+.icon-btn[aria-pressed="true"] { background: var(--accent-soft); }
+
+/* ---------- Checker (variant A) ---------- */
+.checker .hero { max-width: 44rem; margin-inline: auto; text-align: center; }
+.checker .hero h1 { font-size: var(--t-3xl); margin: var(--s-3) 0 var(--s-4); }
+.checker .hero h1 em { font-style: italic; color: var(--accent-ink); }
+.checker .hero p:not(.eyebrow) { font-size: var(--t-md); color: var(--ink-2); max-width: 36rem; margin-inline: auto; }
+.pre-launch { max-width: 44rem; margin: var(--s-5) auto 0; }
+.sheet-wrap { max-width: 44rem; margin: var(--s-6) auto 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+.verdict-wrap, .noscript-copy, .checker .stamp { max-width: 44rem; margin-inline: auto; }
+.verdict-wrap { margin-top: var(--s-6); }
+.paper-wrap .paper { overflow: hidden; }
+.paper .backdrop { top: 0; left: 0; right: 0; }
+.paper-foot .acts { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+.paper-foot .checking { visibility: hidden; }
+.paper-foot.htmx-request .checking { visibility: visible; }
+#cap-notice:empty { display: none; }
+.verdict { margin-top: 0; }
+.verdict[data-variant] { animation: none; }
+.verdict.is-rising { animation: rise var(--dur-3) var(--ease) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.verdict-wrap[aria-busy="true"] .verdict { opacity: .85; }
+.verdict .eyebrow { margin-bottom: var(--s-3); }
+.verdict .caveat { margin-top: var(--s-5); color: var(--ink-2); }
+.v-foot { margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--line); display: grid; gap: var(--s-3); font-size: var(--t-xs); color: var(--ink-2); }
+.v-acts { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.flags li { margin: 0; }
+.copy-marked { white-space: pre-wrap; overflow-wrap: anywhere; font: 400 var(--t-md)/1.7 var(--font-display); margin-top: var(--s-5); }
+.noscript-copy .hl { padding: 0 .08em; }
+.backdrop .hl { padding: 0; cursor: text; }
+
+/* ---------- Citation sheet: native <dialog> ---------- */
+.sheet-dlg { border: 0; padding: var(--s-5) var(--s-5) var(--s-6); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-2); overflow: auto;
+  margin: 0; inset: auto 0 0 0; width: 100%; max-width: none; max-height: 82dvh; border-radius: var(--r-lg) var(--r-lg) 0 0;
+  transform: translateY(104%); transition: transform var(--dur-3) var(--ease); }
+.sheet-dlg.is-open { transform: none; }
+.sheet-dlg::backdrop { background: var(--scrim); }
+.sheet-close { position: absolute; top: var(--s-3); right: var(--s-3); }
+.sheet-dlg h2 { font-size: var(--t-xl); margin: var(--s-3) 0; padding-inline-end: var(--tap); }
+.sheet-dlg dl { margin: var(--s-4) 0; display: grid; gap: var(--s-4); }
+.sheet-dlg dt { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-1); }
+.sheet-dlg dd { margin: 0; display: grid; gap: var(--s-2); }
+.sheet-dlg .quote { margin: var(--s-3) 0; }
+@media (min-width: 48rem) {
+  .sheet-dlg { inset: 0 0 0 auto; width: min(var(--sheet-w), 92vw); height: 100dvh; max-height: none; border-radius: var(--r-lg) 0 0 var(--r-lg); transform: translateX(104%); padding: var(--s-6); }
+}
+
+/* ---------- Toast ---------- */
+.toast:empty { display: none; }
+
+.paper textarea { field-sizing: content; }
+.paper-in { position: relative; }
+.paper-wrap.paper .paper-in textarea, .paper-wrap.paper .paper-in .backdrop { border-radius: var(--r-lg) var(--r-lg) 0 0; }

@@ -31,6 +31,9 @@ line-length = 120
 target-version = "py312"
 extend-exclude = ["data"]
 
+[tool.ruff.lint.per-file-ignores]
+"web/app.py" = ["E501"]  # inline SVG path data and the HTMX config string
+
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 

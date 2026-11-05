@@ -1,0 +1,9 @@
+{#- Native <textarea> over a server-rendered backdrop. HTMX never swaps the textarea (caret, selection, IME survive).
+    backdrop: Markup from web.view.build_backdrop. attrs: extra textarea attributes (hx-*). -#}
+{% macro highlight_field(id, name, text, backdrop, label, placeholder="", busy=False, cls="paper", attrs=None, describedby="") -%}
+<div class="{{ cls }}" data-busy="{{ 'true' if busy else 'false' }}">
+  <div class="backdrop" id="backdrop-{{ id }}" aria-hidden="true">{{ backdrop }}</div>
+  <label class="sr-only" for="{{ id }}">{{ label }}</label>
+  <textarea id="{{ id }}" name="{{ name }}" placeholder="{{ placeholder }}" spellcheck="false" autocomplete="off" autocapitalize="off"{% if describedby %} aria-describedby="{{ describedby }}"{% endif %}{% for k, v in (attrs or {}).items() %} {{ k }}="{{ v }}"{% endfor %}>{{ text }}</textarea>
+</div>
+{%- endmacro %}
