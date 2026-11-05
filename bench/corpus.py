@@ -1,4 +1,4 @@
-"""Corpus build and sentence-level scoring of the rule matcher (P22). Labels are DRAFT until consultant spot-check."""
+"""Corpus build and matcher scoring (P22). Labels are DRAFT until consultant spot-check.
 
 `python -m bench.corpus build` regenerates data/corpus/pdp-*.json from _source.txt.
 """

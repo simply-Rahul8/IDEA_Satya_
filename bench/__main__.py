@@ -1,4 +1,4 @@
-"""`make bench` entry point (P31). Scores the rule matcher against the draft corpus labels; cost and LLM arms come later."""
+"""`make bench` entry point (P31). Scores the rule matcher on the draft corpus; cost and LLM arms come later."""
 
 import sys
 
