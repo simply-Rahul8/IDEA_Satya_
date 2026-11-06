@@ -143,3 +143,24 @@ def test_empty_pack_state(client):
     review.store.get("demo").pack = None
     html = client.get("/packs/demo/review").text
     assert "Nothing to review yet." in html and "Generate PDP pack" in html and 'role="tab"' not in html
+
+
+def test_row_renders_gutter_and_body_wrapper(client):
+    html = client.get("/packs/demo/review").text
+    assert html.count('class="gut"') == 12 and html.count('class="body"') == 12
+
+
+def test_confirm_claim_unblocks_anchor_and_hard_block_refused(client):
+    assert status("bullet_4-0") == "red"
+    r = post(client, "claims/c5/confirm", evidence_type="test_report", reference="")
+    assert r.status_code == 403  # test report needs a reference (P25)
+    r = post(client, "claims/c5/confirm", evidence_type="test_report", reference="doc-9")
+    assert r.status_code == 204 and "satya:reload" in r.headers["hx-trigger"]
+    assert review.store.get("demo").truth.claim("c5").status == "confirmed"
+    assert post(client, "claims/c4/confirm", evidence_type="other", reference="x").status_code == 403
+    assert post(client, "claims/nope/confirm", evidence_type="other").status_code == 404
+
+
+def test_docs_and_openapi_not_public_and_meta_description(client):
+    assert client.get("/docs").status_code == 404 and client.get("/openapi.json").status_code == 404
+    assert '<meta name="description"' in client.get("/packs/demo/review").text

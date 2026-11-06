@@ -6,13 +6,13 @@
 {% macro anchor_chip(row, a) -%}
 {%- if a.kind == "claim" -%}
 <button class="chip chip-claim" type="button" data-anchor="{{ a.id }}" data-state="{{ a.state }}" aria-expanded="false" aria-controls="peek-{{ row.sid }}-{{ a.id }}"
-  aria-label="Anchor {{ a.id }}: {{ a.text }}, {{ a.label | lower }}. Show source claim.">
-  {{ icon("anchor") }}<span class="id">{{ a.id | upper }}</span><span class="txt">{{ a.text }}</span><span class="st">{{ icon({"confirmed": "ok", "blocked": "block", "needs_reference": "warn"}.get(a.state, "info")) }}</span>
+  aria-label="{{ a.id | upper }} {{ a.text }}, {{ a.label | lower }}. Show source claim.">
+  {{ icon("anchor") }}<span class="id">{{ a.id | upper }}</span><span class="txt">{{ a.text }}</span><span class="st">{{ icon({"confirmed": "ok", "blocked": "block", "needs_reference": "warn"}.get(a.state, "info")) }}{% if a.state != "confirmed" %}<span class="stl">{{ a.label }}</span>{% endif %}</span>
 </button>
 <div class="peek" id="peek-{{ row.sid }}-{{ a.id }}" hidden>
   <span>{{ flag_badge({"confirmed": "green", "blocked": "red", "needs_reference": "amber"}.get(a.state, "ink"), label=a.label) }}</span>
   <p>{{ a.evidence }}</p>
-  <button class="btn btn-ghost btn-sm" type="button" data-open-claim="{{ a.id }}" data-from="{{ row.sid }}">Open in Product Truth</button>
+  <button class="btn btn-ghost btn-sm" type="button" data-open-claim="{{ a.id }}" data-from="{{ row.sid }}">{{ "Confirm in Product Truth" if a.state in ("unconfirmed", "needs_reference") else "Open in Product Truth" }}</button>
 </div>
 {%- else -%}
 <span class="chip chip-type">Source: {{ a.text }}</span>
@@ -50,7 +50,7 @@
     {%- if not row.anchors %}<span class="chip is-unanchored">No source claim</span>
     <p class="fp-why">Nothing in Product Truth backs this sentence. Rewrite it, or keep it with a reason.</p>{% endif %}
   </div>
-  {%- set open = row.flags | rejectattr("kept") | list %}
+  {%- set open = row.flags | rejectattr("kept") | rejectattr("folded") | list %}
   {%- if open %}<ul class="fp-list">{% for f in open %}{{ flag_item(row, f) }}{% endfor %}</ul>
   {%- if row.hard_blocked %}<p class="fp-note">{{ icon("block") }}Cannot be overridden. Rewrite or remove it.</p>{% endif %}
   {%- if row.rewrite %}
@@ -75,10 +75,13 @@
 
 {% macro sentence_row(row) -%}
 <article class="row" id="s-{{ row.sid }}" data-status="{{ row.status }}" data-sid="{{ row.sid }}" aria-labelledby="h-{{ row.sid }}">
+  <span class="gut" aria-hidden="true">{{ icon({"red": "block", "amber": "warn", "kept": "check", "ok": "ok"}[row.status]) }}</span>
+  <div class="body">
   {{ highlight_field("t-" ~ row.sid, "text", row.text, row.backdrop, row.label ~ " text, editable", cls="edit", attrs={
      "data-sid": row.sid, "rows": "1",
      "hx-post": "/packs/" ~ pack_id ~ "/sentences/" ~ row.sid ~ "/check", "hx-trigger": "input changed delay:150ms, satya:recheck",
      "hx-sync": "this:replace", "hx-target": "#live-" ~ row.sid, "hx-swap": "outerHTML", "hx-indicator": "#s-" ~ row.sid}) }}
   {{ live(row) }}
+  </div>
 </article>
 {%- endmacro %}

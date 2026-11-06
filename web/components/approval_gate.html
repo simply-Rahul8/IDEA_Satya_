@@ -7,7 +7,7 @@
 <button class="btn btn-secondary btn-sm{% if suffix == '-dock' %} btn-icon{% endif %}" type="button" data-next id="next{{ suffix }}"{% if not s.blocked %} aria-disabled="true" aria-describedby="next{{ suffix }}-why"{% endif %}{% if suffix == '-dock' %} aria-label="Next issue"{% endif %}>
   {{ icon("down") }}{% if suffix != '-dock' %}Next issue{% endif %}</button><span class="sr-only" id="next{{ suffix }}-why">{{ "" if s.blocked else "No open issues" }}</span>
 <button class="btn btn-primary btn-sm" type="button" id="approve{{ suffix }}" data-approve hx-post="/packs/{{ pack_id }}/approve" hx-swap="none"
-  {%- if s.blocked %} aria-disabled="true"{% endif %} aria-describedby="note{{ suffix }}">Approve{% if suffix != '-dock' %} pack{% endif %}</button>
+  {%- if s.blocked %} aria-disabled="true"{% endif %} aria-describedby="note{{ suffix }}">{% if s.blocked and suffix != '-dock' %}Resolve issues to approve{% else %}Approve{% if suffix != '-dock' %} pack{% endif %}{% endif %}</button>
 {%- endmacro %}
 {#- Everything in the gate that changes with a re-check; swapped out-of-band. The h1 and eyebrow stay put. -#}
 {% macro gate_live(s, pack_id, rs, oob=False) -%}

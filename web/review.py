@@ -11,10 +11,11 @@ import json
 import threading
 from dataclasses import dataclass, field
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Response
 
 from engine import api
-from engine.models import ClaimStatus, EvidenceType, PDPPack, ProductTruth, Severity
+from engine.guardrails.claims import ClaimGuardError, confirm_claim
+from engine.models import ClaimStatus, Evidence, EvidenceType, PDPPack, ProductTruth, Severity
 from engine.rules import OverrideNotAllowed, RuleSet, check_override, evaluate
 from web import view
 from web.app import form_data, render
@@ -191,6 +192,7 @@ def _flag_views(state: ReviewState, sid: str, sentence) -> list[dict]:
                 "hint": f.suggestion,
                 "reported": (sid, f.rule_id) in state.reported,
                 "sheet": f.source == "rule",
+                "folded": f.rule_id == "ANCHOR-UNCONFIRMED",  # shown on the anchor chip instead of a second box
             }
         )
     return out
@@ -521,6 +523,37 @@ async def report_flag(request: Request, pack_id: str, sid: str):
             state.reported.add((sid, rule_id))  # tuning queue; changes no status and unblocks nothing
         return _live_response(
             request, state, sid, say="Reported as a wrong flag." if not data.get("undo") else "Report withdrawn."
+        )
+
+
+@router.post("/packs/{pack_id}/claims/{claim_id}/confirm")
+async def confirm_claim_route(request: Request, pack_id: str, claim_id: str):
+    """Confirm a claim with evidence; the engine guard refuses hard-blocked claims (P25)."""
+    state = store.get(pack_id)
+    data = await form_data(request)
+    with store.lock:
+        claim = state.truth.claim(claim_id)
+        if claim is None:
+            raise HTTPException(404, "No such claim")
+        try:
+            etype = EvidenceType(data.get("evidence_type", ""))
+        except ValueError:
+            raise HTTPException(422, "Choose an evidence type") from None
+        ref = data.get("reference", "").strip()[:MAX_REASON] or None
+        try:
+            confirmed = confirm_claim(claim, Evidence(type=etype, reference=ref), state.ruleset)
+        except ClaimGuardError as e:
+            raise HTTPException(403, str(e)) from None
+        state.truth = state.truth.model_copy(
+            update={"claims": [confirmed if c.id == claim_id else c for c in state.truth.claims]}
+        )
+        for key in SECTION_LABELS:
+            for i, sent in enumerate(state.pack.section(key).sentences):
+                if f"claim:{claim_id}" in sent.anchors:
+                    _apply_text(state, sid_of(key, i), sent.text)
+        return Response(
+            status_code=204,
+            headers=_trigger(**{"satya:reload": True, "satya:say": f"Claim {claim_id.upper()} confirmed."}),
         )
 
 

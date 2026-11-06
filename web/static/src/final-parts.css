@@ -117,3 +117,10 @@ html { scroll-padding-top: calc(var(--gate-h) + var(--s-3)); scroll-padding-bott
 .prog i[data-s="red"] { background: var(--red-fg); }
 .prog i[data-s="amber"] { background: repeating-linear-gradient(45deg, var(--amber-fg) 0 4px, var(--amber-bg) 4px 8px); }
 .prog i[data-s="ok"] { background: var(--green-fg); }
+
+/* SAT-32: gutter wrapper, claim confirm form, folded anchor state */
+.row .body { min-width: 0; display: grid; gap: var(--s-3); }
+.chip-claim .stl { margin-inline-start: var(--s-2); font-size: var(--t-xs); font-weight: 600; }
+.claim-confirm { display: grid; gap: var(--s-2); font-size: var(--t-sm); }
+.claim-confirm select, .claim-confirm input { min-height: var(--tap); padding: 0 var(--s-3); border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); color: var(--ink); font: inherit; }
+@media (min-width: 60rem) { .chip-claim .stl { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }

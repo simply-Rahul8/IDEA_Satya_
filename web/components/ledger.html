@@ -1,5 +1,5 @@
 {% from "components/flag_badge.html" import flag_badge %}
-{% macro ledger(claims) -%}
+{% macro ledger(claims, pack_id) -%}
 <h2>Product Truth ledger <span class="muted">· {{ claims | length }} claim{{ "" if claims | length == 1 else "s" }}</span></h2>
 <button class="btn btn-ghost btn-sm" type="button" id="back-btn" hidden></button>
 <ol class="claims">
@@ -9,6 +9,17 @@
     <strong>{{ c.text }}</strong>
     <span>{{ flag_badge(c.sev, label=c.word, icon_name=c.icon) }}</span>
     <small>{{ c.evidence }}</small>
+    {%- if c.state in ("unconfirmed", "needs_reference") %}
+    <form class="claim-confirm" hx-post="/packs/{{ pack_id }}/claims/{{ c.id }}/confirm" hx-swap="none">
+      <label for="ev-{{ c.id }}">Evidence type</label>
+      <select id="ev-{{ c.id }}" name="evidence_type" required>
+        <option value="test_report">Test report</option><option value="ingredient_list">Ingredient list</option><option value="label">Label</option><option value="brand_declaration">Brand declaration</option><option value="other">Other</option>
+      </select>
+      <label for="ref-{{ c.id }}">Document ID or file name</label>
+      <input id="ref-{{ c.id }}" name="reference" type="text" maxlength="500" autocomplete="off" value="">
+      <button class="btn btn-secondary btn-sm" type="submit">Confirm claim</button>
+    </form>
+    {%- elif c.state == "blocked" %}<p class="fp-note">Cannot be confirmed. Rewrite or remove the sentences that use it.</p>{% endif %}
     <div class="used">Used in:
       {%- for u in c.used %} <button class="chip" type="button" data-used-in="{{ u.sid }}">{{ u.label }}</button>{% endfor %}
       {%- if not c.used %} nothing yet{% endif %}</div>

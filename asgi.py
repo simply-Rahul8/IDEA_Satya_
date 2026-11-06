@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from web import assets_router
 from web import router as web_router
 
-app = FastAPI(title="Satya", version="0.0.0")
+app = FastAPI(title="Satya", version="0.0.0", docs_url=None, redoc_url=None, openapi_url=None)
 app.include_router(assets_router)
 app.include_router(web_router)
 
