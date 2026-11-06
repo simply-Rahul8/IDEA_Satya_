@@ -1,25 +1,27 @@
 """Review screen (variant B, Truth <-> Copy): GET /packs/{id}/review and its HTMX actions.
 
 Sentence checks are deterministic (`engine.api.edit_sentence`); Approve re-verifies the whole pack (`verify_pack`,
-fail closed). Persistence and auth belong to Platform: this module talks to a `PackStore` and ships an in-memory one
-seeded with a clearly-labelled demo pack so the page can be previewed. Nothing here says "compliant" (P20).
+fail closed). Every pack is read and saved through the workspace-scoped repository (`web.packs`); a pack id from
+another workspace is a 404. Nothing here says "compliant" (P20).
 """
 
 from __future__ import annotations
 
 import json
-import threading
-from dataclasses import dataclass, field
+from contextlib import contextmanager
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from engine import api
-from engine.models import ClaimStatus, EvidenceType, PDPPack, ProductTruth, Severity
-from engine.rules import OverrideNotAllowed, RuleSet, check_override, evaluate
-from web import view
+from engine.models import ClaimStatus, EvidenceType, Severity
+from engine.repo import Conflict, Keep, NotFound, ReviewState
+from engine.rules import OverrideNotAllowed, check_override, evaluate
+from web import packs, view
 from web.app import form_data, render
+from web.auth import authenticate
+from web.security import guard_unsafe
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(guard_unsafe), Depends(authenticate), Depends(packs.dev_seed)])
 
 SECTION_LABELS = {
     "title": "Title",
@@ -53,55 +55,9 @@ TYPE_LABELS = {
     "descriptive": "Descriptive",
 }
 MAX_REASON = 500
+MIN_EVIDENCE_CHARS = 4  # letters or digits an evidence reference must contain ('doc-7' is the shortest real one)
+MIN_REASON_CHARS = 3
 ALLOW_RED_OVERRIDE = True  # ADR-10: overridable reds may be kept with an evidence reference; non-overridable never
-
-
-# ---------------------------------------------------------------------------------------------------- state
-@dataclass
-class Keep:
-    reason: str
-    evidence: bool
-
-
-@dataclass
-class ReviewState:
-    pack_id: str
-    product: str
-    truth: ProductTruth
-    pack: PDPPack | None
-    ruleset: RuleSet
-    kept: dict[tuple[str, str, str], Keep] = field(default_factory=dict)  # (sid, rule_id, matched_text)
-    rewrites: dict[str, str] = field(default_factory=dict)  # sid -> engine-suggested rewrite, when supplied
-    reported: set[tuple[str, str]] = field(default_factory=set)  # (sid, rule_id)
-    approved: bool = False
-    last_edit_after_approval: bool = False
-    approve_error: str | None = None
-    last_announce: str = ""
-
-
-class PackStore:
-    """In-memory stand-in for the Platform's pack storage (RLS, one brand workspace per user)."""
-
-    def __init__(self) -> None:
-        self._packs: dict[str, ReviewState] = {}
-        self._lock = threading.RLock()
-
-    def put(self, state: ReviewState) -> None:
-        with self._lock:
-            self._packs[state.pack_id] = state
-
-    def get(self, pack_id: str) -> ReviewState:
-        with self._lock:
-            if pack_id not in self._packs:
-                raise HTTPException(404, "No such pack")
-            return self._packs[pack_id]
-
-    @property
-    def lock(self) -> threading.RLock:
-        return self._lock
-
-
-store = PackStore()
 
 
 def sid_of(key: str, i: int) -> str:
@@ -410,17 +366,35 @@ def _apply_text(state: ReviewState, sid: str, text: str) -> None:
         state.approved, state.last_edit_after_approval = False, True
 
 
+@contextmanager
+def open_pack(request: Request, pack_id: str):
+    """The caller's own pack, saved when the block ends. Another workspace's pack id is a 404."""
+    try:
+        with packs.repo().edit(packs.workspace_of(request), pack_id) as state:
+            yield state
+    except NotFound:
+        raise HTTPException(404, "No such pack") from None
+    except Conflict:
+        raise HTTPException(409, "This pack changed in another tab. Reload and try again.") from None
+
+
+def _read(request: Request, pack_id: str) -> ReviewState:
+    try:
+        return packs.repo().get(packs.workspace_of(request), pack_id)
+    except NotFound:
+        raise HTTPException(404, "No such pack") from None
+
+
 @router.get("/packs/{pack_id}/review")
 def review_page(request: Request, pack_id: str):
-    state = store.get(pack_id)
+    state = _read(request, pack_id)
     return render(request, "review/page.html", build_view(state))
 
 
 @router.post("/packs/{pack_id}/sentences/{sid}/check")
 async def check_sentence(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
     text = (await form_data(request)).get("text", "")
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         _apply_text(state, sid, text)
         resp = _live_response(request, state, sid)
     return resp
@@ -428,8 +402,7 @@ async def check_sentence(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/rewrite")
 async def use_rewrite(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         key, i, sentence = _sentence(state, sid)
         new = state.rewrites.get(sid)
         if not new:
@@ -452,10 +425,9 @@ async def use_rewrite(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/keep")
 async def keep(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
     data = await form_data(request)
     reason = data.get("reason", "").strip()[:MAX_REASON]
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         key, i, sentence = _sentence(state, sid)
         label = _label(key, i, len(state.pack.section(key).sentences))
         open_flags = [
@@ -474,7 +446,8 @@ async def keep(request: Request, pack_id: str, sid: str):
             if f.severity == Severity.RED and not ALLOW_RED_OVERRIDE:
                 raise HTTPException(403, f"{f.rule_id} cannot be overridden")
         evidence = any(f.severity == Severity.RED for f in open_flags)
-        if not reason:
+        needed = MIN_EVIDENCE_CHARS if evidence else MIN_REASON_CHARS
+        if sum(c.isalnum() for c in reason) < needed:  # one character or punctuation is not a reference
             msg = (
                 "Add an evidence reference: a document ID or an uploaded file."
                 if evidence
@@ -495,8 +468,7 @@ async def keep(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/edit-reason")
 async def edit_reason(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         _sentence(state, sid)
         old = next((v.reason for k, v in state.kept.items() if k[0] == sid), "")
         for k in [k for k in state.kept if k[0] == sid]:
@@ -508,10 +480,9 @@ async def edit_reason(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/report")
 async def report_flag(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
     data = await form_data(request)
     rule_id = data.get("rule_id", "")
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         _, _, sentence = _sentence(state, sid)
         if rule_id not in {f.rule_id for f in sentence.flags}:
             raise HTTPException(404, "No such flag")
@@ -526,9 +497,8 @@ async def report_flag(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/approve")
 async def approve(request: Request, pack_id: str):
-    state = store.get(pack_id)
     data = await form_data(request)
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         # Texts the browser holds that the server never checked (a failed re-check) are re-checked now.
         for sid, text in data.items():
             if sid.startswith("text-"):

@@ -1,8 +1,8 @@
 # Satya consultant review pack: English rules (DRAFT)
 
-- **Rule set:** satya-en v0.1.0-draft
+- **Rule set:** satya-en v0.1.1-draft
 - **Status:** DRAFT: not reviewed, not signed off
-- **Content fingerprint:** 5bdfe1b61c05
+- **Content fingerprint:** 2aa67fe75bb2
 - **Last updated:** 2026-11-05
 - **Rules:** 24 rules, 3 safe-phrase entries, 4 product-type signals
 - **Prepared for:** Cosmetics regulatory consultant (week-2 review, plan P20)
@@ -36,23 +36,23 @@ This pack is not legal advice. It is a draft for expert review.
 | EN-CLAIM-001 | Absolute safety or 'no side effects' | RED | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Consumer Protection Act, 2019 |
 | EN-CLAIM-002 | Guaranteed or permanent results | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-CLAIM-003 | Absolute removal or reversal of skin signs | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
-| EN-CLAIM-004 | Tested, proven or recommended: evidence required | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Cosmetics Rules, 2020 (G.S.R. 426(E)) |
-| EN-CLAIM-005 | Regulator approval claims | RED | Yes | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 426(E)); Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
+| EN-CLAIM-004 | Tested, proven or recommended: evidence required | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020) |
+| EN-CLAIM-005 | Regulator approval claims | RED | Yes | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020); Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-CLAIM-006 | Statistics or survey results: evidence required | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
-| EN-CLAIM-007 | Natural, organic or chemical-free absolutes | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Cosmetics Rules, 2020 (G.S.R. 426(E)) |
+| EN-CLAIM-007 | Natural, organic or chemical-free absolutes | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020) |
 | EN-CLAIM-008 | Safety for pregnancy, babies or all skin types | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
-| EN-CLAIM-009 | Sun protection overstatement | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Cosmetics Rules, 2020 (G.S.R. 426(E)) |
+| EN-CLAIM-009 | Sun protection overstatement | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020) |
 | EN-CLAIM-010 | Hair growth or hair-fall claims | ORANGE | Yes | Drugs and Cosmetics Act, 1940; ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-CLAIM-011 | Acne, dandruff or germ-killing efficacy claims | ORANGE | Yes | Drugs and Cosmetics Act, 1940; ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-CLAIM-012 | Superlative or 'number one' claims | ORANGE | Yes | ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA); Consumer Protection Act, 2019 |
 | EN-CLAIM-013 | Fat loss or body slimming claims | ORANGE | Yes | Drugs and Cosmetics Act, 1940; ASCI Code for Self-Regulation of Advertising Content in India; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-DMR-001 | Cure, treatment or prevention of a disease listed in the DMR Act | RED | No (locked) | Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954 |
 | EN-DMR-002 | Miscarriage, conception, sexual pleasure or menstrual disorder claims | RED | No (locked) | Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954 |
-| EN-DMR-003 | Premature greying of hair | RED | No (locked) | Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954 |
-| EN-DRUG-001 | Treatment or cure of a skin disease or medical condition | RED | No (locked) | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 426(E)); Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
+| EN-DMR-003 | Premature greying of hair | RED | No (locked) | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020) |
+| EN-DRUG-001 | Treatment or cure of a skin disease or medical condition | RED | No (locked) | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020); Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-DRUG-002 | Prevention of disease or infection | RED | No (locked) | Drugs and Cosmetics Act, 1940; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-DRUG-003 | Claim to change a body function (hormones, immunity, circulation, metabolism) | RED | No (locked) | Drugs and Cosmetics Act, 1940 |
-| EN-DRUG-004 | Prescription or medicinal product language | RED | No (locked) | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 426(E)) |
+| EN-DRUG-004 | Prescription or medicinal product language | RED | No (locked) | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020) |
 | EN-DRUG-005 | Hair regrowth or reversal of hair loss | RED | No (locked) | Drugs and Cosmetics Act, 1940; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
 | EN-FAIR-001 | Claim to lighten, whiten or make skin fairer | RED | No (locked) | ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products; ASCI Code for Self-Regulation of Advertising Content in India; Consumer Protection Act, 2019 |
 | EN-FAIR-002 | Darker skin presented as a problem to remove or fix | RED | No (locked) | ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products; ASCI Code for Self-Regulation of Advertising Content in India |
@@ -72,7 +72,7 @@ This pack is not legal advice. It is a draft for expert review.
 
 **Sources (UNVERIFIED unless marked):**
 - Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
-- Cosmetics Rules, 2020 (G.S.R. 426(E)), labelling and claims provisions; rule numbers to be confirmed by the consultant
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
 - Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation
 
 **Patterns:**
@@ -160,7 +160,7 @@ This pack is not legal advice. It is a draft for expert review.
 
 **Sources (UNVERIFIED unless marked):**
 - Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
-- Cosmetics Rules, 2020 (G.S.R. 426(E)), labelling and claims provisions; rule numbers to be confirmed by the consultant
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
 
 **Patterns:**
 - Phrases: prescription strength, prescription-strength, prescribed by doctors, prescribed by dermatologists, doctor prescribed, doctor-prescribed, dermatologist prescribed, dermatologist-prescribed, medicated, is a medicine, acts as a medicine, works like a medicine, pharmaceutical grade, pharmaceutical-grade
@@ -276,12 +276,13 @@ This pack is not legal advice. It is a draft for expert review.
 
 #### EN-DMR-003: Premature greying of hair [RED, NON-OVERRIDABLE]
 
-**Why it is flagged:** Claims to treat or reverse premature greying of hair are drug claims (listed in the DMR Act Schedule, to be confirmed).
+**Why it is flagged:** Claims to treat or reverse premature greying of hair are drug claims. Premature greying is not listed in the DMR Act Schedule; the basis is the Drugs and Cosmetics Act s.3(b)(i) and rule 36 of the Cosmetics Rules, 2020.
 
 **Rewrite direction:** Remove the claim. A hair colour product may describe covering grey hair as a colouring effect.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954, s.3(d) and the Schedule (diseases, disorders and conditions)
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) definition of 'drug' (treatment, mitigation or prevention of disease). Cited for EN-DMR-003 because premature greying is not in the DMR Schedule
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.36 (false or misleading claims). Cited for EN-DMR-003 with D&C Act s.3(b)(i)
 
 **Patterns:**
 - Verbs: cure*, treat*, prevent*, reverse*, stop*, reduce*, delay*, restore*, fix*
@@ -297,7 +298,7 @@ This pack is not legal advice. It is a draft for expert review.
 - Shampoo for coloured hair.
 
 **Open questions:**
-- Confirm that premature greying is in the Schedule. If not, downgrade to an overridable claim.
+- Premature greying is not in the DMR Act Schedule (agent pre-review 2.2). The draft keeps this rule red and non-overridable on the basis of D&C Act s.3(b)(i) and r.36 Cosmetics Rules 2020. Should it stay locked, or move to an overridable claim? (pre-review section 4, Q2 and Q3). This is a consultant decision.
 - Does 'covers grey hair' for a colour product need an allowlist entry? The draft does not flag 'covers'.
 
 **Reviewer decision:** [ ] Approve  [ ] Change  [ ] Remove. Notes: ______
@@ -504,7 +505,7 @@ This pack is not legal advice. It is a draft for expert review.
 **Sources (UNVERIFIED unless marked):**
 - ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
 - Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Cosmetics Rules, 2020 (G.S.R. 426(E)), labelling and claims provisions; rule numbers to be confirmed by the consultant
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
 
 **Patterns:**
 - Phrases: clinically proven, clinically tested, clinically approved, clinically shown, clinically effective, clinically verified, dermatologically tested, dermatologically proven, dermatologically approved, dermatologist tested, dermatologist approved, dermatologist recommended, dermatologist-recommended, recommended by dermatologists, approved by dermatologists, doctor recommended, doctor approved, recommended by doctors, scientifically proven, scientifically tested, lab tested, lab-tested, laboratory tested, patch tested, allergy tested, hypoallergenic, non-comedogenic, noncomedogenic, non comedogenic
@@ -532,7 +533,7 @@ This pack is not legal advice. It is a draft for expert review.
 
 **Sources (UNVERIFIED unless marked):**
 - Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'
-- Cosmetics Rules, 2020 (G.S.R. 426(E)), labelling and claims provisions; rule numbers to be confirmed by the consultant
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
 - Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
 
 **Patterns:**
@@ -589,7 +590,7 @@ This pack is not legal advice. It is a draft for expert review.
 **Sources (UNVERIFIED unless marked):**
 - ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
 - Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Cosmetics Rules, 2020 (G.S.R. 426(E)), labelling and claims provisions; rule numbers to be confirmed by the consultant
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
 
 **Patterns:**
 - Phrases: 100 natural, 100 percent natural, 100 organic, 100 pure, chemical free, chemical-free, free from chemicals, free of chemicals, free from all chemicals, toxin free, toxin-free, non toxic, non-toxic, nontoxic, certified organic, organic certified
@@ -644,7 +645,7 @@ This pack is not legal advice. It is a draft for expert review.
 **Sources (UNVERIFIED unless marked):**
 - ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
 - Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Cosmetics Rules, 2020 (G.S.R. 426(E)), labelling and claims provisions; rule numbers to be confirmed by the consultant
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.36 (false or misleading claims). The Rules have no SPF or sunscreen provision; r.36 applies only generically
 
 **Patterns:**
 - Phrases: total sun protection, complete sun protection, full sun protection, blocks all uv, blocks 100 uv, 100 uv protection, sunproof, sweatproof sunscreen, waterproof sunscreen
@@ -891,7 +892,7 @@ Rule-specific questions (33), repeated here as a checklist:
 | EN-DMR-001 | Items such as 'baldness' and 'obesity' are included from memory and are NOT confirmed to be in the Schedule. Confirm or drop them. |  |
 | EN-DMR-001 | Is 'for <disease>' (e.g. 'for diabetic feet') always a violation, or only when it suggests treatment? |  |
 | EN-DMR-002 | Are intimate-wash listings that mention 'feminine freshness' acceptable? The draft does not flag them. |  |
-| EN-DMR-003 | Confirm that premature greying is in the Schedule. If not, downgrade to an overridable claim. |  |
+| EN-DMR-003 | Premature greying is not in the DMR Act Schedule (agent pre-review 2.2). The draft keeps this rule red and non-overridable on the basis of D&C Act s.3(b)(i) and r.36 Cosmetics Rules 2020. Should it stay locked, or move to an overridable claim? (pre-review section 4, Q2 and Q3). This is a consultant decision. |  |
 | EN-DMR-003 | Does 'covers grey hair' for a colour product need an allowlist entry? The draft does not flag 'covers'. |  |
 | EN-DRUG-001 | Is 'soothes' or 'relieves' acceptable for visible irritation (redness, dryness) without naming a disease? The draft flags 'relieve*' only next to a named condition. |  |
 | EN-DRUG-001 | 'Treatment' is flagged next to a condition, so 'spot treatment for acne' is red. Confirm this is the right line for 'spot treatment' products. |  |
@@ -909,7 +910,7 @@ Rule-specific questions (33), repeated here as a checklist:
 
 ## 8. Sign-off sheet
 
-- **Rule set reviewed:** satya-en v0.1.0-draft, fingerprint 5bdfe1b61c05
+- **Rule set reviewed:** satya-en v0.1.1-draft, fingerprint 2aa67fe75bb2
 - **Decision:** [ ] Approved   [ ] Approved with the changes listed   [ ] Not approved
 - **Reviewer name and qualification:** 
 - **Date:** 

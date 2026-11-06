@@ -4,18 +4,25 @@ import re
 
 import pytest
 from fastapi.testclient import TestClient
+from helpers import secure_with_demo
 
 from asgi import app
-from web import demo, review
+from web import packs, review
 
 HX = {"HX-Request": "true"}
+CURRENT: dict[str, str] = {}
 BANNED = re.compile(r"\b(compliant|safe)\b", re.I)
 
 
 @pytest.fixture()
 def client():
-    demo.seed()  # fresh in-memory pack per test
-    return TestClient(app)
+    c = secure_with_demo(TestClient(app))  # a new session and its own demo pack
+    CURRENT["owner"] = c.owner
+    return c
+
+
+def demo_state():
+    return packs.repo().get(CURRENT["owner"], "demo")
 
 
 def post(c, path, **data):
@@ -23,7 +30,7 @@ def post(c, path, **data):
 
 
 def status(sid):
-    return next(r["status"] for r in review.build_view(review.store.get("demo"))["rows"] if r["sid"] == sid)
+    return next(r["status"] for r in review.build_view(demo_state())["rows"] if r["sid"] == sid)
 
 
 def test_page_renders_gate_rows_ledger_and_strict_markup(client):
@@ -77,7 +84,7 @@ def test_reason_survives_recheck_only_while_flagged_wording_stands(client):
 
 def test_overridable_red_keeps_only_with_evidence(client):
     post(client, "sentences/bullet_1-0/check", text="Absolutely safe with zero side effects.")
-    row = next(r for r in review.build_view(review.store.get("demo"))["rows"] if r["sid"] == "bullet_1-0")
+    row = next(r for r in review.build_view(demo_state())["rows"] if r["sid"] == "bullet_1-0")
     assert row["status"] == "red" and row["keep_kind"] == "evidence" and not row["hard_blocked"]
     bad = post(client, "sentences/bullet_1-0/keep", reason="")
     assert "Add an evidence reference" in bad.text
@@ -101,8 +108,8 @@ def test_wrong_flag_report_unblocks_nothing_and_can_be_undone(client):
 def test_approve_blocked_then_ready_then_edit_reopens(client):
     blocked = post(client, "approve")
     assert 'aria-disabled="true"' in blocked.text and "before you can approve" in blocked.text
-    assert review.store.get("demo").approved is False
-    st = review.store.get("demo")
+    assert demo_state().approved is False
+    st = demo_state()
     for sid, text in (
         ("bullet_2-0", "Smooth, even-looking skin."),
         ("bullet_4-0", "Gentle daily serum."),
@@ -117,7 +124,7 @@ def test_approve_blocked_then_ready_then_edit_reopens(client):
 
 
 def test_approve_succeeds_on_a_clean_pack_and_edit_reopens_gate(client):
-    state = review.store.get("demo")
+    state = demo_state()
     for sec in state.pack.sections:
         for i in range(len(sec.sentences)):
             sid = review.sid_of(sec.key, i)
@@ -140,6 +147,6 @@ def test_approve_succeeds_on_a_clean_pack_and_edit_reopens_gate(client):
 
 
 def test_empty_pack_state(client):
-    review.store.get("demo").pack = None
+    demo_state().pack = None
     html = client.get("/packs/demo/review").text
     assert "Nothing to review yet." in html and "Generate PDP pack" in html and 'role="tab"' not in html

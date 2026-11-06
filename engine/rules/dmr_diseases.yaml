@@ -11,6 +11,14 @@ anchors:
     ref: "Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954"
     provision: "s.3(a), (b), (c): miscarriage and conception, sexual pleasure, menstrual disorder"
     verified: false
+  dc_act_drug: &dc_act_drug
+    ref: "Drugs and Cosmetics Act, 1940"
+    provision: "s.3(b)(i) definition of 'drug' (treatment, mitigation or prevention of disease). Cited for EN-DMR-003 because premature greying is not in the DMR Schedule"
+    verified: false
+  cosmetics_rules_r36: &cosmetics_rules_r36
+    ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
+    provision: "r.36 (false or misleading claims). Cited for EN-DMR-003 with D&C Act s.3(b)(i)"
+    verified: false
   dmr_conditions: &dmr_conditions
     - "diabet*"
     - "cancer"
@@ -156,14 +164,14 @@ rules:
     title: "Premature greying of hair"
     severity: red
     overridable: false
-    explanation: "Claims to treat or reverse premature greying of hair are drug claims (listed in the DMR Act Schedule, to be confirmed)."
+    explanation: "Claims to treat or reverse premature greying of hair are drug claims. Premature greying is not listed in the DMR Act Schedule; the basis is the Drugs and Cosmetics Act s.3(b)(i) and rule 36 of the Cosmetics Rules, 2020."
     rewrite_hint: "Remove the claim. A hair colour product may describe covering grey hair as a colouring effect."
     patterns:
       - kind: verb_condition
         verbs: ["cure*", "treat*", "prevent*", "reverse*", "stop*", "reduce*", "delay*", "restore*", "fix*"]
         conditions: ["premature greying", "premature graying", "premature grey", "premature gray", "greying", "graying", "grey hair", "gray hair", "white hair"]
         max_gap: 3
-    sources: [*dmr_act]
+    sources: [*dc_act_drug, *cosmetics_rules_r36]
     examples:
       positive:
         - "Prevents premature greying of hair."
@@ -172,5 +180,5 @@ rules:
         - "Hair colour that covers grey hair in 10 minutes."
         - "Shampoo for coloured hair."
     open_questions:
-      - "Confirm that premature greying is in the Schedule. If not, downgrade to an overridable claim."
+      - "Premature greying is not in the DMR Act Schedule (agent pre-review 2.2). The draft keeps this rule red and non-overridable on the basis of D&C Act s.3(b)(i) and r.36 Cosmetics Rules 2020. Should it stay locked, or move to an overridable claim? (pre-review section 4, Q2 and Q3). This is a consultant decision."
       - "Does 'covers grey hair' for a colour product need an allowlist entry? The draft does not flag 'covers'."
