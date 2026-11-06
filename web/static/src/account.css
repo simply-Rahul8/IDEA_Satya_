@@ -1,0 +1,16 @@
+/* Sign-in, consent and brand setup. Tokens only; forms reuse .field, .lbl, .btn and .notice. */
+.account { max-width: 30rem; margin: var(--s-6) auto 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+.account h1 { font-size: var(--t-2xl); margin: var(--s-2) 0 var(--s-3); }
+.account > header p:not(.eyebrow) { color: var(--ink-2); margin: 0; }
+.account form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+.account fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; gap: var(--s-3); }
+.account legend { font: 600 var(--t-sm)/1.3 var(--font-sans); padding: 0; margin-bottom: var(--s-2); }
+.opt { display: flex; gap: var(--s-3); align-items: flex-start; min-height: var(--tap); padding: var(--s-3) var(--s-4); border: 1.5px solid var(--line-strong); border-radius: var(--r-md); background: var(--surface); cursor: pointer; }
+.opt input { flex: none; width: 1.25rem; height: 1.25rem; margin: .15rem 0 0; accent-color: var(--accent); }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.opt b { display: block; font-weight: 600; }
+.opt small { display: block; color: var(--ink-2); font-size: var(--t-xs); line-height: 1.45; }
+.account .btn { width: 100%; }
+.account .stack { display: grid; gap: var(--s-3); }
+.consent-copy { margin: 0; font-size: var(--t-xs); line-height: 1.5; color: var(--ink-2); }
+@media (min-width: 30rem) { .account .btn { width: auto; } .account .stack .btn { width: 100%; } }

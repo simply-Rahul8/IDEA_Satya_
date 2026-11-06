@@ -16,7 +16,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response
 
 STATIC = Path(__file__).resolve().parent / "static"
-CSS_PARTS = ("tokens.css", "review-parts.css", "final-parts.css", "pages.css", "review.css")
+CSS_PARTS = ("tokens.css", "review-parts.css", "final-parts.css", "pages.css", "review.css", "account.css")
 JS_FILES = ("htmx.min.js", "alpine-csp.min.js", "app.js", "review.js")
 IMMUTABLE = {"Cache-Control": "public, max-age=31536000, immutable"}
 

@@ -1,0 +1,15 @@
+{#- The one place consent wording lives. DRAFT: replace the placeholder with the lawyer-reviewed text (P20, DPDP). -#}
+{% macro consent(values, error=None, version="") -%}
+<fieldset aria-describedby="consent-copy consent-err">
+  <legend>Before you continue</legend>
+  <p class="consent-copy" id="consent-copy"><strong>Draft wording, notice {{ version }}.</strong>
+    [Placeholder: the lawyer-reviewed privacy notice and terms text goes here. It is not final and not legal advice.]</p>
+  <label class="opt"><input type="checkbox" name="consent_terms_privacy" {% if values.terms_privacy %}checked{% endif %} aria-required="true">
+    <span><b>I agree to the Terms and the Privacy notice (required)</b><small>Satya stores your email and your brand details to run your account.</small></span></label>
+  <label class="opt"><input type="checkbox" name="consent_llm_processing" {% if values.llm_processing %}checked{% endif %}>
+    <span><b>Send my product text to an AI model (optional)</b><small>Used to pre-fill Product Truth and suggest rewrites. You can still use the rule checks without it.</small></span></label>
+  <label class="opt"><input type="checkbox" name="consent_product_updates" {% if values.product_updates %}checked{% endif %}>
+    <span><b>Email me product updates (optional)</b></span></label>
+  <p class="fp-err" id="consent-err" role="alert">{{ error or "" }}</p>
+</fieldset>
+{%- endmacro %}

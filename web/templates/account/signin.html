@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/field.html" import field %}
+{% from "components/notice.html" import notice %}
+{% from "components/icon.html" import icon %}
+{% from "account/_consent.html" import consent %}
+{% block body %}
+<div class="wrap">
+  {{ topbar() }}
+  <main id="main" class="account">
+    <header>
+      <p class="eyebrow">Step 1 · Sign in</p>
+      <h1>{% if step == "code" %}Check your email{% else %}Sign in to Satya{% endif %}</h1>
+      <p>{% if step == "code" %}We sent a code to <strong>{{ email }}</strong>. It can take a minute to arrive.{% else %}Use Google, or get a one-time code by email. No password to remember.{% endif %}</p>
+    </header>
+    {%- if message %}{{ notice("Sign-in didn't finish.", message, kind="error") }}{% endif %}
+    {%- if not ready %}{{ notice("Sign-in isn't set up here.", "This copy of Satya has no sign-in service connected. Ask the person who runs it to add the Supabase settings.") }}{% endif %}
+    {%- if step == "code" %}
+    <form method="post" action="/signin/code">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="email" value="{{ email }}">
+      {{ field("code", "Code from your email", error=errors.code, required=True, attrs={"inputmode": "numeric", "autocomplete": "one-time-code", "maxlength": "10", "autofocus": "autofocus"}) }}
+      <div class="stack">
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <a class="btn btn-ghost" href="/signin">Use a different email</a>
+      </div>
+    </form>
+    {%- else %}
+    <form method="post" action="/signin/email">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      {{ field("email", "Work email", value=email, error=errors.email, required=True, attrs={"type": "email", "autocomplete": "email", "inputmode": "email"}) }}
+      {{ consent(ticked, errors.consent, notice_version) }}
+      <div class="stack">
+        <button class="btn btn-primary" type="submit">Email me a code</button>
+        <button class="btn btn-secondary" type="submit" formaction="/signin/google" formnovalidate>Continue with Google</button>
+      </div>
+    </form>
+    {%- endif %}
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/field.html" import field %}
+{% from "components/notice.html" import notice %}
+{% block body %}
+<div class="wrap">
+  {%- set nav %}{% if signed_in %}<form method="post" action="/signout"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-ghost btn-sm" type="submit">Sign out</button></form>{% endif %}{% endset %}
+  {{ topbar(nav) }}
+  <main id="main" class="account">
+    <header>
+      <p class="eyebrow">Step 2 · Brand setup</p>
+      <h1>Set up your brand</h1>
+      <p>One workspace per brand. Satya uses this on your reports and when it checks your copy. You can change it any time.</p>
+    </header>
+    {%- if saved %}{{ notice("Saved.", "Your brand setup is up to date.") }}<a class="btn btn-primary" href="/check">Go to the checker</a>{% endif %}
+    {%- if errors %}{{ notice("Some details need fixing.", "Your answers are still here. Check the fields marked below.", kind="error") }}{% endif %}
+    <form method="post" action="/setup" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <fieldset aria-describedby="tone-err">
+        <legend>Tone of voice (required)</legend>
+        {%- for key, label in tones.items() %}
+        <label class="opt"><input type="radio" name="tone" value="{{ key }}" {% if v.tone == key %}checked{% endif %}><span><b>{{ label }}</b></span></label>
+        {%- endfor %}
+        <p class="fp-err" id="tone-err" role="alert">{{ errors.tone or "" }}</p>
+      </fieldset>
+      {{ field("restricted_phrases", "Restricted phrases", value=v.restricted_phrases or "", error=errors.restricted_phrases, multiline=True, rows=4,
+               hint="Words you never want in your copy. One per line. Satya flags them for review.") }}
+      {{ field("seller_legal_name", "Seller legal name", value=v.seller_legal_name or "", error=errors.seller_legal_name, required=True, maxlength=120, attrs={"autocomplete": "organization"}) }}
+      {{ field("address", "Registered address", value=v.address or "", error=errors.address, required=True, multiline=True, rows=3, maxlength=400, attrs={"autocomplete": "street-address"}) }}
+      {{ field("grievance_name", "Grievance officer name", value=v.grievance_name or "", error=errors.grievance_name, required=True, maxlength=120) }}
+      {{ field("grievance_email", "Grievance contact email", value=v.grievance_email or "", error=errors.grievance_email, required=True, maxlength=254, attrs={"type": "email", "inputmode": "email"}) }}
+      <button class="btn btn-primary" type="submit">Save brand setup</button>
+    </form>
+  </main>
+</div>
+{% endblock %}

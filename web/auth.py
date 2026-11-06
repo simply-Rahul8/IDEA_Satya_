@@ -178,6 +178,11 @@ async def authenticate(request: Request) -> None:
     request.state.user_id, request.state.workspace_id = signed[0].id, signed[1]
 
 
+def set_session_cookie(resp, request: Request, token: str) -> None:
+    secure = request.url.scheme == "https" or request.headers.get("x-forwarded-proto") == "https"
+    resp.set_cookie(COOKIE, token, max_age=COOKIE_MAX_AGE, path="/", httponly=True, samesite="lax", secure=secure)
+
+
 router = APIRouter(prefix="/auth", dependencies=[Depends(guard_unsafe)])
 
 
@@ -190,9 +195,8 @@ async def start_session(request: Request):
     signed = await run_in_threadpool(sign_in, token if 0 < len(token) <= _MAX_TOKEN else "")
     if signed is None:
         raise HTTPException(401, "Sign in required", headers={"WWW-Authenticate": "Bearer"})
-    secure = request.url.scheme == "https" or request.headers.get("x-forwarded-proto") == "https"
     resp = JSONResponse({"signed_in": True}, headers={"Cache-Control": "no-store"})
-    resp.set_cookie(COOKIE, token, max_age=COOKIE_MAX_AGE, path="/", httponly=True, samesite="lax", secure=secure)
+    set_session_cookie(resp, request, token)
     return resp
 
 
