@@ -4,7 +4,7 @@ import re
 
 import pytest
 from fastapi.testclient import TestClient
-from helpers import secure, secure_with_demo
+from helpers import secure_with_demo
 
 from asgi import app
 from web import packs, review

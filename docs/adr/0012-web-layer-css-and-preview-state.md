@@ -14,3 +14,6 @@ SAT-21 built checker A and review B. Two choices differ from the letter of AGENT
 ## Consequences
 - Follow-ups: Platform swaps the store and rate limiter (`engine.ratelimit.hit`); Engine adds red override and `suggested_rewrite`; Platform confirms the "nothing stored" copy and `CHECKER_MAX_CHARS`; axe, Lighthouse and a Fast 3G run need the board's preview.
 - Anchor flags are red and non-overridable in the engine, so those sentences show Blocked. The engine wins over the spec text.
+
+## Update (SAT-38)
+Item 2 is done: `PackStore` and the global store are gone. `engine/repo` provides a workspace-scoped `PackRepository` (in-memory for tests and local dev, Supabase through PostgREST behind `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`). Every web route takes the workspace from `web.security.workspace_of(request)`, and a pack id from another workspace is a 404. The demo pack lives in `web/devseed.py` and is seeded only when `SATYA_ENV=dev` with the in-memory repository. Hosted environments (preview/production) refuse to start requests without Supabase config. Item 4 (evidence reference) is still free text in the review UI; the database now rejects member-written `evidence.file_path` values that are not an existing object in the workspace's folder of the `evidence` bucket.

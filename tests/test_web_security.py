@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from helpers import secure, secure_with_demo
 
 from asgi import app
-from web import packs, review, security
+from web import packs, security
 
 HX = {"HX-Request": "true"}
 SAME = {"Origin": "http://testserver"}

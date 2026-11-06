@@ -131,6 +131,23 @@ do $$ begin
 end $$;
 create index if not exists evidence_claim_idx on evidence (claim_id);
 
+-- A member can only cite a file that is already in this workspace's folder of the evidence bucket. (The path
+-- shape and folder are checked by evidence_file_path_ok; this checks the object exists, and the caller's own
+-- storage RLS means a file in another workspace's folder reads as missing.) The backend is trusted.
+create or replace function evidence_file_guard() returns trigger language plpgsql as $$
+begin
+  if new.file_path is null or current_user not in ('anon', 'authenticated') or to_regclass('storage.objects') is null then
+    return new;
+  end if;
+  if not exists (select 1 from storage.objects where bucket_id = 'evidence' and name = new.file_path) then
+    raise exception 'evidence file % is not in the evidence bucket', new.file_path using errcode = '23514';
+  end if;
+  return new;
+end $$;
+drop trigger if exists evidence_file_guard_trg on evidence;
+create trigger evidence_file_guard_trg before insert or update of file_path on evidence
+  for each row execute function evidence_file_guard();
+
 -- ---------- stepwise bulk jobs (P11) ----------
 -- The browser drives progress: each call to a step endpoint claims the next few items, processes
 -- them, and records results. Nothing depends on a long-running worker or on cron.
@@ -229,6 +246,78 @@ begin
   end loop;
 end $$;
 
+-- ---------- packs, audits and exports (SAT-38) ----------
+-- A pack is the reviewed listing plus the review state (kept reasons, approval). Members can read their own
+-- but only the backend writes them: approval must come from the server-side gate, never from the browser.
+-- `truth` is a snapshot of the Product Truth the pack was checked against, so a later edit to the product
+-- cannot change what an approved pack was audited under. `rev` makes concurrent saves fail instead of overwrite.
+create table if not exists packs (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  product_id uuid,
+  name text not null,
+  truth jsonb not null default '{}'::jsonb,
+  pack jsonb,
+  review jsonb not null default '{}'::jsonb,
+  rule_set_version text,
+  rev int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint packs_id_ws_key unique (id, workspace_id),
+  constraint packs_product_ws_fk foreign key (product_id, workspace_id) references products (id, workspace_id)
+);
+create index if not exists packs_ws_idx on packs (workspace_id, created_at desc);
+
+create or replace function packs_touch() returns trigger language plpgsql as $$
+begin
+  new.updated_at := now();
+  return new;
+end $$;
+drop trigger if exists packs_touch_trg on packs;
+create trigger packs_touch_trg before update on packs for each row execute function packs_touch();
+
+-- The audit record written at approval: one row per approval, one item per sentence (append-only for members).
+create table if not exists audits (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  pack_id uuid not null,
+  rule_set_version text not null,             -- "no flagged risks under rule set vX", never "compliant" (P20)
+  summary jsonb not null default '{}'::jsonb,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  constraint audits_id_ws_key unique (id, workspace_id),
+  constraint audits_pack_ws_fk foreign key (pack_id, workspace_id) references packs (id, workspace_id) on delete cascade
+);
+create index if not exists audits_pack_idx on audits (pack_id, created_at desc);
+
+create table if not exists audit_items (
+  id uuid primary key default gen_random_uuid(),
+  audit_id uuid not null,
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  position int not null,
+  section text not null,
+  sentence_text text not null,
+  flags jsonb not null default '[]'::jsonb,
+  overrides jsonb not null default '[]'::jsonb,   -- kept reasons / evidence references
+  unique (audit_id, position),
+  constraint audit_items_audit_ws_fk foreign key (audit_id, workspace_id) references audits (id, workspace_id) on delete cascade
+);
+
+create table if not exists exports (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  pack_id uuid not null,
+  audit_id uuid,
+  layout text not null,
+  file_name text not null,
+  sha256 text,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  constraint exports_pack_ws_fk foreign key (pack_id, workspace_id) references packs (id, workspace_id) on delete cascade,
+  constraint exports_audit_ws_fk foreign key (audit_id, workspace_id) references audits (id, workspace_id)
+);
+create index if not exists exports_pack_idx on exports (pack_id, created_at desc);
+
 -- ---------- telemetry (P26) ----------
 create table if not exists llm_calls (
   id uuid primary key default gen_random_uuid(),
@@ -294,6 +383,10 @@ alter table claims enable row level security;
 alter table evidence enable row level security;
 alter table jobs enable row level security;
 alter table job_items enable row level security;
+alter table packs enable row level security;
+alter table audits enable row level security;
+alter table audit_items enable row level security;
+alter table exports enable row level security;
 alter table llm_calls enable row level security;
 alter table rate_limits enable row level security;  -- no policies: service role only
 
@@ -382,6 +475,16 @@ begin
     create policy evidence_objects_delete on storage.objects for delete to authenticated
       using (bucket_id = 'evidence' and public.is_member(public.try_uuid((storage.foldername(name))[1])));
   end if;
+end $$;
+
+-- Packs, audits and exports: members read their own; only the backend (service role) writes.
+do $$
+declare t text;
+begin
+  foreach t in array array['packs', 'audits', 'audit_items', 'exports'] loop
+    execute format('drop policy if exists %I on %I', t || '_select', t);
+    execute format('create policy %I on %I for select using (is_member(workspace_id))', t || '_select', t);
+  end loop;
 end $$;
 
 -- Jobs, items and telemetry are written by the backend (service role); members may read their own.

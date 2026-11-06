@@ -159,5 +159,7 @@ def from_env(env: dict[str, str] | None = None) -> PackRepository:
     if url and key:
         return SupabaseRepository(PostgrestClient(url, key))
     if env.get("SATYA_ENV", "local") in ("preview", "production") or env.get("VERCEL"):
-        raise RuntimeError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required when SATYA_ENV is preview/production")
+        raise RuntimeError(
+            "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required when SATYA_ENV is preview/production"
+        )
     return MemoryRepository()
