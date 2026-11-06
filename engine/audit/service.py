@@ -59,6 +59,19 @@ def resume_audit(conn, job_id: str) -> dict[str, Any]:
     return {**p, "label": _label(p["status"], p["done"] + p["failed"], p["total"])}
 
 
+def retry_errors(conn, job_id: str) -> dict[str, Any]:
+    """Put products that errored back in the queue ("Retry 5", screen-audit A3). Finished results stay as they are."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "update job_items set status = 'pending', result = null, error = null, attempts = 0, claimed_at = null "
+            "where job_id = %s and (status = 'failed' or result->>'state' = 'error')",
+            (job_id,),
+        )
+    conn.commit()
+    p = job_progress(conn, job_id)
+    return {**p, "label": _label(p["status"], p["done"] + p["failed"], p["total"])}
+
+
 def _label(status: str, n: int, total: int) -> str:
     if status == "cancelled":
         return f"Stopped at {n} of {total}"
