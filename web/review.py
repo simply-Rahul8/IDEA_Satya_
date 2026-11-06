@@ -18,9 +18,10 @@ from engine.repo import Conflict, Keep, NotFound, ReviewState
 from engine.rules import OverrideNotAllowed, check_override, evaluate
 from web import packs, view
 from web.app import form_data, render
+from web.auth import authenticate
 from web.security import guard_unsafe
 
-router = APIRouter(dependencies=[Depends(guard_unsafe), Depends(packs.dev_seed)])
+router = APIRouter(dependencies=[Depends(guard_unsafe), Depends(authenticate), Depends(packs.dev_seed)])
 
 SECTION_LABELS = {
     "title": "Title",

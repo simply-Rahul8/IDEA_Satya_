@@ -2,10 +2,11 @@
 
 from fastapi import APIRouter
 
-from web import checker, review
+from web import auth, checker, review
 from web.assets import router as assets_router
 
 router = APIRouter()
+router.include_router(auth.router)
 router.include_router(checker.router)
 router.include_router(review.router)
 

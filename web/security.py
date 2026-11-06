@@ -1,7 +1,7 @@
 """Request security for the web pages: browser sessions, CSRF, client IP and write rate limits (SAT-34).
 
 - Every browser gets a signed, HttpOnly session cookie. `workspace_of(request)` is the single seam that scopes
-  stored packs; when Supabase Auth is wired in, it returns the signed-in user's workspace id instead.
+  stored packs; it returns the signed-in user's workspace id (web.auth), and 401s when there is none.
 - Every state-changing request must come from this site (Origin / Referer / Sec-Fetch-Site) and carry the
   session's CSRF token (X-CSRF-Token header, set by htmx, or a `csrf_token` form field).
 - The client IP is only read from a header the hosting platform sets (SATYA_TRUSTED_IP_HEADER, defaulting to
@@ -100,9 +100,15 @@ class SessionMiddleware:
 
 
 def workspace_of(request: Request) -> str:
-    """The workspace every pack lookup is scoped to. Signed-in users: set `request.state.workspace_id` from the
-    Supabase session (membership checked there). Until then each browser session is its own workspace."""
-    return getattr(request.state, "workspace_id", None) or request.state.sid
+    """The workspace every pack lookup is scoped to: the verified user's workspace (`web.auth.authenticate` sets
+    `request.state.workspace_id` after checking the Supabase session and membership). Only local dev/test with no
+    Supabase configured falls back to the browser session id; otherwise no workspace means 401."""
+    ws = getattr(request.state, "workspace_id", None)
+    if ws:
+        return ws
+    if getattr(request.state, "anonymous_ok", False) and not _hosted():
+        return request.state.sid
+    raise HTTPException(401, "Sign in required")
 
 
 def client_ip(request: Request) -> str:

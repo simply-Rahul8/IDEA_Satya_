@@ -49,6 +49,8 @@ create table if not exists workspace_members (
   primary key (workspace_id, user_id)
 );
 create index if not exists workspace_members_user_idx on workspace_members (user_id);
+-- One brand workspace per owner in v1 (plan section 3). Also makes the backend's first-sign-in create safe under a race.
+create unique index if not exists workspace_members_one_owner_idx on workspace_members (user_id) where role = 'owner';
 
 -- security definer so policies that use it don't recurse into workspace_members' own RLS.
 create or replace function is_member(ws uuid) returns boolean

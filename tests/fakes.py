@@ -20,7 +20,7 @@ class FakeRest:
     def insert(self, table, row):
         self.calls.append(("insert", table, dict(row)))
         rows = self.tables.setdefault(table, [])
-        if any(r["id"] == row["id"] for r in rows):
+        if "id" in row and any(r["id"] == row["id"] for r in rows):
             raise RuntimeError("duplicate key")  # primary key is global, as in Postgres
         stored = json.loads(json.dumps(row))  # what comes back has been through JSON, like the wire
         rows.append(stored)
