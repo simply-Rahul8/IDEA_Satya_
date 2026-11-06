@@ -29,7 +29,7 @@ def visible_text(html: str) -> str:
 
 def test_page_renders_with_draft_banner_and_no_inline_code(client):
     html = client.get("/check").text
-    assert "Draft rule set v0.1.0-draft" in html
+    assert "Draft rule set v0.1.1-draft" in html
     assert 'style="' not in html
     assert len(re.findall(r"<script(?![^>]*\bsrc=)", html)) == 1  # the theme snippet only
     assert 'x-data="satyaChecker"' in html
@@ -44,7 +44,7 @@ def test_flagged_partial_has_marks_list_and_announcement(client):
     html = client.post("/check", data={"text": FLAGGED}, headers=HX).text
     assert html.count("<mark ") == 3
     assert 'class="hl hl-red"' in html and 'class="hl hl-amber"' in html
-    assert "2 blocked, 1 to review under rule set v0.1.0-draft." in html
+    assert "2 blocked, 1 to review under rule set v0.1.1-draft." in html
     assert "hx-swap-oob" in html and 'id="backdrop-text"' in html
 
 
@@ -55,7 +55,7 @@ def test_red_listed_before_amber(client):
 
 def test_clear_result_never_says_safe_or_compliant(client):
     html = client.post("/check", data={"text": "A gentle moisturiser with ceramides."}, headers=HX).text
-    assert "No flagged risks" in html and "under rule set v0.1.0-draft" in html
+    assert "No flagged risks" in html and "under rule set v0.1.1-draft" in html
     assert not BANNED.search(visible_text(html))
 
 
@@ -102,7 +102,7 @@ def test_rate_limit_returns_429_with_retry_after_and_keeps_text(client, monkeypa
 
 
 def test_rule_sheet_is_cacheable_and_holds_no_user_text(client):
-    r = client.get("/rules/EN-DRUG-001/sheet?v=v0.1.0-draft")
+    r = client.get("/rules/EN-DRUG-001/sheet?v=v0.1.1-draft")
     assert r.status_code == 200 and "public" in r.headers["cache-control"]
     assert "Why it is flagged" in r.text and "Not yet verified" in r.text and "cannot be overridden" in r.text
     assert client.get("/rules/NOPE/sheet").status_code == 404

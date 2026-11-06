@@ -71,7 +71,7 @@ def _pack(
         else:
             s = Sentence(text=f"Text for {key}.", type=SentenceType.DESCRIPTIVE)
         secs.append(Section(key=key, sentences=[s]))
-    return PDPPack(sections=secs, rule_set_version="v0.1.0-draft", verifier_passed=verified)
+    return PDPPack(sections=secs, rule_set_version="v0.1.1-draft", verifier_passed=verified)
 
 
 def _flag(sev: Severity, overridable: bool = True, reason: str | None = None) -> Flag:
@@ -100,7 +100,7 @@ def test_report_golden_and_wording():
     res = export_csv(pack, truth, exported_at=WHEN)
     html = render_report(pack, truth, res.audit)
     _golden("report.html", html)
-    assert "Not legal advice · rule set v0.1.0-draft" in html
+    assert "Not legal advice · rule set v0.1.1-draft" in html
     assert "compliant" not in html.lower()
 
 
