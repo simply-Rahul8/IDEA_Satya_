@@ -29,7 +29,7 @@ addopts = "-ra"
 [tool.ruff]
 line-length = 120
 target-version = "py312"
-extend-exclude = ["data"]
+extend-exclude = ["data", "docs/qa"]  # QA scratch probes, not product code
 
 [tool.ruff.lint.per-file-ignores]
 "web/app.py" = ["E501"]  # inline SVG path data and the HTMX config string
