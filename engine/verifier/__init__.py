@@ -8,7 +8,11 @@ from pydantic import BaseModel
 from engine import prompts, telemetry
 from engine.guardrails import RuleSet, check_sentence, default_ruleset
 from engine.models import ClaimStatus, Flag, PDPPack, ProductTruth, Sentence, SentenceType, Severity
+from engine.normalize import nfc
 from engine.providers import LLMProvider, ProviderError, get_provider
+from engine.translate.service import DISCLAIMER_EN, DISCLAIMER_HI
+
+_SYSTEM_DISCLAIMERS = frozenset({nfc(DISCLAIMER_EN), nfc(DISCLAIMER_HI)})
 
 
 class VerificationReport(BaseModel):
@@ -21,10 +25,18 @@ def _anchor_flag(rule_id: str, reason: str, sev: Severity = Severity.RED) -> Fla
     return Flag(rule_id=rule_id, severity=sev, reason=reason, overridable=False, source="anchor")
 
 
+def is_system_disclaimer(sentence: Sentence) -> bool:
+    """The fixed system disclaimer (EN or HI) is not product copy, so it needs no anchor. Exact text match on a
+    LEGAL sentence only: user text never gets this exemption."""
+    return sentence.type == SentenceType.LEGAL and nfc(sentence.text) in _SYSTEM_DISCLAIMERS
+
+
 def anchor_sources(sentence: Sentence, truth: ProductTruth) -> tuple[list[str], list[Flag]]:
     """Resolve anchors to source texts; return (sources, anchor flags)."""
     sources: list[str] = []
     flags: list[Flag] = []
+    if is_system_disclaimer(sentence):
+        return [], []
     if not sentence.anchors:
         return [], [_anchor_flag("ANCHOR-MISSING", "Sentence has no anchor to the Product Truth")]
     for a in sentence.anchors:
