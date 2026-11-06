@@ -359,6 +359,18 @@ begin
   return c <= p_limit;
 end $$;
 
+-- ---------- brand setup (SAT-39): one profile per workspace; restricted_phrases feed the engine as brand flags ----------
+create table if not exists brand_profiles (
+  workspace_id uuid primary key references workspaces(id) on delete cascade,
+  tone text not null check (tone in ('warm', 'clinical', 'premium')),
+  restricted_phrases jsonb not null default '[]'::jsonb check (jsonb_typeof(restricted_phrases) = 'array'),
+  seller_legal_name text not null,
+  address text not null,
+  grievance_name text not null,
+  grievance_email text not null,
+  updated_at timestamptz not null default now()
+);
+
 -- ---------- signup hook: profile + first workspace ----------
 create or replace function handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
@@ -386,6 +398,7 @@ alter table evidence enable row level security;
 alter table jobs enable row level security;
 alter table job_items enable row level security;
 alter table packs enable row level security;
+alter table brand_profiles enable row level security;
 alter table audits enable row level security;
 alter table audit_items enable row level security;
 alter table exports enable row level security;
@@ -483,7 +496,7 @@ end $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['packs', 'audits', 'audit_items', 'exports'] loop
+  foreach t in array array['packs', 'audits', 'audit_items', 'exports', 'brand_profiles'] loop
     execute format('drop policy if exists %I on %I', t || '_select', t);
     execute format('create policy %I on %I for select using (is_member(workspace_id))', t || '_select', t);
   end loop;

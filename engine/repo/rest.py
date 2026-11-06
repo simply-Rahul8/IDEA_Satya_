@@ -51,3 +51,23 @@ class PostgrestClient:
 
     def update(self, table: str, eq: dict[str, Any], values: dict[str, Any]) -> list[dict[str, Any]]:
         return self._call("PATCH", table, eq, values, "return=representation")
+
+
+class MemoryRest:
+    """Dict-backed `Rest` for local dev with no Supabase configured (not for hosted use)."""
+
+    def __init__(self) -> None:
+        self.tables: dict[str, list[dict[str, Any]]] = {}
+
+    def select(self, table: str, eq: dict[str, Any]) -> list[dict[str, Any]]:
+        return [dict(r) for r in self.tables.get(table, []) if all(str(r.get(k)) == str(v) for k, v in eq.items())]
+
+    def insert(self, table: str, row: dict[str, Any]) -> dict[str, Any]:
+        self.tables.setdefault(table, []).append(dict(row))
+        return dict(row)
+
+    def update(self, table: str, eq: dict[str, Any], values: dict[str, Any]) -> list[dict[str, Any]]:
+        hit = [r for r in self.tables.get(table, []) if all(str(r.get(k)) == str(v) for k, v in eq.items())]
+        for r in hit:
+            r.update(values)
+        return [dict(r) for r in hit]

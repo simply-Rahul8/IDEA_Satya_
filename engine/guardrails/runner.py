@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+from engine.brand import restricted_flags
 from engine.models import Flag, PDPPack, Sentence, Severity
 from engine.rules import RuleSet, default_ruleset, evaluate
 
 
-def check_text(text: str, ruleset: RuleSet | None = None) -> list[Flag]:
-    """One flag per rule per text. Citation carries the rule's sources and the rule-set label (never 'compliant')."""
+def check_text(text: str, ruleset: RuleSet | None = None, restricted: tuple[str, ...] = ()) -> list[Flag]:
+    """One flag per rule per text, then the brand's restricted phrases (review-level, source 'brand').
+
+    Rule citations carry the rule's sources and the rule-set label (never 'compliant')."""
     rs = ruleset or default_ruleset()
     flags: list[Flag] = []
     for f in evaluate(text, rs):
@@ -26,17 +29,18 @@ def check_text(text: str, ruleset: RuleSet | None = None) -> list[Flag]:
                 overridable=f.overridable,
             )
         )
-    return flags
+    return flags + restricted_flags(text, restricted)
 
 
-def check_sentence(sentence: Sentence, ruleset: RuleSet | None = None) -> Sentence:
-    kept = [f for f in sentence.flags if f.source != "rule"]
-    return sentence.model_copy(update={"flags": kept + check_text(sentence.text, ruleset)})
+def check_sentence(sentence: Sentence, ruleset: RuleSet | None = None, restricted: tuple[str, ...] = ()) -> Sentence:
+    kept = [f for f in sentence.flags if f.source not in ("rule", "brand")]
+    return sentence.model_copy(update={"flags": kept + check_text(sentence.text, ruleset, restricted)})
 
 
-def check_pack(pack: PDPPack, ruleset: RuleSet | None = None) -> PDPPack:
+def check_pack(pack: PDPPack, ruleset: RuleSet | None = None, restricted: tuple[str, ...] = ()) -> PDPPack:
     rs = ruleset or default_ruleset()
     sections = [
-        sec.model_copy(update={"sentences": [check_sentence(s, rs) for s in sec.sentences]}) for sec in pack.sections
+        sec.model_copy(update={"sentences": [check_sentence(s, rs, restricted) for s in sec.sentences]})
+        for sec in pack.sections
     ]
     return pack.model_copy(update={"sections": sections, "rule_set_version": rs.label})
