@@ -9,11 +9,13 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from types import SimpleNamespace
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from markupsafe import Markup
 from starlette.concurrency import run_in_threadpool
 
+from engine.brand import BRAND_RULE_ID
 from engine.product_type import GateStatus, check_product_type
 from engine.ratelimit import MemoryLimiter, ip_key, make_limiter
 from engine.rules import RuleSet, default_ruleset, evaluate
@@ -131,6 +133,22 @@ async def check_post(request: Request):
 @router.get("/rules/{rule_id}/sheet")
 def rule_sheet(request: Request, rule_id: str, v: str | None = None):
     rs = default_ruleset()
+    if rule_id == BRAND_RULE_ID:  # the brand's own list from /setup: no legal source, always overridable
+        rule = SimpleNamespace(
+            id=BRAND_RULE_ID,
+            title="Brand rule: restricted phrase",
+            explanation="This is your brand's own rule, not a legal rule. You listed this phrase as restricted "
+            "in your brand setup, so Satya flags it wherever it appears.",
+            sources=[],
+            rewrite_hint="Reword it, or keep it with a reason. Change the list in Brand setup.",
+        )
+        ctx = {
+            "rule": rule,
+            "sev": "amber",
+            "override_long": "Yes. Keep it with a reason; the reason is saved with the listing.",
+            "ruleset": rs,
+        }
+        return render(request, "rules/sheet.html", ctx, headers={"Cache-Control": "public, max-age=3600"})
     try:
         rule = rs.rule(rule_id)
     except KeyError:

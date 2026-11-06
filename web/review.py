@@ -11,13 +11,15 @@ import json
 from contextlib import contextmanager
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi.responses import RedirectResponse
 
 from engine import api
+from engine.brand import restricted_flags
 from engine.guardrails.claims import ClaimGuardError, confirm_claim
 from engine.models import ClaimStatus, Evidence, EvidenceType, Severity
 from engine.repo import Conflict, Keep, NotFound, ReviewState
 from engine.rules import OverrideNotAllowed, check_override, evaluate
-from web import packs, view
+from web import account, packs, view
 from web.app import form_data, render
 from web.auth import authenticate
 from web.security import guard_unsafe
@@ -110,6 +112,18 @@ def _label(key: str, i: int, n: int) -> str:
     return base if n == 1 else f"{base}, sentence {i + 1}"
 
 
+def with_brand(sentence, phrases: tuple[str, ...]):
+    """The sentence with the brand's restricted-phrase flags (source 'brand') added: a review-level flag source the
+    engine's live re-check and verifier do not carry, so they are recomputed from the saved phrases on every view."""
+    flags = [f for f in sentence.flags if f.source != "brand"]
+    return sentence.model_copy(update={"flags": flags + restricted_flags(sentence.text, phrases)})
+
+
+def _phrases(request: Request) -> tuple[str, ...]:
+    """The signed-in workspace's restricted phrases (none when there is no brand profile yet)."""
+    return account._store().restricted_phrases(packs.workspace_of(request))
+
+
 def _flag_views(state: ReviewState, sid: str, sentence) -> list[dict]:
     rs = state.ruleset
     out = []
@@ -122,6 +136,8 @@ def _flag_views(state: ReviewState, sid: str, sentence) -> list[dict]:
                 title = rs.rule(f.rule_id).title
             except KeyError:
                 pass
+        elif f.source == "brand":
+            title = "Brand rule: restricted phrase"
         elif f.rule_id == "ANCHOR-UNCONFIRMED":
             title = "Source claim is not confirmed"
         elif f.rule_id == "ANCHOR-MISSING":
@@ -139,7 +155,7 @@ def _flag_views(state: ReviewState, sid: str, sentence) -> list[dict]:
                 "sev": sev,
                 "title": title,
                 "why": f.reason if f.source != "rule" else rs.rule(f.rule_id).explanation,
-                "text": (f.matched_text or "") if f.source == "rule" else "",
+                "text": (f.matched_text or "") if f.source in ("rule", "brand") else "",
                 "kind": kind,
                 "overridable": f.overridable and (sev != "red" or ALLOW_RED_OVERRIDE),
                 "policy": short,
@@ -147,7 +163,7 @@ def _flag_views(state: ReviewState, sid: str, sentence) -> list[dict]:
                 "reason": keep.reason if keep else "",
                 "hint": f.suggestion,
                 "reported": (sid, f.rule_id) in state.reported,
-                "sheet": f.source == "rule",
+                "sheet": f.source in ("rule", "brand"),
                 "folded": f.rule_id == "ANCHOR-UNCONFIRMED",  # shown on the anchor chip instead of a second box
             }
         )
@@ -230,7 +246,7 @@ def _row(state: ReviewState, key: str, i: int, sentence, n: int, truth_claims: d
     }
 
 
-def build_view(state: ReviewState) -> dict:
+def build_view(state: ReviewState, phrases: tuple[str, ...] = ()) -> dict:
     claims = {c.id: c for c in state.truth.claims}
     ctx: dict = {
         "state": state,
@@ -248,7 +264,7 @@ def build_view(state: ReviewState) -> dict:
         for key in keys:
             sents = state.pack.section(key).sentences
             for i, s in enumerate(sents):
-                r = _row(state, key, i, s, len(sents), claims)
+                r = _row(state, key, i, with_brand(s, phrases), len(sents), claims)
                 g_rows.append(r)
                 rows.append(r)
         groups.append({"heading": heading, "rows": g_rows})
@@ -338,7 +354,7 @@ def _live_response(
     prefill: str = "",
 ):
     """Row partial plus OOB parts. Announces only when the outcome changed (never per keystroke)."""
-    ctx = build_view(state)
+    ctx = build_view(state, _phrases(request))
     row = next(r for r in ctx["rows"] if r["sid"] == sid)
     row["error"] = error
     row["prefill"] = prefill
@@ -356,11 +372,12 @@ def _sentence(state: ReviewState, sid: str):
     return key, i, state.pack.section(key).sentences[i]
 
 
-def _apply_text(state: ReviewState, sid: str, text: str) -> None:
+def _apply_text(state: ReviewState, sid: str, text: str, phrases: tuple[str, ...] = ()) -> None:
     """Re-check `text` deterministically and keep reasons/evidence whose flagged wording is unchanged."""
     key, i = locate(state, sid)
     state.pack = api.edit_sentence(state.pack, key, i, text, state.truth, ruleset=state.ruleset)
-    new_flags = {(sid, f.rule_id, f.matched_text or "") for f in state.pack.section(key).sentences[i].flags}
+    checked = with_brand(state.pack.section(key).sentences[i], phrases)
+    new_flags = {(sid, f.rule_id, f.matched_text or "") for f in checked.flags}
     for k in list(state.kept):
         if k[0] == sid and k not in new_flags:
             del state.kept[k]  # the flagged wording changed: the old reason no longer applies
@@ -389,15 +406,18 @@ def _read(request: Request, pack_id: str) -> ReviewState:
 
 @router.get("/packs/{pack_id}/review")
 def review_page(request: Request, pack_id: str):
+    if getattr(request.state, "user_id", None) and "hx-request" not in request.headers:
+        if "text/html" in request.headers.get("accept", "") and not account._store().get(packs.workspace_of(request)):
+            return RedirectResponse("/setup", status_code=303, headers={"Cache-Control": "no-store"})
     state = _read(request, pack_id)
-    return render(request, "review/page.html", build_view(state))
+    return render(request, "review/page.html", build_view(state, _phrases(request)))
 
 
 @router.post("/packs/{pack_id}/sentences/{sid}/check")
 async def check_sentence(request: Request, pack_id: str, sid: str):
     text = (await form_data(request)).get("text", "")
     with open_pack(request, pack_id) as state:
-        _apply_text(state, sid, text)
+        _apply_text(state, sid, text, _phrases(request))
         resp = _live_response(request, state, sid)
     return resp
 
@@ -410,9 +430,9 @@ async def use_rewrite(request: Request, pack_id: str, sid: str):
         if not new:
             raise HTTPException(409, "No rewrite was supplied for this sentence")
         label = _label(key, i, len(state.pack.section(key).sentences))
-        _apply_text(state, sid, new)
+        _apply_text(state, sid, new, _phrases(request))
         del state.rewrites[sid]
-        row = next(r for r in build_view(state)["rows"] if r["sid"] == sid)
+        row = next(r for r in build_view(state, _phrases(request))["rows"] if r["sid"] == sid)
         clear = row["status"] == "ok"
         say = (
             f"{label} rewritten. Re-checked: no flagged risks."
@@ -431,6 +451,7 @@ async def keep(request: Request, pack_id: str, sid: str):
     reason = data.get("reason", "").strip()[:MAX_REASON]
     with open_pack(request, pack_id) as state:
         key, i, sentence = _sentence(state, sid)
+        sentence = with_brand(sentence, _phrases(request))
         label = _label(key, i, len(state.pack.section(key).sentences))
         open_flags = [
             f
@@ -460,7 +481,7 @@ async def keep(request: Request, pack_id: str, sid: str):
             )
         for f in open_flags:
             state.kept[(sid, f.rule_id, f.matched_text or "")] = Keep(reason, f.severity == Severity.RED)
-            if f.severity == Severity.ORANGE:
+            if f.severity == Severity.ORANGE and f.source != "brand":  # brand flags live only in `state.kept`
                 state.pack = api.override_flag(state.pack, key, i, f.rule_id, reason)
         if state.approved:
             state.approved, state.last_edit_after_approval = False, True
@@ -521,7 +542,7 @@ async def confirm_claim_route(request: Request, pack_id: str, claim_id: str):
             for key in SECTION_LABELS:
                 for i, sent in enumerate(state.pack.section(key).sentences):
                     if f"claim:{claim_id}" in sent.anchors:
-                        _apply_text(state, sid_of(key, i), sent.text)
+                        _apply_text(state, sid_of(key, i), sent.text, _phrases(request))
     return Response(
         status_code=204,
         headers=_trigger(**{"satya:reload": True, "satya:say": f"Claim {claim_id.upper()} confirmed."}),
@@ -538,12 +559,13 @@ async def approve(request: Request, pack_id: str):
                 real = sid[5:]
                 key, i, s = _sentence(state, real)
                 if s.text != text:
-                    _apply_text(state, real, text)
-        ctx = build_view(state)
+                    _apply_text(state, real, text, _phrases(request))
+        phrases = _phrases(request)
+        ctx = build_view(state, phrases)
         state.approve_error = None
         if ctx["summary"]["blocked"]:
             first = ctx["summary"]["first_blocker"]
-            ctx = build_view(state)
+            ctx = build_view(state, phrases)
             return render(
                 request,
                 "review/_gate_parts.html",
@@ -552,14 +574,14 @@ async def approve(request: Request, pack_id: str):
             )
         report = api.verify_pack(state.pack, state.truth, ruleset=state.ruleset)
         state.pack = report.pack
-        ctx = build_view(state)
+        ctx = build_view(state, phrases)
         if not report.pass2_completed:
             state.approve_error = "The verifier could not run, so approval stays off. Try again in a moment."
         elif ctx["summary"]["blocked"]:
             pass  # the verifier raised a new flag; rows below are re-rendered by the reload trigger
         else:
             state.approved, state.last_edit_after_approval = True, False
-        ctx = build_view(state)
+        ctx = build_view(state, phrases)
         events = {
             "satya:say": "Approved. The audit record is attached to your export."
             if ctx["summary"]["approved"]
