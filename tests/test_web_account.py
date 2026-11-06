@@ -266,3 +266,56 @@ def test_restricted_phrases_reach_the_engine(env):
     assert not [f for f in check_text("A miraculous serum.", restricted=phrases) if f.source == "brand"]
     assert BrandStore(rest).restricted_phrases("w-other") == ()
     assert restricted_flags("anything", ()) == []
+
+
+# ---- review screen: brand flags and the /setup redirect (SAT-48) ----
+
+PAGE = {"Accept": "text/html"}
+HX = {"HX-Request": "true"}
+
+
+def _signed_in_with_pack(rest, phrases="dewy finish"):
+    from web import devseed, packs
+
+    c = TestClient(app)
+    sign_in(c)
+    ws = rest.tables["workspace_members"][0]["workspace_id"]
+    devseed.seed(packs.repo(), ws)
+    if phrases:
+        post(c, "/setup", {**GOOD, "restricted_phrases": phrases})
+    return c
+
+
+def test_review_page_without_brand_profile_goes_to_setup_but_htmx_and_api_do_not(env):
+    rest, _ = env
+    c = _signed_in_with_pack(rest, phrases="")
+    r = c.get("/packs/demo/review", headers=PAGE, follow_redirects=False)
+    assert r.status_code == 303 and r.headers["location"] == "/setup"
+    assert c.get("/packs/demo/review", headers={**PAGE, **HX}, follow_redirects=False).status_code == 200
+    assert c.get("/packs/demo/review", follow_redirects=False).status_code == 200  # not a browser page load
+    post(c, "/setup", GOOD)
+    assert c.get("/packs/demo/review", headers=PAGE, follow_redirects=False).status_code == 200
+
+
+def test_brand_restricted_phrase_is_an_orange_overridable_flag_with_its_own_sheet(env):
+    rest, _ = env
+    c = _signed_in_with_pack(rest)
+    html = c.get("/packs/demo/review", headers=PAGE).text
+    live = html[html.index('id="live-bullet_1-0"') : html.index('id="s-bullet_2-0"')]
+    assert "Brand rule: restricted phrase" in live and "BRAND-RESTRICTED" in live and "fp-amber" in live
+    assert "Your brand restricted the phrase" in live and 'data-sheet="/rules/BRAND-RESTRICTED/sheet' in live
+    assert "Wrong flag?" not in live and "Reason to keep this wording" in live
+    sheet = c.get("/rules/BRAND-RESTRICTED/sheet").text
+    assert "not a legal rule" in sheet and "Keep it with a reason" in sheet and "compliant" not in sheet.lower()
+    # keep with a reason: the flag stops blocking, and it survives a re-check of unchanged wording
+    r = post(c, "/packs/demo/sentences/bullet_1-0/keep", {"reason": "Approved by our founder"}, headers={**SAME, **HX})
+    assert r.status_code == 200 and "Kept with reason" in r.text
+    r = post(
+        c,
+        "/packs/demo/sentences/bullet_1-0/check",
+        {"text": "Hydrating serum with a dewy finish."},
+        headers={**SAME, **HX},
+    )
+    assert "Kept with reason" in r.text
+    r = post(c, "/packs/demo/sentences/bullet_1-0/check", {"text": "Hydrating serum."}, headers={**SAME, **HX})
+    assert "Brand rule" not in r.text

@@ -21,7 +21,7 @@
 
 {% macro flag_item(row, f) -%}
 <li class="fp-item fp-{{ f.sev }}">
-  <div class="fp-head">{{ flag_badge(f.sev, rule_id=f.rule_id if f.kind == "rule" else None, label=("Blocked" if f.sev == "red" else "Needs a reason")) }}<strong>{{ f.title }}</strong></div>
+  <div class="fp-head">{{ flag_badge(f.sev, rule_id=f.rule_id if f.kind in ("rule", "brand") else None, label=("Blocked" if f.sev == "red" else "Needs a reason")) }}<strong>{{ f.title }}</strong></div>
   <p class="fp-why">{% if f.text %}<q>{{ f.text }}</q>: {% endif %}{{ f.why }}</p>
   {%- if f.hint %}<p class="fp-why">What to do: {{ f.hint }}</p>{% endif %}
   <div class="fp-row">
