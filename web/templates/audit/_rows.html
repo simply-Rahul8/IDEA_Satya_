@@ -1,0 +1,13 @@
+{% from "components/icon.html" import icon %}
+{% for c in rows %}
+<tr data-s="{{ c.state }}"{% if first_new and loop.first %} data-new tabindex="-1"{% endif %}>
+  <td class="sk">{{ c.sku }}</td>
+  <td>{{ c.name }}<span class="rowflags">{{ c.top }}{% if c.more %} +{{ c.more }} more{% endif %}</span></td>
+  <td><span class="flag flag-{{ c.sev }}">{{ icon(c.icon) }}<span>{{ c.label }}</span></span></td>
+  <td class="hide-sm">{{ c.top }}{% if c.more %} <span class="muted">+{{ c.more }} more</span>{% endif %}</td>
+  <td><button class="btn btn-ghost btn-sm" type="button" data-sheet="/audits/{{ v.job_id }}/products/{{ c.i }}">Open<span class="sr-only"> {{ c.sku }}</span></button></td>
+</tr>
+{% endfor %}
+{% if left %}
+<tr class="more-row"><td colspan="5"><button class="btn btn-secondary btn-sm" type="button" hx-get="/audits/{{ v.job_id }}/rows?page={{ next }}&amp;f={{ v.f }}&amp;sort={{ v.sort }}" hx-target="closest tr" hx-swap="outerHTML">Show more ({{ left }} left)</button></td></tr>
+{% endif %}

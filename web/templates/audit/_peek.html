@@ -1,0 +1,21 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/draft_banner.html" import draft_banner %}
+<div class="sheet-content">
+  {{ flag_badge(c.sev, c.label, icon_name=c.icon) }}
+  <h2 id="sheet-title" tabindex="-1">{{ c.name }}</h2>
+  <p class="sk">{{ c.sku }}</p>
+  {%- if c.items %}
+  <ul class="peek-list">
+    {%- for sev, rid, title, quote in c.items %}
+    <li>{{ flag_badge(sev, rule_id=(rid if rid != "LM" else none)) }}<strong>{{ title }}</strong>
+      {%- if quote %}<q>{{ quote }}</q>{% endif %}</li>
+    {%- endfor %}
+  </ul>
+  {%- elif c.state in ("skipped", "error", "pending") %}
+  <p class="peek-meta">{{ c.top }}</p>
+  {%- else %}
+  <p class="peek-meta">No flagged risks under rule set {{ v.report.rule_set }}.</p>
+  {%- endif %}
+  <p><a class="btn btn-secondary btn-sm" href="/audits/{{ v.job_id }}/report#p-{{ c.i }}">Open report</a></p>
+  {{ draft_banner(ruleset) }}
+</div>

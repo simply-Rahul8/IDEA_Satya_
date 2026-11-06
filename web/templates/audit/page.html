@@ -1,0 +1,81 @@
+{% extends "audit/_shell.html" %}
+{% from "components/audit.html" import stat_counter, heat_cell, legend_item, filter_chips, job_progress %}
+{% from "components/notice.html" import notice %}
+{% from "components/icon.html" import icon %}
+{% set c = v.report.counters %}
+{% set running = v.mode == "running" %}
+{% block audit %}
+<header><p class="eyebrow">Catalogue audit</p>
+  <h1>Where your listings are at risk.</h1>
+  <p class="lede">Each square is one product, sorted by risk. Select a square to see why, or filter without leaving the page.</p></header>
+
+{%- if v.out_of_scope %}
+{{ notice("This product isn't in scope for Satya v1.", "Satya reviews cosmetic listings only (" ~ v.cells[0].top ~ "). It was not checked against the rules.", actions=none) }}
+<p><a class="btn btn-secondary" href="/audits/new">Check another</a></p>
+{%- else %}
+<div x-data="satyaAudit" data-job="{{ v.job_id }}" data-mode="{{ v.mode }}" data-f="{{ v.f }}" data-sort="{{ v.sort }}" data-total="{{ c.total }}" data-label="{{ v.report.progress_label }}">
+  <div class="audit">
+  {%- if v.mode == "done" and (v.skipped or v.errors) %}
+  {%- set parts = [] %}
+  {%- if v.errors %}{% set _ = parts.append(v.errors ~ (" product couldn't" if v.errors == 1 else " products couldn't") ~ " be checked") %}{% endif %}
+  {%- if v.skipped %}{% set _ = parts.append(v.skipped ~ (" isn't a cosmetic" if v.skipped == 1 else " aren't cosmetics")) %}{% endif %}
+  <div class="notice" role="status">{{ icon("info") }}<div><strong>{{ parts | join(" and ") | capitalize }}.</strong><p>They are marked in the strip and left out of the risk counts.{% if v.skipped %} {{ v.skipped }} not reviewed: not a cosmetic.{% endif %}</p>
+    {%- if v.errors %}<div class="acts"><button class="btn btn-secondary btn-sm" type="button" hx-post="/audits/{{ v.job_id }}/retry">{{ icon("refresh") }}Retry {{ v.errors }}</button></div>{% endif %}</div></div>
+  {%- endif %}
+  {%- if v.cleared %}
+  {{ notice("No flagged risks in " ~ c.total ~ " products under rule set " ~ ruleset.label ~ ".", "Not legal advice.") }}
+  {%- endif %}
+
+  <section class="counters" aria-label="Risk counts">
+    {{ stat_counter("red", c.red, c.total, loading=running) }}
+    {{ stat_counter("amber", c.amber, c.total, loading=running) }}
+    {{ stat_counter("green", c.green, c.total, loading=running) }}
+    {%- if (v.skipped or v.errors) and not running %}{{ stat_counter("ink", v.skipped + v.errors, c.total, label="Not checked", icon_name="info") }}{% endif %}
+  </section>
+
+  <section class="card strip-card" aria-labelledby="strip-h">
+    <h2 id="strip-h" class="sr-only">Risk heat-strip</h2>
+    {%- if running or v.mode == "stopped" %}{{ job_progress(v.report, v.mode) }}{% endif %}
+    {%- if not running %}
+    <div class="controls no-print">
+      {{ filter_chips(v.chips, v.f) }}
+      <button class="chip" type="button" id="sort-toggle" aria-pressed="{{ 'true' if v.sort == 'cat' else 'false' }}" x-on:click="sort">Catalogue order</button>
+    </div>
+    <p class="sr-only" id="audit-live" role="status" aria-live="polite"></p>
+    {%- endif %}
+    <div class="strip" id="strip" role="group" aria-label="One square per product. Use the arrow keys to move between products.">
+      {%- for cell in v.cells %}{{ heat_cell(cell, v.job_id, first=loop.first, dim=not running and not (v.f == "all" or cell.state == v.f or (v.f == "na" and cell.state in ("skipped", "error")))) }}{% endfor %}
+    </div>
+    <div class="inspect" id="inspect" role="status">
+      <span id="in-empty">Select a square to see why.</span>
+      <span class="who" id="in-body" hidden>
+        <span id="in-badge"></span><strong id="in-name"></strong><span class="sk" id="in-sku"></span>
+        <span id="in-top"></span><span id="in-more"></span>
+        <button class="btn btn-ghost btn-sm" type="button" id="in-peek">Details</button>
+        <a id="in-report" href="/audits/{{ v.job_id }}/report">Open report</a>
+      </span>
+    </div>
+    <div class="legend" aria-label="Legend">{% for l in v.legend %}{{ legend_item(l) }}{% endfor %}</div>
+    <p class="tip-keys">Tip: use the arrow keys to move between products. Press Enter to open one.</p>
+    <template id="badges">
+      {%- for k, (sev, word, ic) in {"red": ("red", "Blocked", "block"), "amber": ("amber", "Review", "warn"), "green": ("green", "Clear", "ok"), "pending": ("ink", "Checking", "spin"), "skipped": ("ink", "Not reviewed", "info"), "error": ("ink", "Couldn't check", "unchecked")}.items() %}
+      <span class="flag flag-{{ sev }}" data-b="{{ k }}">{{ icon(ic) }}<span>{{ word }}</span></span>
+      {%- endfor %}
+    </template>
+  </section>
+
+  {%- if not running %}
+  <section class="card table-card" aria-labelledby="table-h">
+    <h2 id="table-h">Products, highest risk first <span class="muted">(the same data as the strip)</span></h2>
+    <div class="tbl" id="audit-table">
+      <table><caption class="sr-only">Products with their status and the main reason</caption>
+        <thead><tr><th scope="col">SKU</th><th scope="col">Product</th><th scope="col">Status</th><th scope="col" class="hide-sm">Why</th><th scope="col"><span class="sr-only">Details</span></th></tr></thead>
+        <tbody id="rows">{% include "audit/_rows.html" %}</tbody>
+      </table>
+    </div>
+  </section>
+  {%- endif %}
+  </div>
+</div>
+{%- endif %}
+{% endblock %}

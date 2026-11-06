@@ -1,0 +1,2 @@
+{% from "components/audit.html" import heat_cell %}
+{% for cell in cells %}{{ heat_cell(cell, job_id) }}{% endfor %}

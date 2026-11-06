@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/draft_banner.html" import draft_banner %}
+{% from "components/citation_sheet.html" import citation_sheet %}
+{% block head_scripts %}<script src="{{ page.js_audit }}" defer></script>{% endblock %}
+{% block body %}
+<div class="wrap">
+  {{ topbar() }}
+  <main id="main" class="audit">
+    {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
+    {% block audit %}{% endblock %}
+    <footer class="stamp">
+      <p>Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} (draft, not yet reviewed by a regulatory consultant){% endif %}.</p>
+      <p>Checks are matched against written rules. No AI model is used to decide a flag.</p>
+    </footer>
+  </main>
+</div>
+{{ citation_sheet() }}
+{% endblock %}

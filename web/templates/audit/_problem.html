@@ -1,0 +1,24 @@
+{% from "components/icon.html" import icon %}
+<div class="notice" data-kind="{{ kind }}" role="{{ 'alert' if kind == 'error' else 'status' }}">
+  {{ icon("error" if kind == "error" else "info") }}
+  <div><strong>{{ title }}</strong>{% if body %}<p>{{ body }}</p>{% endif %}
+  {%- if mapping %}
+  {%- if mapping.error %}<p class="fp-err" role="alert">{{ mapping.error }}</p>{% endif %}
+  <table class="map-tbl"><caption class="sr-only">Your column to Satya field</caption>
+    <thead><tr><th scope="col">Satya field</th><th scope="col">Your column</th></tr></thead>
+    <tbody>
+    {%- for key, label, required in mapping.fields %}
+    <tr><th scope="row"><label for="map-{{ key }}">{{ label }}{% if required %} <span class="muted">(required)</span>{% endif %}</label></th>
+      <td><select id="map-{{ key }}" name="map_{{ key }}"><option value="">Not in my file</option>
+        {%- for h in mapping.headers %}<option value="{{ h }}"{% if mapping.chosen.get(key) == h %} selected{% endif %}>{{ h }}</option>{% endfor -%}
+      </select></td></tr>
+    {%- endfor %}
+    </tbody></table>
+  <div class="acts"><button class="btn btn-primary btn-sm" type="submit">Continue</button></div>
+  {%- endif %}
+  {%- if actions %}<div class="acts">{% for label, vals in actions %}
+    {%- if vals.get("again") %}<button class="btn btn-secondary btn-sm" type="button" data-again>{{ label }}</button>
+    {%- else %}<button class="btn btn-secondary btn-sm" type="button" hx-post="/audits" hx-include="#audit-form" hx-encoding="multipart/form-data" hx-vals="{{ vals | tojson | forceescape }}" hx-target="#audit-problem" hx-swap="innerHTML">{{ label }}</button>{% endif %}
+  {%- endfor %}</div>{% endif %}
+  </div>
+</div>

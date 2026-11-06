@@ -58,6 +58,7 @@ ICONS = {
     "copy": '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
     "spin": '<path d="M12 3a9 9 0 1 0 9 9"/>',
     "error": '<circle cx="12" cy="12" r="9"/><path d="M12 7.5V13M12 16.4v.1"/>',
+    "upload": '<path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 16v4h16v-4"/>',
     "unchecked": '<circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/><path d="M12 11v5M12 7.9v.1"/>',
 }
 SPRITE = Markup(
@@ -77,6 +78,7 @@ class Page:
     alpine_url: str
     app_js_url: str
     js_review: str
+    js_audit: str
 
 
 def page_context(ruleset: RuleSet | None = None) -> dict:
@@ -89,6 +91,7 @@ def page_context(ruleset: RuleSet | None = None) -> dict:
             assets.js_url("alpine-csp.min.js"),
             assets.js_url("app.js"),
             assets.js_url("review.js"),
+            assets.js_url("audit.js"),
         ),
         "ruleset": rs,
         "sprite": SPRITE,

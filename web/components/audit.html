@@ -1,0 +1,59 @@
+{% from "components/icon.html" import icon %}
+{% from "components/flag_badge.html" import flag_badge %}
+{#- Audit components (components.md section E). Cell data is plain data-* attributes that Alpine reads; nothing is eval'd. -#}
+
+{#- stat_counter: the animating number is aria-hidden, the final value sits in an sr-only sibling. -#}
+{% macro stat_counter(sev, value, total, loading=False, label=None, icon_name=None) -%}
+<div class="card stat"{% if loading %} data-state="loading"{% endif %}>
+  {{ flag_badge(sev, label, icon_name=icon_name) }}
+  {%- if loading %}<b aria-hidden="true">—</b><span class="sr-only">Not counted yet</span>
+  {%- else %}<b x-data="satyaCounter" data-n="{{ value }}" aria-hidden="true">{{ value }}</b><span class="sr-only">{{ value }}</span>{% endif %}
+  <small>of {{ total }} products</small>
+</div>
+{%- endmacro %}
+
+{% macro heat_cell(c, job_id, first=False, dim=False) -%}
+<button class="cell{% if dim %} dim{% endif %}" type="button" data-s="{{ c.state }}" data-i="{{ c.i }}" data-r="{{ c.rank }}" data-sku="{{ c.sku }}" data-name="{{ c.name }}" data-label="{{ c.label }}" data-top="{{ c.top }}" data-more="{{ c.more }}" data-sheet="/audits/{{ job_id }}/products/{{ c.i }}" tabindex="{{ 0 if first else -1 }}" aria-label="{{ c.aria }}"></button>
+{%- endmacro %}
+
+{% macro legend_item(c) -%}
+<span><i class="sw" data-s="{{ c.state }}"></i>{{ icon(c.icon) }}{{ {"red": "Blocked", "amber": "Review", "green": "Clear", "pending": "Checking", "skipped": "Not a cosmetic, not reviewed", "error": "Couldn't check"}[c.state] }}</span>
+{%- endmacro %}
+
+{% macro filter_chips(chips, active) -%}
+<div class="group" role="group" aria-label="Filter products">
+  {%- for key, word, n in chips %}
+  <button class="chip" type="button" data-f="{{ key }}" aria-pressed="{{ 'true' if key == active else 'false' }}" x-on:click="filter">{{ word }} <span class="n">{{ n }}</span></button>
+  {%- endfor %}
+</div>
+{%- endmacro %}
+
+{#- job_progress: role=progressbar plus a throttled status line. -#}
+{% macro job_progress(report, state) -%}
+{%- set c = report.counters -%}
+<div class="progress-head"><strong id="job-label">{{ report.progress_label }}</strong><span class="sr-only" id="job-live" role="status"></span>
+  <span class="no-print"><button class="btn btn-ghost btn-sm" type="button" id="job-cancel" x-on:click="cancel"{% if state != "running" %} hidden{% endif %}>Cancel</button>
+  <button class="btn btn-secondary btn-sm" type="button" id="job-resume" x-on:click="resume"{% if state == "running" %} hidden{% endif %}>{{ icon("refresh") }}Resume</button></span></div>
+<div class="bar" id="job-bar" role="progressbar" aria-label="Audit progress" aria-valuemin="0" aria-valuemax="{{ c.total }}" aria-valuenow="{{ c.done }}"><i data-pct="{{ (100 * c.done / c.total) | round | int if c.total else 0 }}"></i></div>
+{%- endmacro %}
+
+{% macro dropzone(max_rows) -%}
+<div class="dropzone" x-data="satyaDropzone" x-on:dragover.prevent="over" x-on:dragleave="leave" x-on:drop.prevent="drop">
+  {{ icon("upload", cls="ic-lg") }}
+  <h2>Audit your catalogue</h2>
+  <p class="muted">Upload a Shopify product CSV, or a catalogue download saved as CSV. Or paste listing text.</p>
+  <p class="over-note"><strong>Drop to upload</strong></p>
+  <div class="idle" id="pick-box">
+    <input class="file-in" type="file" id="audit-file" name="file" accept=".csv,text/csv,text/plain" x-on:change="chosen">
+    <label class="btn btn-primary" for="audit-file">Choose a file</label>
+    <button class="btn btn-ghost btn-sm" type="button" x-on:click="showPaste">Paste text instead</button>
+  </div>
+  <div class="paste" id="paste-box" hidden>
+    <label class="lbl" for="audit-text">Listing text <span class="muted">(one product, or a table copied from a sheet)</span></label>
+    <textarea class="field" id="audit-text" name="text" rows="8" placeholder="Paste product copy here…"></textarea>
+    <div class="acts"><button class="btn btn-primary" type="submit">Check pasted text</button>
+      <button class="btn btn-ghost btn-sm" type="button" x-on:click="showFile">Choose a file instead</button></div>
+  </div>
+  <small>CSV up to {{ max_rows }} products and 2 MB. For an XLSX sheet, save it as CSV first.</small>
+</div>
+{%- endmacro %}

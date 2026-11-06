@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{{ page.css_url }}">
 <script src="{{ page.htmx_url }}" defer></script>
 <script src="{{ page.app_js_url }}" defer></script>
+{% block head_scripts %}{% endblock %}
 <script src="{{ page.alpine_url }}" defer></script>
 {% block head %}{% endblock %}
 </head>

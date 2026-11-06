@@ -1,0 +1,11 @@
+{% extends "audit/_shell.html" %}
+{% from "components/audit.html" import dropzone %}
+{% block audit %}
+<header><p class="eyebrow">Catalogue audit</p>
+  <h1>Where your listings are at risk.</h1>
+  <p class="lede">Upload your catalogue and see which products could get a listing pulled, and why. Cosmetic products only.</p></header>
+<form id="audit-form" hx-post="/audits" hx-encoding="multipart/form-data" hx-target="#audit-problem" hx-swap="innerHTML" x-data="satyaAuditForm" data-swap-errors>
+  <div id="audit-problem" aria-live="polite"></div>
+  {{ dropzone(max_rows) }}
+</form>
+{% endblock %}
