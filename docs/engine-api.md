@@ -56,3 +56,44 @@ estimates to verify before the cost metric is trusted.
 ## Prompts (P19)
 `engine/prompts`: listing text only appears as JSON inside `<untrusted_data>` with `<` escaped; system prompts
 state it is data. Versions in `prompts.VERSIONS`.
+
+## Catalogue audit (`engine.audit`, plan section 3 step 3, P11/P23/P29)
+Engine side only; the screen is `docs/design/final/screen-audit.md`. Deterministic, no LLM, works under `SATYA_LLM=mock`.
+
+```python
+from engine import audit
+
+res = audit.import_catalogue(upload_bytes, kind="csv")      # kind: auto | csv (uploads) | text (paste)
+job = audit.create_audit(conn, workspace_id, res.products)  # conn: service-role psycopg connection (ADR-8)
+audit.step_audit(conn, job, batch_size=5)  # {status, total, done, failed, label}; the browser calls this repeatedly
+audit.cancel_audit(conn, job)              # label "Stopped at 38 of 120"; finished results are kept
+audit.resume_audit(conn, job)              # picks the rest up again
+report = audit.audit_report(conn, job)     # AuditReport, callable at any point (partial results show `pending`)
+```
+
+**Import.** Registry order: any registered marketplace importer, then `shopify_csv` (merges variant rows by Handle,
+strips HTML), then `generic_csv` (header synonyms; delimiter sniffed), and `pasted_text` (products split by blank
+lines or `---`; first line is the name). Unknown headers raise `NeedsMapping(headers, suggested)`; call again with
+`mapping={"name": "Col A", "description": "Col B"}` (Satya field -> their column; `name` required). Pass
+`kind="csv"` for uploads so unknown layouts reach the mapping step instead of being read as pasted prose.
+`ImportProblem.code` is one of `empty, too_large, unsupported_type, unreadable, bad_mapping, no_products,
+needs_mapping, over_limit`; `.message` is brand-facing. Limits: 2 MB, 500 products (`OverLimit`; pass
+`allow_truncate=True` to keep the first 500), 5,000 characters per cell. Every cell is data: control characters are
+removed and cells starting `= + - @` get a leading `'`. XLSX is not supported yet. Nykaa and Amazon parsers wait for
+the templates (SAT-4): add them with `audit.register_importer(Importer(name, matches(headers), parse(headers, rows)))`.
+
+**Per product** (`scan_product`): the product-type gate first (non-cosmetic or unclear -> `skipped`, `note` = the gate's
+explanation, no flags, excluded from risk counts); then the rule scan (`AuditFlag`: `rule_id, title, severity,
+citation, matched_text`; rule severity `orange` is shown as `amber`); then Legal Metrology declaration fields. Missing
+ones become flags `LM-NET-QUANTITY, LM-MRP, LM-MANUFACTURER, LM-COUNTRY-OF-ORIGIN, LM-CONSUMER-CARE`, severity
+`amber`, title "Legal Metrology declaration fields (rule reference to be confirmed)", **no citation** (rule number
+unconfirmed, pre-review 1c), plus plain labels in `missing_fields`. A field counts as present if its column is filled
+or the listing text declares it. State = worst flag: `red | amber | green`; `pending | skipped | error` as described.
+
+**Report.** `AuditReport{job_id, status, rule_set, counters{total, done, red, amber, green, skipped, error, pending},
+progress_label, summary, items}`. `items` are `{sku, name, state, flags, missing_fields, note, position}` sorted red,
+amber, green, pending, error, skipped, then catalogue order (`position`). `summary` is set only when the audit is
+complete with 0 red and 0 amber: "No flagged risks under rule set vX-draft. Not legal advice. ...", never "compliant".
+A product that raises is recorded as `error` in the same step (no retry loop); store-level failures after 3 attempts
+also surface as `error`. `engine/jobs/store.py` gained `cancel_job`, `resume_job` and `job_items`; a cancelled job
+ignores late `step_job` calls. Sample: `data/samples/audit-120.csv` (`scripts/make_audit_sample.py`).
