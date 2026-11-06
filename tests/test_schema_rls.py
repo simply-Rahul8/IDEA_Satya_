@@ -106,13 +106,14 @@ def test_browser_cannot_write_jobs_or_call_helpers(db, tenants):
 
 def test_hard_block_and_evidence_constraints(db, tenants):
     a = tenants["alice"]
-    as_user(db, a["user"])
+    as_service(db)  # members are stopped earlier by claims_guard; the CHECK is the second layer (P25)
     with pytest.raises(psycopg.errors.CheckViolation):
         db.execute(
             "insert into claims (workspace_id, product_id, text, status, hard_blocked)"
             " values (%s, %s, 'cures acne', 'confirmed', true)",
             (a["ws"], a["product"]),
         )
+    as_user(db, a["user"])
     claim = db.execute(
         "insert into claims (workspace_id, product_id, text) values (%s, %s, 'dermatologically tested') returning id",
         (a["ws"], a["product"]),
@@ -179,3 +180,134 @@ def test_rate_limit_window(db):
     results = [db.execute("select rate_limit_hit('user:1', 3, 3600)").fetchone()[0] for _ in range(5)]
     assert results == [True, True, True, False, False]
     assert db.execute("select rate_limit_hit('user:2', 3, 3600)").fetchone()[0] is True
+
+
+# ---- SAT-34: claims bypass, same-workspace FKs, evidence paths, storage ----
+def _claim(db, t, text="dermatologically tested"):
+    as_service(db)
+    return db.execute(
+        "insert into claims (workspace_id, product_id, text) values (%s, %s, %s) returning id",
+        (t["ws"], t["product"], text),
+    ).fetchone()[0]
+
+
+def test_member_cannot_unblock_or_confirm_claims(db, tenants):
+    a = tenants["alice"]
+    as_service(db)
+    blocked = db.execute(
+        "insert into claims (workspace_id, product_id, text, hard_blocked, rule_id)"
+        " values (%s, %s, 'cures acne', true, 'EN-DRUG-001') returning id",
+        (a["ws"], a["product"]),
+    ).fetchone()[0]
+    as_user(db, a["user"])
+    for sql in (
+        "update claims set hard_blocked = false, status = 'confirmed' where id = %s",
+        "update claims set hard_blocked = false where id = %s",
+        "update claims set rule_id = null where id = %s",
+        "update claims set status = 'confirmed' where id = %s",
+    ):
+        with pytest.raises((psycopg.errors.InsufficientPrivilege, psycopg.errors.CheckViolation)):
+            db.execute(sql, (blocked,))
+    as_service(db)
+    row = db.execute("select hard_blocked, status from claims where id = %s", (blocked,)).fetchone()
+    assert row == (True, "extracted")
+
+
+def test_member_cannot_insert_preconfirmed_claims_but_can_reject(db, tenants):
+    a = tenants["alice"]
+    as_user(db, a["user"])
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        db.execute(
+            "insert into claims (workspace_id, product_id, text, status) values (%s, %s, 'x', 'confirmed')",
+            (a["ws"], a["product"]),
+        )
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        db.execute(
+            "insert into claims (workspace_id, product_id, text, rule_id) values (%s, %s, 'x', 'R')",
+            (a["ws"], a["product"]),
+        )
+    cid = db.execute(
+        "insert into claims (workspace_id, product_id, text) values (%s, %s, 'mild') returning id",
+        (a["ws"], a["product"]),
+    ).fetchone()[0]
+    assert db.execute("update claims set status = 'rejected' where id = %s", (cid,)).rowcount == 1
+
+
+def test_backend_confirms_and_member_edit_resets_confirmation(db, tenants):
+    a = tenants["alice"]
+    cid = _claim(db, a)
+    db.execute("update claims set status = 'confirmed' where id = %s", (cid,))  # service role
+    as_user(db, a["user"])
+    db.execute("update claims set text = 'cures cancer' where id = %s", (cid,))
+    assert db.execute("select status from claims where id = %s", (cid,)).fetchone()[0] == "extracted"
+
+
+def test_children_must_share_the_parents_workspace(db, tenants):
+    a, b = tenants["alice"], tenants["bob"]
+    as_service(db)
+    with pytest.raises(psycopg.errors.ForeignKeyViolation):
+        db.execute(
+            "insert into claims (workspace_id, product_id, text) values (%s, %s, 'x')", (b["ws"], a["product"])
+        )
+    with pytest.raises(psycopg.errors.ForeignKeyViolation):
+        db.execute(
+            "insert into listings (workspace_id, product_id, source_text) values (%s, %s, 'x')",
+            (b["ws"], a["product"]),
+        )
+    cid = _claim(db, a)
+    with pytest.raises(psycopg.errors.ForeignKeyViolation):
+        db.execute("insert into evidence (workspace_id, claim_id, kind) values (%s, %s, 'other')", (b["ws"], cid))
+    job = create_job(db, str(a["ws"]), "bulk", [{"n": 1}])
+    with pytest.raises(psycopg.errors.ForeignKeyViolation):
+        db.execute(
+            "insert into job_items (job_id, workspace_id, position) values (%s, %s, 99)", (job, b["ws"])
+        )
+
+
+@pytest.mark.parametrize(
+    "suffix,ok",
+    [
+        ("report.pdf", True),
+        ("sub/report 1.pdf", True),
+        ("../other/report.pdf", False),
+        ("a/../b.pdf", False),
+        ("a//b.pdf", False),
+        ("dir/", False),
+        ("bad\name.pdf", False),
+        ("x" * 400, False),
+    ],
+)
+def test_evidence_file_path_is_validated(db, tenants, suffix, ok):
+    a, b = tenants["alice"], tenants["bob"]
+    cid = _claim(db, a)
+    as_service(db)
+    sql = "insert into evidence (workspace_id, claim_id, kind, file_path) values (%s, %s, 'other', %s)"
+    path = f"{a['ws']}/{suffix}"
+    if ok:
+        db.execute(sql, (a["ws"], cid, path))
+    else:
+        with pytest.raises(psycopg.errors.CheckViolation):
+            db.execute(sql, (a["ws"], cid, path))
+    with pytest.raises(psycopg.errors.CheckViolation):  # another workspace's folder
+        db.execute(sql, (a["ws"], cid, f"{b['ws']}/report.pdf"))
+    with pytest.raises(psycopg.errors.CheckViolation):  # no folder at all
+        db.execute(sql, (a["ws"], cid, "report.pdf"))
+
+
+def test_storage_bucket_is_private_and_scoped_to_workspace_folders(db, tenants):
+    a, b = tenants["alice"], tenants["bob"]
+    as_service(db)
+    bucket = db.execute("select public, file_size_limit from storage.buckets where id = 'evidence'").fetchone()
+    assert bucket == (False, 10485760)
+    db.execute("insert into storage.objects (bucket_id, name) values ('evidence', %s)", (f"{a['ws']}/a.pdf",))
+    db.execute("insert into storage.objects (bucket_id, name) values ('evidence', %s)", (f"{b['ws']}/b.pdf",))
+    as_user(db, a["user"])
+    names = [r[0] for r in db.execute("select name from storage.objects").fetchall()]
+    assert names == [f"{a['ws']}/a.pdf"]
+    db.execute("insert into storage.objects (bucket_id, name) values ('evidence', %s)", (f"{a['ws']}/c.pdf",))
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        db.execute("insert into storage.objects (bucket_id, name) values ('evidence', %s)", (f"{b['ws']}/x.pdf",))
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        db.execute("insert into storage.objects (bucket_id, name) values ('evidence', 'not-a-uuid/x.pdf')")
+    as_user(db, None)
+    assert db.execute("select count(*) from storage.objects").fetchone()[0] == 0
