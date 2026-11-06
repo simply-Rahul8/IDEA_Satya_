@@ -6,8 +6,8 @@ anchors:
     provision: "s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'"
     verified: false
   cosmetics_rules: &cosmetics_rules
-    ref: "Cosmetics Rules, 2020 (G.S.R. 426(E))"
-    provision: "labelling and claims provisions; rule numbers to be confirmed by the consultant"
+    ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
+    provision: "r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant"
     verified: false
   ccpa: &ccpa
     ref: "Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA)"

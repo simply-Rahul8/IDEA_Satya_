@@ -34,7 +34,11 @@ def create_job(
 
 
 def step_job(conn, job_id: str, handler: Handler, batch_size: int = 3, stale_seconds: int = 120) -> dict[str, Any]:
-    """Process up to batch_size items. Returns progress: {status, total, done, failed}."""
+    """Process up to batch_size items. Returns progress: {status, total, done, failed}.
+
+    A cancelled job claims nothing, so a late step from the browser cannot restart it (see resume_job)."""
+    if job_progress(conn, job_id)["status"] == "cancelled":
+        return job_progress(conn, job_id)
     with conn.cursor() as cur:
         cur.execute(
             "select * from claim_job_items(%s, %s, make_interval(secs => %s))", (job_id, batch_size, stale_seconds)
@@ -62,3 +66,35 @@ def job_progress(conn, job_id: str) -> dict[str, Any]:
         status, total, done, failed = cur.fetchone()
     conn.commit()
     return {"status": status, "total": total, "done": done, "failed": failed}
+
+
+def cancel_job(conn, job_id: str) -> dict[str, Any]:
+    """Stop a job. Finished items keep their results; pending ones stay pending. Idempotent."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "update jobs set status = 'cancelled', updated_at = now() where id = %s and status <> 'done'", (job_id,)
+        )
+    conn.commit()
+    return job_progress(conn, job_id)
+
+
+def resume_job(conn, job_id: str) -> dict[str, Any]:
+    """Un-cancel a job; refresh_job then derives its status from the remaining items."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "update jobs set status = 'running', updated_at = now() where id = %s and status = 'cancelled'", (job_id,)
+        )
+    conn.commit()
+    return job_progress(conn, job_id)
+
+
+def job_items(conn, job_id: str) -> list[dict[str, Any]]:
+    """Every item in catalogue order: {position, status, payload, result, error}."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "select position, status, payload, result, error from job_items where job_id = %s order by position",
+            (job_id,),
+        )
+        rows = cur.fetchall()
+    conn.commit()
+    return [dict(zip(("position", "status", "payload", "result", "error"), r, strict=True)) for r in rows]

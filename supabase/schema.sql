@@ -49,12 +49,22 @@ create table if not exists workspace_members (
   primary key (workspace_id, user_id)
 );
 create index if not exists workspace_members_user_idx on workspace_members (user_id);
+-- One brand workspace per owner in v1 (plan section 3). Also makes the backend's first-sign-in create safe under a race.
+create unique index if not exists workspace_members_one_owner_idx on workspace_members (user_id) where role = 'owner';
 
 -- security definer so policies that use it don't recurse into workspace_members' own RLS.
 create or replace function is_member(ws uuid) returns boolean
 language sql stable security definer set search_path = public as $$
   select exists (select 1 from workspace_members where workspace_id = ws and user_id = auth.uid());
 $$;
+
+-- Folder names come from the client; a malformed one must read as "no workspace", not raise.
+create or replace function try_uuid(v text) returns uuid language plpgsql immutable as $$
+begin
+  return v::uuid;
+exception when others then
+  return null;
+end $$;
 
 -- ---------- product truth and listings ----------
 create table if not exists products (
@@ -105,7 +115,40 @@ create table if not exists evidence (
   created_at timestamptz not null default now(),
   constraint evidence_has_reference check (kind <> 'test_report' or file_path is not null or document_id is not null)
 );
+-- Storage object path is '<workspace_id>/<file name>': one folder per workspace, no traversal, bounded.
+-- Added separately so a re-run upgrades a database whose table predates it.
+do $$ begin
+  if not exists (select 1 from pg_constraint where conname = 'evidence_file_path_ok') then
+    alter table evidence add constraint evidence_file_path_ok check (
+      file_path is null or (
+        length(file_path) <= 300
+        and file_path like workspace_id::text || '/%'
+        and file_path !~ '(^|/)\.\.?(/|$)'
+        and file_path !~ '[^A-Za-z0-9._/ -]'
+        and file_path !~ '//'
+        and right(file_path, 1) <> '/'
+      )
+    ) not valid;  -- new and changed rows are checked; legacy rows are left for the board user to review
+  end if;
+end $$;
 create index if not exists evidence_claim_idx on evidence (claim_id);
+
+-- A member can only cite a file that is already in this workspace's folder of the evidence bucket. (The path
+-- shape and folder are checked by evidence_file_path_ok; this checks the object exists, and the caller's own
+-- storage RLS means a file in another workspace's folder reads as missing.) The backend is trusted.
+create or replace function evidence_file_guard() returns trigger language plpgsql as $$
+begin
+  if new.file_path is null or current_user not in ('anon', 'authenticated') or to_regclass('storage.objects') is null then
+    return new;
+  end if;
+  if not exists (select 1 from storage.objects where bucket_id = 'evidence' and name = new.file_path) then
+    raise exception 'evidence file % is not in the evidence bucket', new.file_path using errcode = '23514';
+  end if;
+  return new;
+end $$;
+drop trigger if exists evidence_file_guard_trg on evidence;
+create trigger evidence_file_guard_trg before insert or update of file_path on evidence
+  for each row execute function evidence_file_guard();
 
 -- ---------- stepwise bulk jobs (P11) ----------
 -- The browser drives progress: each call to a step endpoint claims the next few items, processes
@@ -179,6 +222,104 @@ begin
   return j;
 end $$;
 
+-- ---------- child rows must share the parent's workspace ----------
+-- (id, workspace_id) is unique on each parent so children can reference both columns. The older
+-- single-column FKs stay (harmless); these add the same-workspace guarantee.
+do $$
+declare r record;
+begin
+  for r in select * from (values
+    ('products', 'products_id_ws_key'), ('claims', 'claims_id_ws_key'), ('jobs', 'jobs_id_ws_key')
+  ) as v(tbl, cname) loop
+    if not exists (select 1 from pg_constraint where conname = r.cname) then
+      execute format('alter table %I add constraint %I unique (id, workspace_id)', r.tbl, r.cname);
+    end if;
+  end loop;
+  for r in select * from (values
+    ('listings', 'listings_product_ws_fk', 'product_id', 'products'),
+    ('claims', 'claims_product_ws_fk', 'product_id', 'products'),
+    ('evidence', 'evidence_claim_ws_fk', 'claim_id', 'claims'),
+    ('job_items', 'job_items_job_ws_fk', 'job_id', 'jobs')
+  ) as v(tbl, cname, col, parent) loop
+    if not exists (select 1 from pg_constraint where conname = r.cname) then
+      execute format('alter table %I add constraint %I foreign key (%I, workspace_id) references %I (id, workspace_id) on delete cascade',
+                     r.tbl, r.cname, r.col, r.parent);
+    end if;
+  end loop;
+end $$;
+
+-- ---------- packs, audits and exports (SAT-38) ----------
+-- A pack is the reviewed listing plus the review state (kept reasons, approval). Members can read their own
+-- but only the backend writes them: approval must come from the server-side gate, never from the browser.
+-- `truth` is a snapshot of the Product Truth the pack was checked against, so a later edit to the product
+-- cannot change what an approved pack was audited under. `rev` makes concurrent saves fail instead of overwrite.
+create table if not exists packs (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  product_id uuid,
+  name text not null,
+  truth jsonb not null default '{}'::jsonb,
+  pack jsonb,
+  review jsonb not null default '{}'::jsonb,
+  rule_set_version text,
+  rev int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint packs_id_ws_key unique (id, workspace_id),
+  constraint packs_product_ws_fk foreign key (product_id, workspace_id) references products (id, workspace_id)
+);
+create index if not exists packs_ws_idx on packs (workspace_id, created_at desc);
+
+create or replace function packs_touch() returns trigger language plpgsql as $$
+begin
+  new.updated_at := now();
+  return new;
+end $$;
+drop trigger if exists packs_touch_trg on packs;
+create trigger packs_touch_trg before update on packs for each row execute function packs_touch();
+
+-- The audit record written at approval: one row per approval, one item per sentence (append-only for members).
+create table if not exists audits (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  pack_id uuid not null,
+  rule_set_version text not null,             -- "no flagged risks under rule set vX", never "compliant" (P20)
+  summary jsonb not null default '{}'::jsonb,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  constraint audits_id_ws_key unique (id, workspace_id),
+  constraint audits_pack_ws_fk foreign key (pack_id, workspace_id) references packs (id, workspace_id) on delete cascade
+);
+create index if not exists audits_pack_idx on audits (pack_id, created_at desc);
+
+create table if not exists audit_items (
+  id uuid primary key default gen_random_uuid(),
+  audit_id uuid not null,
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  position int not null,
+  section text not null,
+  sentence_text text not null,
+  flags jsonb not null default '[]'::jsonb,
+  overrides jsonb not null default '[]'::jsonb,   -- kept reasons / evidence references
+  unique (audit_id, position),
+  constraint audit_items_audit_ws_fk foreign key (audit_id, workspace_id) references audits (id, workspace_id) on delete cascade
+);
+
+create table if not exists exports (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  pack_id uuid not null,
+  audit_id uuid,
+  layout text not null,
+  file_name text not null,
+  sha256 text,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  constraint exports_pack_ws_fk foreign key (pack_id, workspace_id) references packs (id, workspace_id) on delete cascade,
+  constraint exports_audit_ws_fk foreign key (audit_id, workspace_id) references audits (id, workspace_id)
+);
+create index if not exists exports_pack_idx on exports (pack_id, created_at desc);
+
 -- ---------- telemetry (P26) ----------
 create table if not exists llm_calls (
   id uuid primary key default gen_random_uuid(),
@@ -244,6 +385,10 @@ alter table claims enable row level security;
 alter table evidence enable row level security;
 alter table jobs enable row level security;
 alter table job_items enable row level security;
+alter table packs enable row level security;
+alter table audits enable row level security;
+alter table audit_items enable row level security;
+alter table exports enable row level security;
 alter table llm_calls enable row level security;
 alter table rate_limits enable row level security;  -- no policies: service role only
 
@@ -275,10 +420,72 @@ create policy members_select on workspace_members for select using (user_id = au
 do $$
 declare t text;
 begin
-  foreach t in array array['products', 'listings', 'claims', 'evidence'] loop
+  foreach t in array array['products', 'listings', 'evidence'] loop
     execute format('drop policy if exists %I on %I', t || '_rw', t);
     execute format('create policy %I on %I for all using (is_member(workspace_id)) with check (is_member(workspace_id))',
                    t || '_rw', t);
+  end loop;
+end $$;
+
+-- Claims: members read and write their own, but P25 is enforced by the guard trigger below, because a
+-- row policy cannot restrict columns. Only the backend (service role, after it ran the rules) confirms.
+drop policy if exists claims_rw on claims;
+create policy claims_rw on claims for all using (is_member(workspace_id)) with check (is_member(workspace_id));
+
+create or replace function claims_guard() returns trigger language plpgsql as $$
+begin
+  if current_user not in ('anon', 'authenticated') then
+    return new;  -- service role / table owner: the backend has evaluated the rules
+  end if;
+  if tg_op = 'INSERT' then
+    if new.status <> 'extracted' or new.hard_blocked or new.rule_id is not null then
+      raise exception 'claims are created as extracted; confirmation and blocking are set by the backend'
+        using errcode = '42501';
+    end if;
+  else
+    if new.hard_blocked is distinct from old.hard_blocked or new.rule_id is distinct from old.rule_id then
+      raise exception 'hard_blocked and rule_id are set by the backend' using errcode = '42501';
+    end if;
+    if new.status = 'confirmed' and old.status is distinct from 'confirmed' then
+      raise exception 'claims are confirmed through the backend, which re-checks the rules' using errcode = '42501';
+    end if;
+    if new.text is distinct from old.text then
+      new.status := 'extracted';  -- edited wording needs a fresh check; an old confirmation does not carry over
+    end if;
+  end if;
+  return new;
+end $$;
+drop trigger if exists claims_guard_trg on claims;
+create trigger claims_guard_trg before insert or update on claims for each row execute function claims_guard();
+
+-- Evidence files: one private bucket, one folder per workspace (the folder name is the workspace id).
+-- Skipped where the storage schema does not exist.
+do $$
+begin
+  if to_regclass('storage.buckets') is not null then
+    insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+      values ('evidence', 'evidence', false, 10485760, array['application/pdf', 'image/png', 'image/jpeg'])
+      on conflict (id) do update set public = false, file_size_limit = 10485760,
+        allowed_mime_types = array['application/pdf', 'image/png', 'image/jpeg'];
+    drop policy if exists evidence_objects_select on storage.objects;
+    create policy evidence_objects_select on storage.objects for select to authenticated
+      using (bucket_id = 'evidence' and public.is_member(public.try_uuid((storage.foldername(name))[1])));
+    drop policy if exists evidence_objects_insert on storage.objects;
+    create policy evidence_objects_insert on storage.objects for insert to authenticated
+      with check (bucket_id = 'evidence' and public.is_member(public.try_uuid((storage.foldername(name))[1])));
+    drop policy if exists evidence_objects_delete on storage.objects;
+    create policy evidence_objects_delete on storage.objects for delete to authenticated
+      using (bucket_id = 'evidence' and public.is_member(public.try_uuid((storage.foldername(name))[1])));
+  end if;
+end $$;
+
+-- Packs, audits and exports: members read their own; only the backend (service role) writes.
+do $$
+declare t text;
+begin
+  foreach t in array array['packs', 'audits', 'audit_items', 'exports'] loop
+    execute format('drop policy if exists %I on %I', t || '_select', t);
+    execute format('create policy %I on %I for select using (is_member(workspace_id))', t || '_select', t);
   end loop;
 end $$;
 

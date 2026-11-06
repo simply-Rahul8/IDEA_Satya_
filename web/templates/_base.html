@@ -1,6 +1,7 @@
 <!doctype html>
-<html lang="en-IN">
+<html lang="en-IN" hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
 <head>
+<meta name="csrf-token" content="{{ csrf_token }}">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{{ meta_description or 'Satya checks Indian beauty listing copy against a draft rule set and shows the sources behind every sentence. Not legal advice.' }}">

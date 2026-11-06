@@ -240,3 +240,19 @@ def test_summary_wording():
 def test_no_rule_text_says_compliant():
     blob = " ".join([r.explanation + r.rewrite_hint for r in RULES] + [g.explanation for g in RS.gate.types.values()])
     assert "compliant" not in blob.lower()
+
+
+def test_no_rule_cites_the_wrong_cosmetics_rules_gazette_number():
+    """SAT-36: the Cosmetics Rules are G.S.R. 763(E), 15 Dec 2020. 426(E) was a wrong citation."""
+    for rule in RULES:
+        for src in rule.sources:
+            assert "426(E)" not in src.ref and "426(E)" not in src.provision, rule.id
+
+
+def test_dmr_003_stays_red_and_locked_without_a_dmr_schedule_claim():
+    rule = next(r for r in RULES if r.id == "EN-DMR-003")
+    assert rule.severity == "red" and rule.overridable is False
+    assert "not listed in the DMR Act Schedule" in rule.explanation
+    with pytest.raises(OverrideNotAllowed):
+        check_override("EN-DMR-003")
+    assert "EN-DMR-003" in ids("Prevents premature greying of hair.")

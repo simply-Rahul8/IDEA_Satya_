@@ -1,5 +1,8 @@
 # ruff: noqa: E501
-"""Preview-only demo pack so the review screen can be opened before Platform storage exists. Draft content."""
+"""Dev-only demo pack (SATYA_ENV=dev, in-memory repository), so the review screen can be opened locally.
+
+Never loaded on a non-dev path (see web.packs.dev_seed). Draft content.
+"""
 
 from engine import api
 from engine.models import (
@@ -13,7 +16,7 @@ from engine.models import (
     Sentence,
     SentenceType,
 )
-from web.review import ReviewState, store
+from engine.repo import MemoryRepository, ReviewState
 
 PACK_ID = "demo"
 
@@ -38,7 +41,7 @@ _ROWS = {
 }
 
 
-def seed() -> ReviewState:
+def build() -> ReviewState:
     ev = lambda t, ref=None: Evidence(type=t, reference=ref)  # noqa: E731
     truth = ProductTruth(
         product_name="Rosewater Dew Serum", size="30 ml", how_to_use="Apply two drops to clean skin.",
@@ -70,5 +73,10 @@ def seed() -> ReviewState:
         rs,
         rewrites={"bullet_3-0": "A gentle serum made for everyday use on sensitive skin."},
     )
-    store.put(state)
+    return state
+
+
+def seed(store: MemoryRepository, workspace_id: str) -> ReviewState:
+    state = build()
+    store.put(workspace_id, state)
     return state

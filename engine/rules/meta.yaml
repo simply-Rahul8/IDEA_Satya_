@@ -2,7 +2,7 @@
 # Bump `version` whenever any rule, allowlist entry or gate signal changes; reports quote it as "rule set vX".
 rule_set:
   name: satya-en
-  version: "0.1.0"
+  version: "0.1.1"
   status: DRAFT
   language: en
   updated: "2026-11-05"
