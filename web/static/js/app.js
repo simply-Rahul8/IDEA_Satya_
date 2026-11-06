@@ -27,7 +27,7 @@
     Alpine.data('satyaToast', () => ({
       timer: 0,
       init() {
-        window.addEventListener('satya:toast', (e) => this.show(e.detail));
+        window.addEventListener('satya:toast', (e) => this.show(typeof e.detail === 'string' ? e.detail : e.detail.value));
         this.$el.addEventListener('mouseenter', () => clearTimeout(this.timer));
         this.$el.addEventListener('focusin', () => clearTimeout(this.timer));
       },
@@ -148,7 +148,7 @@
   document.addEventListener('htmx:sendError', showError);
   document.addEventListener('htmx:responseError', showError);
   document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-retry]')) { const ta = $('#text'); if (ta) fire(ta, 'input'); }
+    if (e.target.closest('[data-retry]')) { const ta = $('#text'); if (ta) ta.dispatchEvent(new Event('satya:recheck')); }
   });
 
   window.satya = { say, reduced, toast, $, $$, fire };

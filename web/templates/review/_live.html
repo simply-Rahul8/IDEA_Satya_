@@ -1,0 +1,6 @@
+{% from "components/sentence_row.html" import live with context %}
+{% from "components/approval_gate.html" import gate_live, dock with context %}
+{{ live(row) }}
+<div id="backdrop-t-{{ row.sid }}" class="backdrop" aria-hidden="true" hx-swap-oob="outerHTML">{{ row.backdrop }}</div>
+{{ gate_live(summary, pack_id, ruleset, oob=True) }}
+{{ dock(summary, pack_id, oob=True) }}

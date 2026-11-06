@@ -1,0 +1,31 @@
+{% from "components/icon.html" import icon %}
+{% from "components/notice.html" import notice %}
+{% macro progress_strip(s) -%}
+<div class="prog" role="img" aria-label="{{ s.strip_label }}">{% for st in s.strip %}<i data-s="{{ st }}"></i>{% endfor %}</div>
+{%- endmacro %}
+{% macro actions(s, pack_id, suffix) -%}
+<button class="btn btn-secondary btn-sm{% if suffix == '-dock' %} btn-icon{% endif %}" type="button" data-next id="next{{ suffix }}"{% if not s.blocked %} aria-disabled="true" aria-describedby="next{{ suffix }}-why"{% endif %}{% if suffix == '-dock' %} aria-label="Next issue"{% endif %}>
+  {{ icon("down") }}{% if suffix != '-dock' %}Next issue{% endif %}</button><span class="sr-only" id="next{{ suffix }}-why">{{ "" if s.blocked else "No open issues" }}</span>
+<button class="btn btn-primary btn-sm" type="button" id="approve{{ suffix }}" data-approve hx-post="/packs/{{ pack_id }}/approve" hx-swap="none"
+  {%- if s.blocked %} aria-disabled="true"{% endif %} aria-describedby="note{{ suffix }}">Approve{% if suffix != '-dock' %} pack{% endif %}</button>
+{%- endmacro %}
+{#- Everything in the gate that changes with a re-check; swapped out-of-band. The h1 and eyebrow stay put. -#}
+{% macro gate_live(s, pack_id, rs, oob=False) -%}
+<div id="gate-live"{% if oob %} hx-swap-oob="outerHTML"{% endif %}>
+  {%- if s.approved %}
+  {{ notice("Approved.", "The audit record is attached to your export. Editing any sentence reopens the gate.") }}
+  {%- else %}
+  <p class="note" id="note" aria-live="polite">{{ icon("ok" if s.ready else ("block" if s.red else "warn")) }}<span>{{ s.note }}</span></p>
+  <div class="gate-actions">{{ actions(s, pack_id, "") }}</div>
+  <p class="fine">Approving records your review and the rule set version. It is not a legal sign-off.</p>
+  {%- endif %}
+  <div class="gate-strip">{{ progress_strip(s) }}</div>
+</div>
+{%- endmacro %}
+{% macro dock(s, pack_id, oob=False) -%}
+<div class="dock" id="dock" role="region" aria-label="Approval"{% if oob %} hx-swap-oob="outerHTML"{% endif %}>
+  {{ progress_strip(s) }}
+  <div class="row-a"><p class="note" id="note-dock">{{ icon("ok" if s.ready else ("block" if s.red else "warn")) }}{{ s.dock_note }}</p>
+    <div class="dock-btns">{{ actions(s, pack_id, "-dock") }}</div></div>
+</div>
+{%- endmacro %}

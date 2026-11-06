@@ -21,7 +21,7 @@
       <div class="paper-wrap paper">
         {{ highlight_field("text", "text", r.text, r.backdrop, "Product listing copy to check",
              placeholder="Paste or type your product copy here…", describedby="count live-note",
-             attrs={"hx-post": "/check", "hx-trigger": "input changed delay:250ms", "hx-target": "#verdict", "hx-swap": "outerHTML",
+             attrs={"hx-post": "/check", "hx-trigger": "input changed delay:250ms, satya:recheck", "hx-target": "#verdict", "hx-swap": "outerHTML",
                     "hx-sync": "this:replace", "hx-indicator": "#paper-foot"}) }}
         <div class="paper-foot" id="paper-foot">
           {{ count(r, max_chars) }}

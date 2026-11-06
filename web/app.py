@@ -76,6 +76,7 @@ class Page:
     htmx_url: str
     alpine_url: str
     app_js_url: str
+    js_review: str
 
 
 def page_context(ruleset: RuleSet | None = None) -> dict:
@@ -87,6 +88,7 @@ def page_context(ruleset: RuleSet | None = None) -> dict:
             assets.js_url("htmx.min.js"),
             assets.js_url("alpine-csp.min.js"),
             assets.js_url("app.js"),
+            assets.js_url("review.js"),
         ),
         "ruleset": rs,
         "sprite": SPRITE,

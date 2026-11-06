@@ -1,0 +1,18 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% macro ledger(claims) -%}
+<h2>Product Truth ledger <span class="muted">· {{ claims | length }} claim{{ "" if claims | length == 1 else "s" }}</span></h2>
+<button class="btn btn-ghost btn-sm" type="button" id="back-btn" hidden></button>
+<ol class="claims">
+  {%- for c in claims %}
+  <li class="claim" id="claim-{{ c.id }}" data-claim="{{ c.id }}" data-state="{{ c.state }}" tabindex="-1">
+    <span class="chip chip-type">{{ c.id | upper }} · Claim</span>
+    <strong>{{ c.text }}</strong>
+    <span>{{ flag_badge(c.sev, label=c.word, icon_name=c.icon) }}</span>
+    <small>{{ c.evidence }}</small>
+    <div class="used">Used in:
+      {%- for u in c.used %} <button class="chip" type="button" data-used-in="{{ u.sid }}">{{ u.label }}</button>{% endfor %}
+      {%- if not c.used %} nothing yet{% endif %}</div>
+  </li>
+  {%- endfor %}
+</ol>
+{%- endmacro %}

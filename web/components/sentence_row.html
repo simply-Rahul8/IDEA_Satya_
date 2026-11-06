@@ -1,0 +1,84 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/icon.html" import icon %}
+{% from "components/field.html" import field %}
+{% from "components/highlight_field.html" import highlight_field %}
+{#- Review B sentence row. The textarea is never swapped; `live` (everything below it) is re-rendered by HTMX. -#}
+{% macro anchor_chip(row, a) -%}
+{%- if a.kind == "claim" -%}
+<button class="chip chip-claim" type="button" data-anchor="{{ a.id }}" data-state="{{ a.state }}" aria-expanded="false" aria-controls="peek-{{ row.sid }}-{{ a.id }}"
+  aria-label="Anchor {{ a.id }}: {{ a.text }}, {{ a.label | lower }}. Show source claim.">
+  {{ icon("anchor") }}<span class="id">{{ a.id | upper }}</span><span class="txt">{{ a.text }}</span><span class="st">{{ icon({"confirmed": "ok", "blocked": "block", "needs_reference": "warn"}.get(a.state, "info")) }}</span>
+</button>
+<div class="peek" id="peek-{{ row.sid }}-{{ a.id }}" hidden>
+  <span>{{ flag_badge({"confirmed": "green", "blocked": "red", "needs_reference": "amber"}.get(a.state, "ink"), label=a.label) }}</span>
+  <p>{{ a.evidence }}</p>
+  <button class="btn btn-ghost btn-sm" type="button" data-open-claim="{{ a.id }}" data-from="{{ row.sid }}">Open in Product Truth</button>
+</div>
+{%- else -%}
+<span class="chip chip-type">Source: {{ a.text }}</span>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro flag_item(row, f) -%}
+<li class="fp-item fp-{{ f.sev }}">
+  <div class="fp-head">{{ flag_badge(f.sev, rule_id=f.rule_id if f.kind == "rule" else None, label=("Blocked" if f.sev == "red" else "Needs a reason")) }}<strong>{{ f.title }}</strong></div>
+  <p class="fp-why">{% if f.text %}<q>{{ f.text }}</q>: {% endif %}{{ f.why }}</p>
+  {%- if f.hint %}<p class="fp-why">What to do: {{ f.hint }}</p>{% endif %}
+  <div class="fp-row">
+    {%- if f.sheet %}<button class="btn btn-ghost btn-sm" type="button" data-sheet="/rules/{{ f.rule_id }}/sheet?v={{ row.ruleset.label }}" data-quote="{{ f.text }}">{{ icon("book") }}Citation</button>{% endif %}
+    {%- if f.kind == "anchor" or f.kind == "verifier" %}{% for a in row.anchors if a.kind == "claim" and a.state != "confirmed" %}<button class="btn btn-ghost btn-sm" type="button" data-open-claim="{{ a.id }}" data-from="{{ row.sid }}">Open in Product Truth</button>{% endfor %}{% endif %}
+    {%- if f.kind == "rule" %}
+    <form hx-post="/packs/{{ pack_id }}/sentences/{{ row.sid }}/report" hx-target="#live-{{ row.sid }}" hx-swap="outerHTML"><input type="hidden" name="rule_id" value="{{ f.rule_id }}">
+      {%- if f.reported %}<input type="hidden" name="undo" value="1">Reported as a wrong flag. Thanks. <button class="btn btn-ghost btn-sm" type="submit">Undo</button>
+      {%- else %}<button class="btn btn-ghost btn-sm" type="submit">{{ icon("thumbdown") }}Wrong flag?</button>{% endif -%}
+    </form>
+    {%- endif %}
+  </div>
+</li>
+{%- endmacro %}
+
+{% macro live(row) -%}
+<div id="live-{{ row.sid }}" data-live data-status="{{ row.status }}">
+  <span class="sr-only" id="h-{{ row.sid }}">{{ row.label }}, {{ row.status_word }}</span>
+  <div class="row-meta"><span class="chip chip-type">{{ row.type }}</span>
+    {{ flag_badge({"red": "red", "amber": "amber", "kept": "ink", "ok": "green"}[row.status], label=row.status_word, icon_name=("check" if row.status == "kept" else None)) }}
+    <span class="checking" aria-hidden="true">{{ icon("spin") }}Checking…</span>
+    {%- if row.seo_limit %}<span class="count{% if row.length > row.seo_limit %} is-over{% endif %}">{{ row.length }} / {{ row.seo_limit }} characters (soft limit)</span>{% endif %}</div>
+  <div id="err-{{ row.sid }}"></div>
+  <div class="anchors">
+    {%- for a in row.anchors %}{{ anchor_chip(row, a) }}{% endfor %}
+    {%- if not row.anchors %}<span class="chip is-unanchored">No source claim</span>
+    <p class="fp-why">Nothing in Product Truth backs this sentence. Rewrite it, or keep it with a reason.</p>{% endif %}
+  </div>
+  {%- set open = row.flags | rejectattr("kept") | list %}
+  {%- if open %}<ul class="fp-list">{% for f in open %}{{ flag_item(row, f) }}{% endfor %}</ul>
+  {%- if row.hard_blocked %}<p class="fp-note">{{ icon("block") }}Cannot be overridden. Rewrite or remove it.</p>{% endif %}
+  {%- if row.rewrite %}
+  <div class="fp-rw"><p class="eyebrow">Suggested rewrite</p><p>{{ row.rewrite }}</p>
+    <button class="btn btn-primary btn-sm" type="button" hx-post="/packs/{{ pack_id }}/sentences/{{ row.sid }}/rewrite" hx-target="#live-{{ row.sid }}" hx-swap="outerHTML">Use rewrite</button></div>
+  {%- endif %}
+  {%- if row.keep_kind %}
+  <form class="fp-reason" hx-post="/packs/{{ pack_id }}/sentences/{{ row.sid }}/keep" hx-target="#live-{{ row.sid }}" hx-swap="outerHTML">
+    {{ field("reason-" ~ row.sid, "Evidence reference to keep this wording" if row.keep_kind == "evidence" else "Reason to keep this wording", value=row.prefill, name="reason", error=row.error, required=True, maxlength=500,
+             hint="A document ID or file name." if row.keep_kind == "evidence" else None) }}
+    <button class="btn btn-secondary btn-sm" type="submit">{{ "Keep with evidence" if row.keep_kind == "evidence" else "Keep with reason" }}</button>
+  </form>
+  {%- endif %}
+  {%- endif %}
+  {%- if row.kept_reason %}
+  <div class="fp-kept"><span class="eyebrow">Your reason</span><q>{{ row.kept_reason }}</q>
+    <button class="btn btn-ghost btn-sm" type="button" hx-post="/packs/{{ pack_id }}/sentences/{{ row.sid }}/edit-reason" hx-target="#live-{{ row.sid }}" hx-swap="outerHTML">{{ icon("pencil") }}Edit reason</button></div>
+  {%- endif %}
+  {%- if row.status == "ok" %}<p class="fp-ok">No flagged risks under rule set {{ row.ruleset.label }}.</p>{% endif %}
+</div>
+{%- endmacro %}
+
+{% macro sentence_row(row) -%}
+<article class="row" id="s-{{ row.sid }}" data-status="{{ row.status }}" data-sid="{{ row.sid }}" aria-labelledby="h-{{ row.sid }}">
+  {{ highlight_field("t-" ~ row.sid, "text", row.text, row.backdrop, row.label ~ " text, editable", cls="edit", attrs={
+     "data-sid": row.sid, "rows": "1",
+     "hx-post": "/packs/" ~ pack_id ~ "/sentences/" ~ row.sid ~ "/check", "hx-trigger": "input changed delay:150ms, satya:recheck",
+     "hx-sync": "this:replace", "hx-target": "#live-" ~ row.sid, "hx-swap": "outerHTML", "hx-indicator": "#s-" ~ row.sid}) }}
+  {{ live(row) }}
+</article>
+{%- endmacro %}

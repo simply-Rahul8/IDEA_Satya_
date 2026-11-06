@@ -1,0 +1,3 @@
+{% from "components/approval_gate.html" import gate_live, dock with context %}
+{{ gate_live(summary, pack_id, ruleset, oob=True) }}
+{{ dock(summary, pack_id, oob=True) }}

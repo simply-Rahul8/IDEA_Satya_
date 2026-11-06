@@ -1,0 +1,49 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/sentence_row.html" import sentence_row with context %}
+{% from "components/approval_gate.html" import gate_live, dock with context %}
+{% from "components/ledger.html" import ledger as render_ledger %}
+{% from "components/draft_banner.html" import draft_banner %}
+{% from "components/citation_sheet.html" import citation_sheet %}
+{% from "components/toast.html" import toast %}
+{% from "components/notice.html" import notice %}
+{% block head %}<script src="{{ page.js_review }}" defer></script>{% endblock %}
+{% block body_attrs %}{% if not empty %} data-has-dock{% endif %}{% endblock %}
+{% block body %}
+<div class="wrap" id="review">
+  {{ topbar() }}
+  <section class="gate" id="gate" aria-label="Approval gate">
+    <div class="gate-title"><p class="eyebrow">Step 7 · Review · {{ product }}</p>
+    <h1>{% if empty %}Nothing to review yet.{% else %}Does every sentence trace to a confirmed claim?{% endif %}</h1></div>
+    {%- if not empty %}{{ gate_live(summary, pack_id, ruleset) }}{% endif %}
+  </section>
+  {%- if not empty %}<nav class="skip-links" aria-label="Skip links"><a href="#pane-truth" data-skip="truth">Skip to Product Truth</a> <a href="#pane-copy" data-skip="copy">Skip to copy</a></nav>{% endif %}
+  <main id="main">
+    <div id="offline-notice" hidden>{{ notice("You are offline.", "Edits are kept here and checked when you reconnect.") }}</div>
+    {%- if empty %}
+    <p>Generate the PDP pack first.</p>
+    <a class="btn btn-primary" href="/packs/{{ pack_id }}/generate">Generate PDP pack</a>
+    {%- else %}
+    <div class="tabs" role="tablist" aria-label="Review panes">
+      <button class="btn btn-secondary btn-sm" role="tab" id="tab-copy" aria-controls="pane-copy" aria-selected="true" tabindex="0" type="button" data-tab="copy">Copy · {{ rows | length }} sentences</button>
+      <button class="btn btn-secondary btn-sm" role="tab" id="tab-truth" aria-controls="pane-truth" aria-selected="false" tabindex="-1" type="button" data-tab="truth">Product Truth · {{ ledger | length }} claims</button>
+    </div>
+    <div class="review-grid">
+      <aside class="pane ledger" id="pane-truth" role="tabpanel" aria-labelledby="tab-truth" tabindex="0" hidden>{{ render_ledger(ledger) }}</aside>
+      <section class="pane copy" id="pane-copy" role="tabpanel" aria-labelledby="tab-copy" tabindex="0">
+        <h2 class="sr-only">PDP copy</h2>
+        {%- for g in groups %}
+        <h3 class="section-h">{{ g.heading }}</h3>
+        {%- for row in g.rows %}{{ sentence_row(row) }}{% endfor %}
+        {%- endfor %}
+      </section>
+    </div>
+    {%- endif %}
+    <footer class="stamp">{{ draft_banner(ruleset) }}<p>Not legal advice · rule set {{ ruleset.label }}.</p></footer>
+  </main>
+</div>
+{%- if not empty %}{{ dock(summary, pack_id) }}{% endif %}
+<template id="tpl-recheck-error">{{ notice("Could not re-check this sentence.", "Your edit is kept. Approval stays off until it is checked.", kind="error", actions=[("Retry check", {"data-recheck": ""})]) }}</template>
+{{ citation_sheet() }}
+{{ toast() }}
+{% endblock %}
