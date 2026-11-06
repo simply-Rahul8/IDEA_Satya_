@@ -25,7 +25,7 @@ class Flag:
     end: int
     text: str
     message: str
-    rule_set: str  # label such as "v0.1.0-draft"
+    rule_set: str  # label such as "v0.1.1-draft"
 
 
 @dataclass(frozen=True)

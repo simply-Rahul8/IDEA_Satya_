@@ -379,3 +379,31 @@ def test_translate_pack_does_not_mutate_the_english_pack(truth):
     before = copy.deepcopy(pack)
     translate_pack(pack, truth)
     assert pack == before
+
+
+# ---- SAT-33: the fixed disclaimer needs no anchor; user text still does ----------------------------------------
+
+
+def test_verify_pack_does_not_flag_the_system_disclaimer_as_anchor_missing(truth):
+    from engine.verifier import verify_pack
+
+    hi = translate_pack(generate_pack(truth), truth)
+    report = verify_pack(hi, truth)
+    disclaimer = report.pack.section("warnings_storage").sentences[-1]
+    assert disclaimer.text == DISCLAIMER_HI and disclaimer.flags == []
+    assert not [f for s in report.pack.sentences() for f in s.flags if f.rule_id == "ANCHOR-MISSING"]
+
+
+def test_anchor_rules_still_apply_to_user_text_even_if_it_mimics_the_disclaimer(truth):
+    from engine.models import Sentence, SentenceType
+    from engine.verifier import anchor_sources
+
+    unanchored = Sentence(text="यह उत्पाद सबसे अच्छा है।", type=SentenceType.LEGAL)
+    _, flags = anchor_sources(unanchored, truth)
+    assert [f.rule_id for f in flags] == ["ANCHOR-MISSING"]
+    wrong_type = Sentence(text=DISCLAIMER_HI, type=SentenceType.BENEFIT_CLAIM)
+    _, flags = anchor_sources(wrong_type, truth)
+    assert [f.rule_id for f in flags] == ["ANCHOR-MISSING"]
+    padded = Sentence(text=DISCLAIMER_HI + " यह इलाज करता है।", type=SentenceType.LEGAL)
+    _, flags = anchor_sources(padded, truth)
+    assert [f.rule_id for f in flags] == ["ANCHOR-MISSING"]

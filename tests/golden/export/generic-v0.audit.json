@@ -10,7 +10,7 @@
     }
   ],
   "content_sha256": "2cb9985c220e02e0bd7f825ac722e8cef9a33f63dfbeaf2aee3d9eb61caa7ff5",
-  "disclaimer": "Not legal advice · rule set v0.1.0-draft",
+  "disclaimer": "Not legal advice · rule set v0.1.1-draft",
   "exported_at": "2026-11-05T12:00:00Z",
   "flags": [
     {
@@ -48,6 +48,6 @@
   },
   "overrides": 1,
   "red_flags": 0,
-  "rule_set_version": "v0.1.0-draft",
+  "rule_set_version": "v0.1.1-draft",
   "verifier_passed": true
 }

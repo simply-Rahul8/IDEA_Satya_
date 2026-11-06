@@ -13,8 +13,12 @@ anchors:
     provision: "s.2(28) misleading advertisement"
     verified: false
   cosmetics_rules: &cosmetics_rules
-    ref: "Cosmetics Rules, 2020 (G.S.R. 426(E))"
-    provision: "labelling and claims provisions; rule numbers to be confirmed by the consultant"
+    ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
+    provision: "r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant"
+    verified: false
+  cosmetics_rules_r36: &cosmetics_rules_r36
+    ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
+    provision: "r.36 (false or misleading claims). The Rules have no SPF or sunscreen provision; r.36 applies only generically"
     verified: false
   dc_act: &dc_act
     ref: "Drugs and Cosmetics Act, 1940"
@@ -321,7 +325,7 @@ rules:
           - "waterproof sunscreen"
       - kind: regex
         regex: '\bspf[\s-]*[1-9]\d{2,}\b'
-    sources: [*asci_code, *ccpa, *cosmetics_rules]
+    sources: [*asci_code, *ccpa, *cosmetics_rules_r36]
     examples:
       positive:
         - "Total sun protection all day."
