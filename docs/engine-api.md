@@ -63,12 +63,12 @@ Engine side only; the screen is `docs/design/final/screen-audit.md`. Determinist
 ```python
 from engine import audit
 
-res = audit.import_catalogue(upload_bytes, kind="csv")      # kind: auto | csv (uploads) | text (paste)
+res = audit.import_catalogue(upload_bytes, kind="csv")  # kind: auto | csv (uploads) | text (paste)
 job = audit.create_audit(conn, workspace_id, res.products)  # conn: service-role psycopg connection (ADR-8)
 audit.step_audit(conn, job, batch_size=5)  # {status, total, done, failed, label}; the browser calls this repeatedly
-audit.cancel_audit(conn, job)              # label "Stopped at 38 of 120"; finished results are kept
-audit.resume_audit(conn, job)              # picks the rest up again
-report = audit.audit_report(conn, job)     # AuditReport, callable at any point (partial results show `pending`)
+audit.cancel_audit(conn, job)  # label "Stopped at 38 of 120"; finished results are kept
+audit.resume_audit(conn, job)  # picks the rest up again
+report = audit.audit_report(conn, job)  # AuditReport, callable at any point (partial results show `pending`)
 ```
 
 **Import.** Registry order: any registered marketplace importer, then `shopify_csv` (merges variant rows by Handle,
