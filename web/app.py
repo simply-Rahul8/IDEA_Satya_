@@ -79,6 +79,7 @@ class Page:
     app_js_url: str
     js_review: str
     js_audit: str
+    js_fix: str
 
 
 def page_context(ruleset: RuleSet | None = None) -> dict:
@@ -92,6 +93,7 @@ def page_context(ruleset: RuleSet | None = None) -> dict:
             assets.js_url("app.js"),
             assets.js_url("review.js"),
             assets.js_url("audit.js"),
+            assets.js_url("fix.js"),
         ),
         "ruleset": rs,
         "sprite": SPRITE,

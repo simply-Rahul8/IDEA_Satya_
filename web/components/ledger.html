@@ -1,6 +1,7 @@
 {% from "components/flag_badge.html" import flag_badge %}
 {% macro ledger(claims, pack_id) -%}
 <h2>Product Truth ledger <span class="muted">· {{ claims | length }} claim{{ "" if claims | length == 1 else "s" }}</span></h2>
+<p class="hint"><a href="/packs/{{ pack_id }}/truth">Open the Product Truth screen</a> to add evidence or leave claims out.</p>
 <button class="btn btn-ghost btn-sm" type="button" id="back-btn" hidden></button>
 <ol class="claims">
   {%- for c in claims %}

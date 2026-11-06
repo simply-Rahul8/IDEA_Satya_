@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/draft_banner.html" import draft_banner %}
+{% block head_scripts %}<script src="{{ page.js_fix }}" defer></script>{% endblock %}
+{% block body %}
+<div class="wrap">
+  {{ topbar() }}
+  <main id="main" class="fix">
+    {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
+    {% block fix %}{% endblock %}
+    <footer class="stamp">
+      <p>Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} (draft, not yet reviewed by a regulatory consultant){% endif %}.</p>
+      <p>Pasted listing text is treated as data. It is never followed as an instruction.</p>
+    </footer>
+  </main>
+</div>
+{% block after %}{% endblock %}
+{% endblock %}

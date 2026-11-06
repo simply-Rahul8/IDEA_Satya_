@@ -1,0 +1,25 @@
+{% extends "fix/_shell.html" %}
+{% block fix %}
+{%- set p = progress %}
+<header><p class="eyebrow">Step 6 · Generate · {{ product }}</p>
+  <h1>{% if has_pack and p.status != "running" %}Write the pack again?{% else %}Writing your PDP pack.{% endif %}</h1>
+  <p class="lede">{{ summary.note }} Every sentence is written from a product fact or a confirmed claim and keeps its anchor.</p></header>
+<div x-data="satyaGenerate" data-pack="{{ pack_id }}" data-status="{{ p.status }}" data-auto="{{ 1 if auto else 0 }}" data-total="{{ p.total }}">
+  <section class="card gen-card" aria-labelledby="gen-h">
+    <h2 id="gen-h" class="sr-only">Progress</h2>
+    <div class="progress-head"><strong id="gen-label" role="status">{{ p.label }}</strong>
+      <span class="no-print"><button class="btn btn-ghost btn-sm" type="button" id="gen-cancel" x-on:click="cancel"{% if p.status != "running" and not auto %} hidden{% endif %}>Cancel</button></span></div>
+    <div class="bar" id="gen-bar" role="progressbar" aria-label="Generation progress" aria-valuemin="0" aria-valuemax="{{ p.total }}" aria-valuenow="{{ p.done }}"><i data-pct="{{ (100 * p.done / p.total) | round | int }}"></i></div>
+    <div id="gen-error" role="alert" hidden></div>
+    <div class="acts" id="gen-acts">
+      <button class="btn btn-primary" type="button" id="gen-start" x-on:click="start"{% if auto or p.status == "running" %} hidden{% endif %}>{% if has_pack %}Write it again{% elif p.status in ("failed", "cancelled") %}Try again{% else %}Generate PDP pack{% endif %}</button>
+      {%- if has_pack %}<a class="btn btn-secondary" id="gen-open" href="/packs/{{ pack_id }}/review">Open the current pack</a>{% endif %}
+      <a class="btn btn-ghost" href="/packs/{{ pack_id }}/truth">Back to Product Truth</a>
+    </div>
+    {%- if has_pack %}<p class="fine">Writing it again replaces the copy and clears the reasons you kept.</p>{% endif %}
+  </section>
+  <ol class="gen-skel" aria-hidden="true">
+    {%- for g in groups %}<li><span class="gen-skel-h">{{ g }}</span><i></i><i></i></li>{% endfor %}
+  </ol>
+</div>
+{% endblock %}

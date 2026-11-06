@@ -1,0 +1,36 @@
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/icon.html" import icon %}
+<li class="claim" id="claim-{{ c.id }}" data-claim="{{ c.id }}" data-state="{{ c.state }}" tabindex="-1" aria-labelledby="claim-{{ c.id }}-t">
+  <span class="chip chip-type">{{ c.id | upper }} · Claim</span>
+  <strong id="claim-{{ c.id }}-t">{{ c.text }}</strong>
+  <span>{{ flag_badge(c.sev, label=c.word, icon_name=c.icon) }}</span>
+  <small>{{ c.evidence }}</small>
+  {%- if c.state == "blocked" %}
+  <div class="why-blocked">
+    <p><strong>Why it cannot be confirmed.</strong> It hits a rule that cannot be overridden, not even with evidence.</p>
+    <ul>{% for r in c.reasons %}
+      <li><button type="button" class="btn btn-ghost btn-sm" data-sheet="/rules/{{ r.id }}/sheet?v={{ ruleset.label }}">{{ icon("book") }}{{ r.title }}<span class="sr-only"> ({{ r.id }}), open the citation</span></button>{% if r.why %}<span class="muted"> {{ r.why }}</span>{% endif %}</li>
+    {%- endfor %}</ul>
+    <p>Leave it out, and say what the product does in other words. Satya will not write copy from it.</p>
+    <div class="acts"><button class="btn btn-secondary btn-sm" type="button" hx-post="/packs/{{ c.pack_id }}/truth/{{ c.id }}/reject" hx-target="#claim-{{ c.id }}" hx-swap="outerHTML">Leave it out<span class="sr-only"> ({{ c.id | upper }})</span></button></div>
+    {%- if c.error %}<p class="fp-err" role="alert">{{ c.error }}</p>{% endif %}
+  </div>
+  {%- elif c.can_confirm %}
+  <form class="claim-confirm" hx-post="/packs/{{ c.pack_id }}/truth/{{ c.id }}/confirm" hx-encoding="multipart/form-data" hx-target="#claim-{{ c.id }}" hx-swap="outerHTML" data-swap-errors>
+    <label for="ev-{{ c.id }}">Evidence type</label>
+    <select id="ev-{{ c.id }}" name="evidence_type" required{% if c.error_field == "type" %} aria-invalid="true" aria-describedby="err-{{ c.id }}"{% endif %}>
+      {%- for v, label in evidence_choices %}<option value="{{ v.value }}"{% if c.values.type == v.value %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    <label for="ref-{{ c.id }}">Document ID <span class="muted">(required for a test report, unless you upload it)</span></label>
+    <input id="ref-{{ c.id }}" name="reference" type="text" maxlength="300" autocomplete="off" value="{{ c.values.reference or '' }}"{% if c.error_field == "reference" %} aria-invalid="true" aria-describedby="err-{{ c.id }}"{% endif %}>
+    <label for="file-{{ c.id }}">Or upload the document <span class="muted">(PDF, PNG or JPEG, up to {{ max_mb }} MB)</span></label>
+    <input id="file-{{ c.id }}" name="file" type="file" accept="application/pdf,image/png,image/jpeg"{% if c.error_field == "file" %} aria-invalid="true" aria-describedby="err-{{ c.id }}"{% endif %}>
+    <p class="fp-err" id="err-{{ c.id }}" role="alert">{{ c.error }}</p>
+    <div class="acts">
+      <button class="btn btn-secondary btn-sm" type="submit">Confirm claim<span class="sr-only"> {{ c.id | upper }}</span></button>
+      {%- if c.state != "rejected" %}<button class="btn btn-ghost btn-sm" type="button" hx-post="/packs/{{ c.pack_id }}/truth/{{ c.id }}/reject" hx-target="#claim-{{ c.id }}" hx-swap="outerHTML">Leave it out<span class="sr-only"> ({{ c.id | upper }})</span></button>{% endif %}
+    </div>
+  </form>
+  {%- endif %}
+  {%- if c.used %}<div class="used">Used in {{ c.used }} sentence{{ "" if c.used == 1 else "s" }}.</div>{% endif %}
+</li>

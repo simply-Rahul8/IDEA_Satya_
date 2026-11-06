@@ -16,6 +16,10 @@
   {%- else %}
   <p class="peek-meta">No flagged risks under rule set {{ v.report.rule_set }}.</p>
   {%- endif %}
-  <p><a class="btn btn-secondary btn-sm" href="/audits/{{ v.job_id }}/report#p-{{ c.i }}">Open report</a></p>
+  <p class="peek-acts"><a class="btn btn-secondary btn-sm" href="/audits/{{ v.job_id }}/report#p-{{ c.i }}">Open report</a>
+    {%- if c.state in ("red", "amber", "green") %}
+    <button class="btn btn-primary btn-sm" type="button" hx-post="/fix" hx-vals='{"audit": "{{ v.job_id }}", "position": "{{ c.i }}"}' hx-target="#fix-problem" hx-swap="innerHTML" hx-disabled-elt="this">Fix with Satya<span class="sr-only">: {{ c.sku }}</span></button>
+    {%- endif %}</p>
+  <div id="fix-problem" aria-live="polite" data-swap-errors></div>
   {{ draft_banner(ruleset) }}
 </div>

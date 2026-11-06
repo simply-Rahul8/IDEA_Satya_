@@ -1,0 +1,30 @@
+{% extends "fix/_shell.html" %}
+{% from "fix/_summary.html" import summary_block %}
+{% from "components/citation_sheet.html" import citation_sheet %}
+{% block fix %}
+<header><p class="eyebrow">Step 5 · Fix with Satya · {{ product }}</p>
+  <h1>Confirm what the product can say.</h1>
+  <p class="lede">Satya found these claims in your listing. Confirm each one with the evidence you hold. A claim that hits a rule that cannot be overridden cannot be confirmed.</p></header>
+
+{{ summary_block(summary, pack_id) }}
+
+<section class="card" aria-labelledby="facts-h">
+  <h2 id="facts-h">Product facts <span class="muted">· from your listing</span></h2>
+  <dl class="facts">
+    <div><dt>Product</dt><dd>{{ product }}</dd></div>
+    {%- for f in facts %}<div><dt>{{ f.label }}</dt><dd>{% if f.value %}{{ f.value }}{% else %}<span class="muted">Not stated in the listing</span>{% endif %}</dd></div>{% endfor %}
+  </dl>
+</section>
+
+<section aria-labelledby="claims-h">
+  <h2 id="claims-h">Product Truth ledger <span class="muted">· {{ claims | length }} claim{{ "" if claims | length == 1 else "s" }}</span></h2>
+  {%- if claims %}
+  <ol class="claims" id="claims">
+    {%- for c in claims %}{% include "fix/_claim.html" %}{% endfor %}
+  </ol>
+  {%- else %}
+  <p class="muted">No benefit claims were found. The pack will use the product facts above.</p>
+  {%- endif %}
+</section>
+{% endblock %}
+{% block after %}{{ citation_sheet() }}{% endblock %}

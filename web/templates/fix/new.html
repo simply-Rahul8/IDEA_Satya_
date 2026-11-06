@@ -1,0 +1,13 @@
+{% extends "fix/_shell.html" %}
+{% block fix %}
+<header><p class="eyebrow">Step 5 · Fix with Satya</p>
+  <h1>Paste one listing to fix.</h1>
+  <p class="lede">Satya reads it into a Product Truth draft. Every claim starts unconfirmed, and nothing is written from a claim until you confirm it. Cosmetic products only.</p></header>
+<form class="card fix-form" hx-post="/fix" hx-target="#fix-problem" hx-swap="innerHTML" hx-disabled-elt="#fix-go" data-swap-errors>
+  <div id="fix-problem" aria-live="polite"></div>
+  <label class="lbl" for="fix-text">Listing text <span class="muted">(product name on the first line, then the description)</span></label>
+  <textarea class="field" id="fix-text" name="text" rows="10" maxlength="{{ max_chars }}" placeholder="Rosewater Dew Serum 30 ml&#10;A light serum with a dewy finish…" required></textarea>
+  <div class="acts"><button class="btn btn-primary" id="fix-go" type="submit">Read the listing</button>
+    <a class="btn btn-ghost" href="/audits/new">Audit a catalogue instead</a></div>
+</form>
+{% endblock %}

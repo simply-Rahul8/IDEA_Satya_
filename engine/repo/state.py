@@ -29,6 +29,7 @@ class ReviewState:
     last_edit_after_approval: bool = False
     approve_error: str | None = None
     last_announce: str = ""
+    gen: dict[str, Any] = field(default_factory=dict)  # generation job: {status, step, draft, error} (see web.fix)
 
 
 def to_row(state: ReviewState) -> dict[str, Any]:
@@ -49,6 +50,7 @@ def to_row(state: ReviewState) -> dict[str, Any]:
             "last_edit_after_approval": state.last_edit_after_approval,
             "approve_error": state.approve_error,
             "last_announce": state.last_announce,
+            "gen": state.gen,
         },
     }
 
@@ -71,4 +73,5 @@ def from_row(pack_id: str, row: dict[str, Any]) -> ReviewState:
         last_edit_after_approval=bool(rv.get("last_edit_after_approval")),
         approve_error=rv.get("approve_error"),
         last_announce=rv.get("last_announce", ""),
+        gen=dict(rv.get("gen") or {}),
     )

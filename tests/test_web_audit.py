@@ -387,3 +387,26 @@ def test_without_a_database_audits_fail_closed(alice, monkeypatch):
     monkeypatch.delenv("SUPABASE_DB_URL", raising=False)
     assert alice.get("/audits/new").status_code == 200
     assert upload(alice).status_code == 503
+
+
+# ---------------------------------------------------------------------------------------- SAT-41: Fix with Satya
+def test_fix_with_satya_from_an_audit_row_starts_a_product_truth_draft(alice, done):
+    html = alice.get(f"/audits/{done}").text
+    red_i = next(i for s, i in cells(html) if s == "red")
+    skipped_i = next(i for s, i in cells(html) if s == "skipped")
+    peek = alice.get(f"/audits/{done}/products/{red_i}").text
+    assert "Fix with Satya" in peek and 'hx-post="/fix"' in peek
+    assert (
+        "Fix with Satya" not in alice.get(f"/audits/{done}/products/{skipped_i}").text
+    )  # P23: no fix for a refused product
+    hx = {"HX-Request": "true"}
+    refused = alice.post("/fix", data={"audit": done, "position": str(skipped_i)}, headers=hx)
+    assert refused.status_code == 422 and "isn&#39;t in scope for Satya v1" in refused.text
+    r = alice.post("/fix", data={"audit": done, "position": str(red_i)}, headers=hx)
+    assert r.status_code == 200 and re.fullmatch(r"/packs/[0-9a-f-]{36}/truth", r.headers["hx-redirect"])
+    truth = alice.get(r.headers["hx-redirect"])
+    assert truth.status_code == 200 and "Confirm what the product can say." in truth.text
+    assert alice.post("/fix", data={"audit": done, "position": "999"}, headers=hx).status_code == 404
+    bob = browser("bob")  # another workspace cannot start from this audit, and cannot see the draft
+    assert bob.post("/fix", data={"audit": done, "position": str(red_i)}, headers=hx).status_code == 404
+    assert bob.get(r.headers["hx-redirect"]).status_code == 404

@@ -1,0 +1,11 @@
+{% from "components/icon.html" import icon %}
+{% macro summary_block(s, pack_id, oob=False) -%}
+<section class="card truth-sum" id="truth-sum" aria-label="Confirmation progress"{% if oob %} hx-swap-oob="outerHTML"{% endif %}>
+  <p class="note" id="truth-note" aria-live="polite">{{ icon("ok" if s.total and s.confirmed == s.total else "info") }}<span>{{ s.note }}</span></p>
+  <div class="acts">
+    <a class="btn btn-primary" href="/packs/{{ pack_id }}/generate">{% if s.has_pack %}Write the pack again{% else %}Generate PDP pack{% endif %}</a>
+    {%- if s.has_pack %}<a class="btn btn-secondary" href="/packs/{{ pack_id }}/review">Back to review</a>{% endif %}
+  </div>
+  {%- if s.has_pack %}<p class="fine">A pack already exists. Writing it again replaces the copy and clears the reasons you kept.</p>{% endif %}
+</section>
+{%- endmacro %}
