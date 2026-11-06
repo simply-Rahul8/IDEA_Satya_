@@ -1,0 +1,36 @@
+{
+  "pdp_id": "pdp-015",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Mehendi Muse",
+  "category": "makeup",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Mehendi Muse Kajal Pencil, Smudge-Resistant Black",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Creamy formula that glides on smoothly.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Water-resistant wear for a day out.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Twist-up pencil, no sharpening needed.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Remove with micellar water.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

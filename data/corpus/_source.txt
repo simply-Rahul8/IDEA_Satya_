@@ -1,0 +1,374 @@
+# SYNTHETIC test fixtures (SAT-18). Fictional brands and products; no real retailer text. Labels are DRAFT.
+# Line format: "S|text" safe, "O|RULE[,RULE]|text" orange, "R|RULE[,RULE]|text" red. First line of a PDP is its title.
+# "## id | category | band | fictional brand" starts a PDP. band = clean | borderline | risky (planted mix, not a label).
+
+## pdp-001 | skin | clean | Kesarvan Naturals
+S|Kesarvan Daily Gel Moisturiser with Hyaluronic Acid
+S|Lightweight gel texture that absorbs without a sticky finish.
+S|Formulated with 1% hyaluronic acid and glycerin for everyday hydration.
+S|Free from parabens and sulphates.
+S|Suitable for daily use, morning and night.
+S|Made in a licensed facility in Pune.
+S|Apply a pea-sized amount to clean skin and massage gently.
+S|For external use only.
+
+## pdp-002 | skin | clean | Morpankh Labs
+S|Morpankh Gentle Foaming Face Wash for Acne-Prone Skin
+S|A mild cleanser designed for acne-prone and oily skin.
+S|Contains 0.5% salicylic acid and green tea extract.
+S|Rinses clean and leaves skin feeling fresh.
+S|Fragrance level is low, patch test before first use.
+S|Wet your face, lather a small amount and rinse with water.
+
+## pdp-003 | makeup | clean | Rangrez Beauty
+S|Rangrez Skin-Tint Foundation, 24 Shades from Fair to Deep
+S|Buildable medium coverage with a natural satin finish.
+S|Shade range covers fair, wheatish, medium, tan and deep skin tones.
+S|Get the fairest shade in our range if you have a light skin tone.
+S|Includes a pump and a handy shade-match guide.
+S|Shake well and apply with a sponge or brush.
+
+## pdp-004 | hair | clean | Amlaveda Co
+S|Amlaveda Smoothing Shampoo with Amla and Aloe
+S|A sulphate-free shampoo for dry and frizzy hair.
+S|Nourishes hair from root to tip with amla extract and aloe vera.
+S|Leaves hair soft and easy to comb.
+S|Massage into wet hair, lather and rinse thoroughly.
+S|Avoid contact with eyes.
+
+## pdp-005 | skin | clean | Tarang Skin
+S|Tarang Sunscreen Gel SPF 50 PA++++
+S|Lightweight broad-spectrum sunscreen with a matte finish.
+S|Offers SPF 50 PA++++ protection when applied as directed.
+S|Reapply every two to three hours when outdoors.
+S|Non-greasy and layers well under makeup.
+S|Keep out of reach of children.
+
+## pdp-006 | fragrance | clean | Itra House
+S|Itra House Midnight Jasmine Eau de Parfum, 50 ml
+S|Top notes of bergamot, a heart of jasmine and a base of sandalwood.
+S|Long lasting for a fragrance of this concentration, results vary by skin.
+S|Comes in a recyclable glass bottle with a magnetic cap.
+S|Spray on pulse points from 15 cm away.
+S|Flammable, keep away from flame.
+
+## pdp-007 | other | clean | Chandni Cosmetics
+S|Chandni Whiter Smile Charcoal Toothpaste
+S|Get whiter teeth in a week with this toothpaste.
+S|Contains activated charcoal and 1000 ppm fluoride.
+S|Fresh mint flavour that lasts through the morning.
+S|Brush twice a day for two minutes.
+
+## pdp-008 | skin | clean | Neelkanth Botanicals
+S|Neelkanth Lip Balm with Shea and Cocoa Butter
+S|Moisturises dry lips with shea butter, cocoa butter and vitamin E.
+S|Smooth glide with a light vanilla scent.
+S|Comes in a pocket-friendly tube.
+S|Apply as often as needed.
+S|Discontinue use if irritation occurs.
+
+## pdp-009 | hair | clean | Kesari Roots
+S|Kesari Roots Lightweight Hair Oil with Bhringraj
+S|Blend of coconut, sesame and bhringraj oils.
+S|Absorbs quickly and does not weigh hair down.
+S|Pleasant herbal scent from natural fragrance.
+S|Warm slightly and massage into the scalp before washing.
+S|Patch test before first use.
+
+## pdp-010 | skin | clean | Dhara Dermals
+S|Dhara 5% Niacinamide Face Serum
+S|Contains 5% niacinamide and zinc PCA.
+S|Water-based serum that sits well under moisturiser.
+S|Developed for oily and combination skin.
+S|Visible results with regular use.
+S|Use once or twice daily after cleansing.
+S|Not intended to diagnose, treat, cure or prevent any disease.
+
+## pdp-011 | makeup | clean | Sindoor Studio
+S|Sindoor Studio Matte Liquid Lipstick in Brick Red
+S|Highly pigmented colour in a single swipe.
+S|Comfortable matte finish that does not feel drying.
+S|Available in 18 shades inspired by Indian festivals.
+S|Wear it alone or layer over a liner.
+S|Remove with oil-based makeup remover.
+
+## pdp-012 | skin | clean | Gulmohar Garden
+S|Gulmohar Rose Water Toner
+S|Alcohol-free toner made with distilled rose water and glycerin.
+S|Gives skin a fresh feel after cleansing.
+S|Spritz on face or apply with a cotton pad.
+S|Shelf life is 24 months from the date of manufacture.
+S|Store in a cool, dry place.
+
+## pdp-013 | hair | clean | Nilgiri Naturals
+S|Nilgiri Naturals Argan Leave-In Hair Cream
+S|Lightweight cream that helps control frizz and adds shine.
+S|Contains argan oil and shea butter.
+S|Apply to towel-dried hair and style as usual.
+S|Rinse eyes with water if contact occurs.
+
+## pdp-014 | skin | clean | Palash Skincare
+S|Palash Ceramide Barrier Cream
+S|Rich cream for dry and sensitive skin with ceramides and squalane.
+S|Fragrance-free formula.
+S|Helps skin feel soft and comfortable all day.
+S|Protects skin from dryness.
+S|Apply generously to face and body as needed.
+
+## pdp-015 | makeup | clean | Mehendi Muse
+S|Mehendi Muse Kajal Pencil, Smudge-Resistant Black
+S|Creamy formula that glides on smoothly.
+S|Water-resistant wear for a day out.
+S|Twist-up pencil, no sharpening needed.
+S|Remove with micellar water.
+
+## pdp-016 | skin | clean | Sagar Soaps
+S|Sagar Oatmeal and Honey Body Wash
+S|Gentle body wash with colloidal oatmeal and honey.
+S|Creamy lather that rinses off easily.
+S|Fresh, mild fragrance.
+S|Use daily in the shower.
+S|Avoid contact with eyes.
+
+## pdp-017 | fragrance | clean | Ambar Atelier
+S|Ambar Atelier Sandal Roll-On Perfume Oil
+S|Alcohol-free perfume oil in a 10 ml roll-on bottle.
+S|Warm sandalwood and vanilla notes.
+S|Slim enough to slip into a pocket.
+S|Apply to pulse points.
+S|Perform a patch test before first use.
+
+## pdp-018 | skin | borderline | Lotus Lab India
+S|Lotus Lab Hydra Boost Gel Cream
+O|EN-CLAIM-004|Clinically proven to hydrate skin for 24 hours.
+S|Lightweight gel cream with hyaluronic acid and panthenol.
+O|EN-CLAIM-004|Dermatologically tested and suitable for sensitive skin.
+S|Fragrance-free formula.
+S|Apply morning and night after cleansing.
+
+## pdp-019 | skin | borderline | Rishikesh Rituals
+S|Rishikesh Rituals Bright Glow Vitamin C Serum
+O|EN-CLAIM-003|Removes dark spots and pigmentation.
+S|Contains 10% vitamin C and ferulic acid.
+O|EN-CLAIM-006|93% of women saw smoother skin in four weeks.
+S|Use in the morning followed by sunscreen.
+S|Store away from direct sunlight.
+
+## pdp-020 | skin | borderline | Anandi Organics
+S|Anandi Organics Kumkumadi Face Oil
+O|EN-CLAIM-007|A 100% natural, chemical-free face oil.
+S|Blend of sesame, almond and saffron-infused oils.
+S|Absorbs well and leaves skin soft.
+S|Use two to three drops at night.
+S|Patch test before use.
+
+## pdp-021 | hair | borderline | Keshav Hair Co
+S|Keshav Hair Co Onion and Biotin Hair Mask
+O|EN-CLAIM-010|Promotes hair growth and strengthens roots.
+S|Enriched with onion seed oil, biotin and keratin.
+S|Leave on for ten minutes then rinse.
+S|Smooth texture suitable for everyday use.
+
+## pdp-022 | skin | borderline | Jeevan Skin Labs
+S|Jeevan Anti-Acne Spot Gel
+O|EN-CLAIM-011|Clears pimples overnight.
+S|Gel with 2% salicylic acid and tea tree oil.
+S|Dab a small amount on the spot at bedtime.
+S|Do not use on broken skin.
+O|EN-CLAIM-008|Safe for all skin types.
+
+## pdp-023 | skin | borderline | Surya Shield
+S|Surya Shield Ultra Sunscreen
+O|EN-CLAIM-009|Total sun protection all day with one application.
+S|Broad-spectrum SPF 50 PA++++ formula.
+S|Water-resistant for up to 40 minutes.
+S|Reapply after swimming or sweating.
+
+## pdp-024 | skin | borderline | Mamta Baby Care
+S|Mamta Gentle Baby Lotion
+O|EN-CLAIM-008|Safe for babies and kids of all ages.
+S|Soft, light lotion with almond oil.
+O|EN-CLAIM-004|Dermatologically tested.
+S|Apply after bath on damp skin.
+
+## pdp-025 | skin | borderline | Vriksha Wellness
+S|Vriksha Firming Body Gel with Caffeine
+O|EN-CLAIM-013|Burns belly fat while you sleep.
+S|Cooling gel with caffeine and green tea extract.
+S|Massage in circular motions after your shower.
+S|Use with a healthy diet and regular exercise.
+
+## pdp-026 | skin | borderline | Bhasma Beauty
+S|Bhasma Beauty Charcoal Face Wash
+O|EN-CLAIM-012|India's No. 1 face wash for glowing skin.
+S|Deep-cleansing formula with activated charcoal.
+S|Lather in wet hands and massage on face.
+S|Rinse well and pat dry.
+
+## pdp-027 | skin | borderline | Tilak Naturals
+S|Tilak Naturals Wrinkle Defence Night Cream
+O|EN-CLAIM-003|Erases wrinkles overnight.
+S|Contains retinyl palmitate and peptides.
+S|Smooth cream that sinks in without residue.
+O|EN-CLAIM-002|Guaranteed results in 7 days.
+
+## pdp-028 | hair | borderline | Mayur Hair Studio
+S|Mayur Anti-Dandruff Shampoo with Neem
+O|EN-CLAIM-011|Kills 99.9% germs that cause dandruff.
+S|Contains neem, tea tree oil and zinc pyrithione.
+S|Lather, leave for two minutes and rinse.
+S|Use twice a week.
+
+## pdp-029 | skin | borderline | Ganga Glow
+S|Ganga Glow Brightening Face Pack
+S|Clay-based mask with sandalwood and turmeric.
+O|EN-CLAIM-004|Dermatologically tested and hypoallergenic.
+S|Apply a thin layer and leave for ten minutes.
+S|Wash off with lukewarm water.
+
+## pdp-030 | skin | borderline | Haldi House
+S|Haldi House Stretch Mark Body Butter
+O|EN-CLAIM-008|Pregnancy-safe body butter made for expecting mothers.
+S|Shea butter, cocoa butter and vitamin E blend.
+S|Massage on belly, hips and thighs.
+S|Consult your doctor if you have concerns.
+
+## pdp-031 | hair | borderline | Shikakai Studio
+S|Shikakai Studio Silk Serum
+O|EN-CLAIM-002|Permanent frizz removal in one wash.
+S|Lightweight serum with silicones and argan oil.
+S|Apply to damp hair ends.
+
+## pdp-032 | skin | borderline | Mitti Mantra
+S|Mitti Mantra Multani Mitti Face Mask
+O|EN-CLAIM-007|Completely chemical-free multani mitti, straight from the earth.
+S|Natural clay with rose water.
+S|Use once a week.
+S|Do not let the mask dry completely on the skin.
+
+## pdp-033 | skin | borderline | Aarohi Care
+S|Aarohi Gentle Intimate Wash
+S|Soap-free pH-balanced wash for daily external use.
+O|EN-CLAIM-006|9 out of 10 users agree it is the best they have tried.
+S|Mild floral scent.
+S|For external use only.
+
+## pdp-034 | skin | borderline | Daksha Derma
+S|Daksha 2% Retinol Night Serum
+R|EN-CLAIM-001|Absolutely safe with zero side effects.
+S|Encapsulated retinol with squalane.
+S|Start with two nights a week.
+S|Always use sunscreen during the day.
+
+## pdp-035 | skin | risky | Tej Beauty
+S|Tej Radiance Cream
+R|EN-FAIR-001|Whitens your skin in 7 days.
+S|Enriched with saffron and licorice extract.
+R|EN-FAIR-003|Fair skin for a perfect wedding day.
+S|Apply twice daily after cleansing.
+
+## pdp-036 | skin | risky | Sundari Fairness Lab
+S|Sundari Glow Cream
+R|EN-FAIR-002|Say goodbye to dark skin with this cream.
+R|EN-FAIR-001|Get fairer skin with saffron and milk proteins.
+S|Cream base with glycerin.
+S|Apply at night.
+
+## pdp-037 | skin | risky | Gauri Gold
+S|Gauri Gold Gel
+R|EN-FAIR-003|Fairness that wins you a better job.
+S|Light gel with vitamin B3.
+R|EN-FAIR-002|Fixes dusky skin tone for good.
+S|Apply thinly.
+
+## pdp-038 | skin | risky | Rogamukt Remedies
+S|Rogamukt Neem Cream
+R|EN-DRUG-001|This cream treats acne and pimples fast.
+S|Contains neem and tea tree oil.
+R|EN-DRUG-001|Cures eczema in just 7 days.
+S|Apply twice daily.
+
+## pdp-039 | skin | risky | Swasth Sutra
+S|Swasth Sutra Turmeric Balm
+R|EN-DRUG-002|Prevents skin infections naturally.
+R|EN-DRUG-002|Protects your family against viral infections.
+S|Made with turmeric and aloe.
+S|Use on clean skin.
+
+## pdp-040 | skin | risky | Amrit Ayur
+S|Amrit Ayur Ashwagandha Body Oil
+R|EN-DRUG-003|Boosts your immunity from the first use.
+R|EN-DRUG-003|Balances hormones naturally.
+S|Blend of sesame and ashwagandha oils.
+S|Massage before bath.
+
+## pdp-041 | skin | risky | Madhumeh Naturals
+S|Madhumeh Herbal Body Lotion
+R|EN-DMR-001|Cures diabetes naturally.
+R|EN-DMR-001|Helps in controlling high blood pressure.
+S|Aloe-based lotion with neem.
+S|Apply daily.
+
+## pdp-042 | skin | risky | Shakti Vitality
+S|Shakti Massage Oil
+R|EN-DMR-002|Boosts sexual stamina and performance.
+S|Blend of sesame and sandalwood oils.
+R|EN-DMR-002|Corrects menstrual disorders naturally.
+S|Massage gently.
+
+## pdp-043 | hair | risky | Kalakesh Colour Care
+S|Kalakesh Herbal Hair Oil
+R|EN-DMR-003|Prevents premature greying of hair.
+R|EN-DMR-003|Reverses grey hair naturally.
+S|Enriched with bhringraj and amla.
+S|Massage on scalp twice a week.
+
+## pdp-044 | hair | risky | Ghana Kesh
+S|Ghana Kesh Rosemary Hair Tonic
+R|EN-DRUG-005|Regrow hair in 30 days.
+S|Contains rosemary oil and redensyl.
+R|EN-DRUG-005|Clinically visible hair regrowth.
+O|EN-CLAIM-010|Stops hair fall in 2 weeks.
+S|Spray on scalp daily.
+
+## pdp-045 | skin | risky | Medicare Skin
+S|Medicare Skin Gel
+R|EN-DRUG-004|Doctor-prescribed strength anti-acne gel.
+R|EN-DRUG-004|Medicated shampoo for the scalp.
+S|Contains aloe and tea tree oil.
+S|Use as directed.
+
+## pdp-046 | skin | risky | Suraksha Sun
+S|Suraksha Sun Cream SPF 50
+R|EN-CLAIM-005|CDSCO-approved sunscreen.
+R|EN-CLAIM-005|FDA approved formula.
+O|EN-CLAIM-009|SPF 200 sunscreen for the strongest protection.
+S|Reapply every two hours.
+
+## pdp-047 | skin | risky | Bahu Beauty
+S|Bahu Beauty Herbal Cream
+R|EN-CLAIM-001|100% safe for all with no side effects.
+O|EN-CLAIM-007|A chemical-free formula.
+S|Made with plant-derived ingredients.
+S|Apply daily.
+
+## pdp-048 | skin | risky | Navya Naturals
+S|Navya Naturals Turmeric Soap
+R|EN-FAIR-001|Lightens skin tone in two weeks.
+O|EN-CLAIM-003|Removes dark spots and pigmentation.
+S|Handmade bar with turmeric.
+S|Use daily.
+
+## pdp-049 | skin | risky | Kaya Kalp Clinic
+S|Kaya Kalp Wellness Day Cream
+R|EN-DRUG-001|Cures eczema and psoriasis.
+R|EN-DRUG-002|Prevents skin infections and viral infections.
+O|EN-CLAIM-012|The world's best skin cream.
+S|Apply once daily.
+
+## pdp-050 | skin | risky | Ojas Organics
+S|Ojas Herbal Cream
+R|EN-FAIR-002|Fixes dusky skin tone.
+O|EN-CLAIM-002|Guaranteed results in 7 days.
+R|EN-DRUG-003|Balances hormones naturally.
+S|Apply daily.

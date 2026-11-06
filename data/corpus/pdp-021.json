@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-021",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Keshav Hair Co",
+  "category": "hair",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Keshav Hair Co Onion and Biotin Hair Mask",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Promotes hair growth and strengthens roots.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-010"
+      ]
+    },
+    {
+      "text": "Enriched with onion seed oil, biotin and keratin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Leave on for ten minutes then rinse.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Smooth texture suitable for everyday use.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

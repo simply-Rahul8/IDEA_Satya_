@@ -1,0 +1,45 @@
+{
+  "pdp_id": "pdp-019",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Rishikesh Rituals",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Rishikesh Rituals Bright Glow Vitamin C Serum",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Removes dark spots and pigmentation.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-003"
+      ]
+    },
+    {
+      "text": "Contains 10% vitamin C and ferulic acid.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "93% of women saw smoother skin in four weeks.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-006"
+      ]
+    },
+    {
+      "text": "Use in the morning followed by sunscreen.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Store away from direct sunlight.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

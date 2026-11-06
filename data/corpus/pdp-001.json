@@ -1,0 +1,51 @@
+{
+  "pdp_id": "pdp-001",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Kesarvan Naturals",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Kesarvan Daily Gel Moisturiser with Hyaluronic Acid",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Lightweight gel texture that absorbs without a sticky finish.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Formulated with 1% hyaluronic acid and glycerin for everyday hydration.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Free from parabens and sulphates.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Suitable for daily use, morning and night.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Made in a licensed facility in Pune.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply a pea-sized amount to clean skin and massage gently.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "For external use only.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

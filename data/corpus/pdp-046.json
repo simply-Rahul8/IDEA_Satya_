@@ -1,0 +1,42 @@
+{
+  "pdp_id": "pdp-046",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Suraksha Sun",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Suraksha Sun Cream SPF 50",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "CDSCO-approved sunscreen.",
+      "label": "red",
+      "rule_ids": [
+        "EN-CLAIM-005"
+      ]
+    },
+    {
+      "text": "FDA approved formula.",
+      "label": "red",
+      "rule_ids": [
+        "EN-CLAIM-005"
+      ]
+    },
+    {
+      "text": "SPF 200 sunscreen for the strongest protection.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-009"
+      ]
+    },
+    {
+      "text": "Reapply every two hours.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

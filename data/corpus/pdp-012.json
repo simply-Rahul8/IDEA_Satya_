@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-012",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Gulmohar Garden",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Gulmohar Rose Water Toner",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Alcohol-free toner made with distilled rose water and glycerin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Gives skin a fresh feel after cleansing.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Spritz on face or apply with a cotton pad.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Shelf life is 24 months from the date of manufacture.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Store in a cool, dry place.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

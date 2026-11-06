@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-003",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Rangrez Beauty",
+  "category": "makeup",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Rangrez Skin-Tint Foundation, 24 Shades from Fair to Deep",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Buildable medium coverage with a natural satin finish.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Shade range covers fair, wheatish, medium, tan and deep skin tones.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Get the fairest shade in our range if you have a light skin tone.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Includes a pump and a handy shade-match guide.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Shake well and apply with a sponge or brush.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-002",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Morpankh Labs",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Morpankh Gentle Foaming Face Wash for Acne-Prone Skin",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "A mild cleanser designed for acne-prone and oily skin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Contains 0.5% salicylic acid and green tea extract.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Rinses clean and leaves skin feeling fresh.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fragrance level is low, patch test before first use.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Wet your face, lather a small amount and rinse with water.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

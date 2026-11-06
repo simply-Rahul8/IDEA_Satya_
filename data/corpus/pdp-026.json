@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-026",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Bhasma Beauty",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Bhasma Beauty Charcoal Face Wash",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "India's No. 1 face wash for glowing skin.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-012"
+      ]
+    },
+    {
+      "text": "Deep-cleansing formula with activated charcoal.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Lather in wet hands and massage on face.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Rinse well and pat dry.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

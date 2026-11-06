@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-041",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Madhumeh Naturals",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Madhumeh Herbal Body Lotion",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Cures diabetes naturally.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DMR-001"
+      ]
+    },
+    {
+      "text": "Helps in controlling high blood pressure.",
+      "label": "red",
+      "rule_ids": [
+        "EN-DMR-001"
+      ]
+    },
+    {
+      "text": "Aloe-based lotion with neem.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply daily.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

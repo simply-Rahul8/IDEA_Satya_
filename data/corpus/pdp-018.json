@@ -1,0 +1,45 @@
+{
+  "pdp_id": "pdp-018",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Lotus Lab India",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Lotus Lab Hydra Boost Gel Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Clinically proven to hydrate skin for 24 hours.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-004"
+      ]
+    },
+    {
+      "text": "Lightweight gel cream with hyaluronic acid and panthenol.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Dermatologically tested and suitable for sensitive skin.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-004"
+      ]
+    },
+    {
+      "text": "Fragrance-free formula.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply morning and night after cleansing.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-030",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Haldi House",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Haldi House Stretch Mark Body Butter",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Pregnancy-safe body butter made for expecting mothers.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-008"
+      ]
+    },
+    {
+      "text": "Shea butter, cocoa butter and vitamin E blend.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Massage on belly, hips and thighs.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Consult your doctor if you have concerns.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

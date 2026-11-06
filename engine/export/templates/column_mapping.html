@@ -1,0 +1,17 @@
+{# Column-mapping screen partial for the Frontend agent. Context: layout, mapping (header -> source or None), sources, action. #}
+<form method="post" action="{{ action }}" class="column-mapping">
+  <p>Layout: {{ layout.label }}</p>
+  <table>
+    <tr><th scope="col">Column</th><th scope="col">Filled from</th></tr>
+    {% for c in layout.columns %}
+    <tr>
+      <th scope="row"><label for="map-{{ loop.index }}">{{ c.header }}{% if c.required %} (required){% endif %}</label></th>
+      <td><select id="map-{{ loop.index }}" name="map:{{ c.header }}">
+        <option value=""{% if not mapping[c.header] %} selected{% endif %}>(leave blank)</option>
+        {% for s in sources %}<option value="{{ s }}"{% if mapping[c.header] == s %} selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <button type="submit">Export CSV</button>
+</form>

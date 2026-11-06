@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-023",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Surya Shield",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Surya Shield Ultra Sunscreen",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Total sun protection all day with one application.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-009"
+      ]
+    },
+    {
+      "text": "Broad-spectrum SPF 50 PA++++ formula.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Water-resistant for up to 40 minutes.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Reapply after swimming or sweating.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-029",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Ganga Glow",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Ganga Glow Brightening Face Pack",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Clay-based mask with sandalwood and turmeric.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Dermatologically tested and hypoallergenic.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-004"
+      ]
+    },
+    {
+      "text": "Apply a thin layer and leave for ten minutes.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Wash off with lukewarm water.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "pdp_id": "pdp-033",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Aarohi Care",
+  "category": "skin",
+  "band": "borderline",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Aarohi Gentle Intimate Wash",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Soap-free pH-balanced wash for daily external use.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "9 out of 10 users agree it is the best they have tried.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-006"
+      ]
+    },
+    {
+      "text": "Mild floral scent.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "For external use only.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,385 @@
+# Hindi lexicon (DRAFT). NOT reviewed by a native Hindi speaker or a regulatory consultant (plan P20, SAT-5).
+# Mirrors the non-overridable English rules (P17) in three written forms:
+#   devanagari     Devanagari script
+#   transliterated Hindi words in Roman letters (ilaaj, gori)
+#   hinglish       code-switched mix (Hindi verb with an English condition, or the reverse)
+# Matching folds nukta, chandrabindu, Devanagari digits and zero-width characters, and collapses Roman spelling
+# variants (aa/a, ee/i, oo/u, w/v, z/j), so list one spelling per variant. A trailing * is a prefix wildcard.
+# Hindi is verb-final, so verb_condition defaults to order: any.
+# Bump `version` on any change. Status flips to SIGNED_OFF only after the reviewer's written decision is logged in
+# engine/normalize/README.md.
+lexicon:
+  name: satya-hi
+  version: "0.1.0"
+  status: DRAFT
+  language: hi
+  updated: "2026-11-05"
+  reviewer: "native Hindi reviewer (SAT-5), pending"
+
+rules:
+  - id: HI-DRUG-001
+    category: drug_treatment
+    maps_to: EN-DRUG-001
+    title: "Treatment or cure of a skin disease or medical condition (Hindi)"
+    explanation: "A cosmetic cannot claim to treat, cure or heal a disease or medical condition. Such a claim makes the product a drug."
+    rewrite_hint: "Describe the cosmetic effect instead, for example 'cleanses oily skin' or 'for acne-prone skin'."
+    patterns:
+      - kind: verb_condition
+        form: devanagari
+        verbs: ["ठीक कर*", "ठीक हो*", "इलाज*", "उपचार*", "चिकित्सा", "निदान", "रामबाण", "रोग मुक्त*", "मुक्ति"]
+        conditions:
+          - "मुंहासे"
+          - "मुहांसे"
+          - "मुंहासों"
+          - "पिंपल*"
+          - "दाने"
+          - "एक्जिमा"
+          - "एग्जिमा"
+          - "सोरायसिस"
+          - "दाद"
+          - "रोसेशिया"
+          - "डर्मेटाइटिस"
+          - "संक्रमण*"
+          - "इन्फेक्शन*"
+          - "फंगल"
+          - "फफूंद*"
+          - "घाव*"
+          - "फोड़े"
+          - "फोड़ों"
+          - "फुंसी*"
+          - "एलर्जी"
+          - "त्वचा रोग*"
+          - "चर्म रोग*"
+          - "त्वचा विकार*"
+          - "त्वचा की बीमारी"
+          - "त्वचा की बीमारियों"
+        max_gap: 4
+      - kind: verb_condition
+        form: transliterated
+        verbs: ["thik kar*", "thik ho*", "ilaj*", "elaj*", "upchar*", "chikitsa", "ramban", "nidan"]
+        conditions:
+          - "munhase"
+          - "muhanse"
+          - "munhaso"
+          - "pimple*"
+          - "dane"
+          - "ekjima"
+          - "egjima"
+          - "sorayasis"
+          - "dad"
+          - "sankraman"
+          - "infection*"
+          - "fungal"
+          - "ghav*"
+          - "fode"
+          - "funsi*"
+          - "elarji"
+          - "allergy"
+          - "twacha rog*"
+          - "charm rog*"
+          - "twacha vikar*"
+        max_gap: 4
+      - kind: verb_condition
+        form: hinglish
+        verbs: ["ठीक कर*", "ठीक हो*", "इलाज*", "ilaj*", "elaj*", "upchar*", "thik kar*", "thik ho*", "cure*", "treat*", "heal*"]
+        conditions:
+          - "acne"
+          - "pimple*"
+          - "eczema"
+          - "psoriasis"
+          - "dermatitis"
+          - "rosacea"
+          - "ringworm"
+          - "fungal"
+          - "infection*"
+          - "allergy"
+          - "wound*"
+          - "skin disease*"
+          - "skin disorder*"
+          - "skin condition*"
+          - "मुंहासे"
+          - "एक्जिमा"
+          - "सोरायसिस"
+          - "दाद"
+          - "munhase"
+          - "dad"
+        max_gap: 4
+    examples:
+      hi_positive:
+        - { text: "यह क्रीम एक्ज़िमा को सात दिन में ठीक करती है।", form: devanagari }
+        - { text: "मुँहासों का पक्का इलाज, आज़माइए हमारा फेस वॉश।", form: devanagari }
+        - { text: "सोरायसिस का उपचार करे यह तेल।", form: devanagari }
+        - { text: "Eczema ka ilaaj ab ghar baithe.", form: transliterated }
+        - { text: "Dad aur fungal infection ko thik kare.", form: transliterated }
+        - { text: "Yeh cream pimples ko cure karti hai, इलाज गारंटीड।", form: hinglish }
+        - { text: "Acne ka इलाज sirf 7 din mein.", form: hinglish }
+      hi_negative:
+        - { text: "मुंहासों वाली त्वचा के लिए हल्का फेस वॉश।", form: devanagari }
+        - { text: "यह फेस वॉश तैलीय त्वचा को साफ़ करता है।", form: devanagari }
+        - { text: "Acne-prone skin ke liye gentle face wash.", form: transliterated }
+        - { text: "Tel ko thik se lagayein aur halke haath se massage karein.", form: transliterated }
+        - { text: "Oily skin ke लिए daily cleanser.", form: hinglish }
+      en_positive:
+        - "This cream cures eczema in seven days."
+        - "A face wash that treats pimples."
+      en_negative:
+        - "A gentle face wash for acne-prone skin."
+        - "Cleanses oily skin."
+    open_questions:
+      - "Is 'दूर करे' (removes) for pimples and acne a treatment claim? The English rule does not flag 'removes'; this draft does not flag 'दूर कर*' either."
+      - "Is 'खुजली' (itching) a condition (flag) or a symptom a cosmetic may soothe (allow)? Left out of the draft."
+      - "Please list the spellings and colloquial forms of these conditions that listings actually use (मुँहासे, मुहाँसे, दाने, फुंसी, छाले)."
+
+  - id: HI-DMR-001
+    category: dmr_disease
+    maps_to: EN-DMR-001
+    title: "Cure, treatment or prevention of a disease listed in the DMR Act (Hindi)"
+    explanation: "Advertising a product as treating, curing or preventing a disease named in the Drugs and Magic Remedies Act is prohibited."
+    rewrite_hint: "Remove the disease. A cosmetic listing cannot refer to these conditions."
+    patterns:
+      - kind: verb_condition
+        form: devanagari
+        verbs: ["ठीक कर*", "ठीक हो*", "इलाज*", "उपचार*", "रोकथाम", "बचाव", "नियंत्रित कर*", "कंट्रोल कर*", "खत्म कर*", "जड़ से", "रामबाण", "चिकित्सा"]
+        conditions:
+          - "मधुमेह"
+          - "डायबिटीज*"
+          - "शुगर"
+          - "कैंसर"
+          - "मोतियाबिंद"
+          - "ग्लूकोमा"
+          - "मिर्गी"
+          - "लकवा"
+          - "कुष्ठ*"
+          - "कोढ़"
+          - "सफेद दाग"
+          - "ल्यूकोडर्मा"
+          - "विटिलिगो"
+          - "टीबी"
+          - "क्षय रोग"
+          - "तपेदिक"
+          - "दमा"
+          - "अस्थमा"
+          - "उच्च रक्तचाप"
+          - "ब्लड प्रेशर"
+          - "बीपी"
+          - "हृदय रोग*"
+          - "दिल की बीमारी"
+          - "हार्ट अटैक"
+          - "पीलिया"
+          - "घेंघा"
+          - "हर्निया"
+          - "गठिया"
+          - "बहरापन"
+          - "अंधापन"
+          - "बवासीर"
+          - "अल्सर"
+          - "एचआईवी"
+          - "एड्स"
+          - "बांझपन"
+          - "नपुंसकता"
+          - "मलेरिया"
+          - "डेंगू"
+          - "टाइफाइड"
+          - "हेपेटाइटिस"
+          - "गंजापन"
+          - "मोटापा"
+          - "बुखार"
+        max_gap: 4
+      - kind: verb_condition
+        form: transliterated
+        verbs: ["thik kar*", "thik ho*", "ilaj*", "elaj*", "upchar*", "roktham", "bachav", "niyantrit kar*", "control kar*", "khatam kar*", "ramban"]
+        conditions:
+          - "madhumeh"
+          - "diabet*"
+          - "sugar"
+          - "cancer"
+          - "motiyabind"
+          - "mirgi"
+          - "lakva"
+          - "kushth*"
+          - "kodh"
+          - "safed dag"
+          - "tibi"
+          - "dama"
+          - "asthma"
+          - "blood pressure"
+          - "bp"
+          - "piliya"
+          - "gathiya"
+          - "bavasir"
+          - "ulcer*"
+          - "hiv"
+          - "aids"
+          - "banjhpan"
+          - "napunsakta"
+          - "malaria"
+          - "dengue"
+          - "ganjapan"
+          - "motapa"
+          - "bukhar"
+        max_gap: 4
+      - kind: verb_condition
+        form: hinglish
+        verbs: ["ठीक कर*", "इलाज*", "ilaj*", "elaj*", "thik kar*", "control kar*", "kam kar*", "cure*", "treat*", "prevent*", "reverse*"]
+        conditions:
+          - "diabet*"
+          - "cancer"
+          - "arthritis"
+          - "hypertension"
+          - "blood pressure"
+          - "bp"
+          - "sugar"
+          - "thyroid"
+          - "asthma"
+          - "obesity"
+          - "baldness"
+          - "vitiligo"
+          - "piles"
+          - "hiv"
+          - "मधुमेह"
+          - "शुगर"
+          - "कैंसर"
+          - "गंजापन"
+        max_gap: 4
+    examples:
+      hi_positive:
+        - { text: "यह तेल मधुमेह को जड़ से ठीक करे।", form: devanagari }
+        - { text: "गंजापन का इलाज अब संभव।", form: devanagari }
+        - { text: "कैंसर की रोकथाम करता है यह साबुन।", form: devanagari }
+        - { text: "Diabetes ka ilaj ayurvedic tel se.", form: transliterated }
+        - { text: "Safed dag ko thik kare yeh lep.", form: transliterated }
+        - { text: "Controls sugar, यह क्रीम शुगर को control kare।", form: hinglish }
+        - { text: "Cancer ko cure karne wala shampoo.", form: hinglish }
+      hi_negative:
+        - { text: "संवेदनशील त्वचा पर इस्तेमाल से पहले पैच टेस्ट करें।", form: devanagari }
+        - { text: "यह शैम्पू सिर की त्वचा को साफ़ करता है।", form: devanagari }
+        - { text: "Baalon ko mulayam banata hai.", form: transliterated }
+        - { text: "Sugar scrub se skin smooth rakhein.", form: transliterated }
+        - { text: "Daily use ke liye mild shampoo.", form: hinglish }
+      en_positive:
+        - "Cures diabetes naturally."
+        - "Treats baldness in 30 days."
+      en_negative:
+        - "A mild shampoo for daily use."
+        - "Smooths and conditions hair."
+    open_questions:
+      - "The condition list mirrors the draft English list, which is itself unverified against the DMR Schedule."
+      - "'शुगर' and 'sugar' also mean sugar (scrubs, sweetener). Safe only because a treatment verb must be present within four words. Is that enough?"
+      - "'मुक्ति' and 'बचाव' (freedom from, protection) are common non-medical words. Confirm they stay restricted to this rule."
+
+  - id: HI-FAIR-001
+    category: fairness
+    maps_to: EN-FAIR-001
+    title: "Claim to lighten, whiten or make skin fairer (Hindi)"
+    explanation: "Claims that a product makes skin fairer, lighter or whiter are blocked. They imply lighter skin is better and are not allowed in listings."
+    rewrite_hint: "Describe the care benefit instead, for example 'helps skin look even and radiant'."
+    patterns:
+      - kind: verb_condition
+        form: devanagari
+        verbs: ["गोर*", "सफेद कर*", "उजला*", "उजली", "उजले", "गोरा", "गोरी"]
+        conditions: ["त्वचा", "त्वचा को", "रंग", "रंगत", "चेहरा", "चेहरे", "चेहरे को", "शरीर", "बगल"]
+        max_gap: 3
+      - kind: phrase
+        form: devanagari
+        phrases: ["गोरापन", "गोरेपन", "फेयरनेस", "फेअरनेस", "फेयर एंड", "गोरा रंग", "गोरी त्वचा", "स्किन व्हाइटनिंग", "व्हाइटनिंग क्रीम", "व्हाइटनिंग सीरम", "व्हाइटनिंग फेस वॉश"]
+      - kind: verb_condition
+        form: transliterated
+        verbs: ["gor*", "safed kar*", "ujal*"]
+        conditions: ["twacha", "tvacha", "rang", "rangat", "chehra", "chehre", "sharir", "skin"]
+        max_gap: 3
+      - kind: phrase
+        form: transliterated
+        phrases: ["goraapan", "gorapan", "gora rang", "gori twacha", "fairness", "skin whitening"]
+      - kind: verb_condition
+        form: hinglish
+        verbs: ["gor*", "gora", "gori", "गोर*", "whiten*", "lighten*", "fair"]
+        conditions: ["skin", "chehra", "rang", "त्वचा", "रंग", "चेहरा", "complexion", "face"]
+        max_gap: 3
+      - kind: phrase
+        form: hinglish
+        phrases: ["fairness क्रीम", "whitening क्रीम", "गोरेपन की cream", "fair skin", "गोरी skin"]
+    examples:
+      hi_positive:
+        - { text: "सिर्फ सात दिन में गोरापन पाएं।", form: devanagari }
+        - { text: "यह क्रीम आपकी त्वचा को गोरा करती है।", form: devanagari }
+        - { text: "Gora rang paane ke liye yeh cream lagayein.", form: transliterated }
+        - { text: "Chehra gora kare, sirf 7 din mein.", form: transliterated }
+        - { text: "Fairness क्रीम जो skin को गोरी बनाए।", form: hinglish }
+      hi_negative:
+        - { text: "यह क्रीम त्वचा को नमी देती है और रंगत को निखारती है।", form: devanagari }
+        - { text: "फ़ाउंडेशन 24 शेड्स में उपलब्ध।", form: devanagari }
+        - { text: "Chehre ko saaf aur taza rakhta hai.", form: transliterated }
+        - { text: "Dry skin ke liye hydrating moisturiser.", form: hinglish }
+      en_positive:
+        - "Whitens your skin in 7 days."
+        - "A fairness cream for glowing faces."
+      en_negative:
+        - "Foundation in 24 shades from fair to deep."
+        - "Brightening vitamin C serum for dull skin."
+    open_questions:
+      - "'रंगत निखारे' (improves complexion/glow) is allowed in this draft. Is it, or does it imply colour change?"
+      - "'गोर*' is a prefix wildcard. Names such as 'गोरखपुर' only flag next to a skin word within three words. Acceptable?"
+      - "Is 'उजला' (bright, clear) used for skin a fairness claim? The draft flags 'उजला*' next to a skin word."
+
+  - id: HI-FAIR-002
+    category: fairness
+    maps_to: EN-FAIR-002
+    title: "Darkness presented as a defect to remove (Hindi)"
+    explanation: "Presenting dark or dusky skin as a problem to remove or fix is blocked."
+    rewrite_hint: "Describe a care benefit that does not refer to skin colour."
+    patterns:
+      - kind: verb_condition
+        form: devanagari
+        verbs: ["हटा*", "दूर कर*", "मिटा*", "ठीक कर*", "खत्म कर*", "से छुटकारा", "अलविदा"]
+        conditions: ["सांवलापन", "सांवलेपन", "सांवला रंग", "सांवली त्वचा", "काली त्वचा", "काला रंग", "डार्क स्किन", "सांवली", "सांवला"]
+        max_gap: 3
+      - kind: verb_condition
+        form: transliterated
+        verbs: ["hata*", "door kar*", "dur kar*", "mita*", "thik kar*", "khatam kar*", "chhutkara"]
+        conditions: ["sanvlapan", "sanvla rang", "sanvli twacha", "kali twacha", "kala rang", "dark skin", "sanvli", "sanvla"]
+        max_gap: 3
+      - kind: verb_condition
+        form: hinglish
+        verbs: ["हटा*", "दूर कर*", "hata*", "door kar*", "dur kar*", "remove*", "fix*", "get rid of"]
+        conditions: ["dark skin", "dusky skin", "सांवलापन", "सांवली त्वचा", "sanvlapan", "काली त्वचा"]
+        max_gap: 3
+    examples:
+      hi_positive:
+        - { text: "सांवलापन हटाएं, पाएं निखार।", form: devanagari }
+        - { text: "काली त्वचा को दूर करे यह क्रीम।", form: devanagari }
+        - { text: "Sanvlapan door karein sirf ek hafte mein.", form: transliterated }
+        - { text: "Dark skin ko hatayein, पाएं साफ़ त्वचा।", form: hinglish }
+      hi_negative:
+        - { text: "सांवली त्वचा के लिए बनाया गया फाउंडेशन शेड।", form: devanagari }
+        - { text: "Sanvli twacha ke liye gehre shades.", form: transliterated }
+        - { text: "Deep shades for dusky skin tones.", form: hinglish }
+      en_positive:
+        - "Removes dark skin."
+      en_negative:
+        - "Deep shades designed for dusky skin tones."
+    open_questions:
+      - "Shade-range wording ('सांवली त्वचा के लिए शेड') is allowed. Does the reviewer agree it reads as inclusive and not as a defect?"
+      - "Please give the common Hindi terms used for dark or dusky skin in listings, and mark which are slurs."
+
+allowlist:
+  - id: AL-HI-001
+    phrases:
+      - "किसी रोग के निदान उपचार इलाज या रोकथाम के लिए नहीं है"
+      - "किसी रोग का निदान उपचार इलाज या रोकथाम करने के लिए नहीं है"
+      - "किसी बीमारी का इलाज नहीं करता"
+      - "रोग के निदान उपचार या रोकथाम के लिए नहीं है"
+    applies_to: ["HI-DRUG-001", "HI-DMR-001"]
+    note: "Standard Hindi negative disclaimer. It denies the drug claim, so it must not be flagged as one."
+    examples:
+      - "यह उत्पाद किसी रोग के निदान, उपचार, इलाज या रोकथाम के लिए नहीं है।"
+
+  - id: AL-HI-002
+    phrases:
+      - "दाँतों को गोरा"
+      - "दांतों को सफेद"
+      - "दांत सफेद"
+      - "दाँत सफेद"
+    applies_to: ["HI-FAIR-001"]
+    note: "Teeth whitening is not skin lightening."
+    examples:
+      - "दांतों को सफेद करने वाला टूथपेस्ट।"

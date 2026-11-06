@@ -1,0 +1,41 @@
+{
+  "pdp_id": "pdp-014",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Palash Skincare",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Palash Ceramide Barrier Cream",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Rich cream for dry and sensitive skin with ceramides and squalane.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Fragrance-free formula.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Helps skin feel soft and comfortable all day.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Protects skin from dryness.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Apply generously to face and body as needed.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

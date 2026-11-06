@@ -1,0 +1,46 @@
+{
+  "pdp_id": "pdp-010",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Dhara Dermals",
+  "category": "skin",
+  "band": "clean",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Dhara 5% Niacinamide Face Serum",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Contains 5% niacinamide and zinc PCA.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Water-based serum that sits well under moisturiser.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Developed for oily and combination skin.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Visible results with regular use.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use once or twice daily after cleansing.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Not intended to diagnose, treat, cure or prevent any disease.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}

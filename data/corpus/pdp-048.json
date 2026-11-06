@@ -1,0 +1,40 @@
+{
+  "pdp_id": "pdp-048",
+  "synthetic": true,
+  "source": "Fictional listing written for SAT-18 test fixtures. Not a real product.",
+  "brand": "Navya Naturals",
+  "category": "skin",
+  "band": "risky",
+  "labels_status": "draft",
+  "sentences": [
+    {
+      "text": "Navya Naturals Turmeric Soap",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Lightens skin tone in two weeks.",
+      "label": "red",
+      "rule_ids": [
+        "EN-FAIR-001"
+      ]
+    },
+    {
+      "text": "Removes dark spots and pigmentation.",
+      "label": "orange",
+      "rule_ids": [
+        "EN-CLAIM-003"
+      ]
+    },
+    {
+      "text": "Handmade bar with turmeric.",
+      "label": "safe",
+      "rule_ids": []
+    },
+    {
+      "text": "Use daily.",
+      "label": "safe",
+      "rule_ids": []
+    }
+  ]
+}
