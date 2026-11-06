@@ -246,9 +246,7 @@ def test_children_must_share_the_parents_workspace(db, tenants):
     a, b = tenants["alice"], tenants["bob"]
     as_service(db)
     with pytest.raises(psycopg.errors.ForeignKeyViolation):
-        db.execute(
-            "insert into claims (workspace_id, product_id, text) values (%s, %s, 'x')", (b["ws"], a["product"])
-        )
+        db.execute("insert into claims (workspace_id, product_id, text) values (%s, %s, 'x')", (b["ws"], a["product"]))
     with pytest.raises(psycopg.errors.ForeignKeyViolation):
         db.execute(
             "insert into listings (workspace_id, product_id, source_text) values (%s, %s, 'x')",
@@ -259,9 +257,7 @@ def test_children_must_share_the_parents_workspace(db, tenants):
         db.execute("insert into evidence (workspace_id, claim_id, kind) values (%s, %s, 'other')", (b["ws"], cid))
     job = create_job(db, str(a["ws"]), "bulk", [{"n": 1}])
     with pytest.raises(psycopg.errors.ForeignKeyViolation):
-        db.execute(
-            "insert into job_items (job_id, workspace_id, position) values (%s, %s, 99)", (job, b["ws"])
-        )
+        db.execute("insert into job_items (job_id, workspace_id, position) values (%s, %s, 99)", (job, b["ws"]))
 
 
 @pytest.mark.parametrize(
@@ -311,3 +307,26 @@ def test_storage_bucket_is_private_and_scoped_to_workspace_folders(db, tenants):
         db.execute("insert into storage.objects (bucket_id, name) values ('evidence', 'not-a-uuid/x.pdf')")
     as_user(db, None)
     assert db.execute("select count(*) from storage.objects").fetchone()[0] == 0
+
+
+def test_shared_limiter_counts_in_postgres_and_falls_back(db):
+    from engine.ratelimit import SharedLimiter
+
+    as_service(db)
+
+    class Conn:  # one limiter per "instance", sharing the same database
+        def cursor(self):
+            return db.cursor()
+
+        def commit(self):
+            pass
+
+    one, two = (SharedLimiter(Conn, 3, 3600) for _ in range(2))
+    results = [lim.hit("ip:shared") for lim in (one, two, one, two, one)]
+    assert results[:3] == [None, None, None] and all(isinstance(r, int) and r > 0 for r in results[3:])
+
+    def broken():
+        raise OSError("db down")
+
+    down = SharedLimiter(broken, 1, 60)
+    assert down.hit("k") is None and down.hit("k") is not None  # per-process fallback still limits

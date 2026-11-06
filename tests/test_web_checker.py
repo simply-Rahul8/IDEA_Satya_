@@ -4,6 +4,7 @@ import re
 
 import pytest
 from fastapi.testclient import TestClient
+from helpers import secure
 
 from asgi import app
 from web import assets, checker
@@ -16,7 +17,7 @@ BANNED = re.compile(r"\b(compliant|approved|safe)\b", re.I)
 @pytest.fixture()
 def client():
     checker.limiter.reset()
-    return TestClient(app)
+    return secure(TestClient(app))
 
 
 DISCLAIMER = "It does not mean the listing is approved by a marketplace or a regulator."

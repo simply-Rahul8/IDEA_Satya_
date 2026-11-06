@@ -38,7 +38,7 @@ _ROWS = {
 }
 
 
-def seed() -> ReviewState:
+def build() -> ReviewState:
     ev = lambda t, ref=None: Evidence(type=t, reference=ref)  # noqa: E731
     truth = ProductTruth(
         product_name="Rosewater Dew Serum", size="30 ml", how_to_use="Apply two drops to clean skin.",
@@ -70,5 +70,15 @@ def seed() -> ReviewState:
         rs,
         rewrites={"bullet_3-0": "A gentle serum made for everyday use on sensitive skin."},
     )
-    store.put(state)
+    return state
+
+
+def register() -> None:
+    """Each visitor gets their own copy of the demo pack on first use; nobody shares or overwrites it."""
+    store.register(PACK_ID, build)
+
+
+def seed(owner: str) -> ReviewState:
+    state = build()
+    store.put(owner, state)
     return state

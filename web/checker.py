@@ -8,22 +8,21 @@ Platform confirms it (specs: screen-checker section 5).
 from __future__ import annotations
 
 import os
-import threading
-import time
-from collections import defaultdict, deque
 from dataclasses import dataclass
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from markupsafe import Markup
+from starlette.concurrency import run_in_threadpool
 
 from engine.product_type import GateStatus, check_product_type
-from engine.ratelimit import ip_key
+from engine.ratelimit import MemoryLimiter, ip_key, make_limiter
 from engine.rules import RuleSet, default_ruleset, evaluate
 from engine.rules.matcher import Flag
 from web import view
 from web.app import form_data, render
+from web.security import client_ip, guard_unsafe
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(guard_unsafe)])
 
 CHECKER_MAX_CHARS = int(
     os.environ.get("CHECKER_MAX_CHARS", "5000")
@@ -34,32 +33,10 @@ SAMPLE_TEXT = (
 )
 
 
-class RateLimiter:
-    """In-process sliding window. Platform replaces this with `engine.ratelimit.hit` on the service connection."""
-
-    def __init__(self, limit: int, window_s: int):
-        self.limit, self.window_s = limit, window_s
-        self._hits: dict[str, deque[float]] = defaultdict(deque)
-        self._lock = threading.Lock()
-
-    def hit(self, key: str) -> int | None:
-        """None while allowed; otherwise the seconds until the oldest hit leaves the window."""
-        now = time.monotonic()
-        with self._lock:
-            q = self._hits[key]
-            while q and now - q[0] > self.window_s:
-                q.popleft()
-            if len(q) >= self.limit:
-                return max(1, int(self.window_s - (now - q[0])) + 1)
-            q.append(now)
-            return None
-
-    def reset(self) -> None:
-        with self._lock:
-            self._hits.clear()
+RateLimiter = MemoryLimiter  # kept for callers and tests that build their own
 
 
-limiter = RateLimiter(
+limiter = make_limiter(
     int(os.environ.get("CHECKER_RATE_LIMIT", "120")), int(os.environ.get("CHECKER_RATE_WINDOW_S", "600"))
 )
 
@@ -129,8 +106,7 @@ def _page_ctx(result: CheckResult, full_page: bool) -> dict:
 
 
 def _limited(request: Request) -> int | None:
-    client = request.client.host if request.client else "unknown"
-    return limiter.hit(ip_key(client))
+    return limiter.hit(ip_key(client_ip(request), "check"))
 
 
 @router.get("/check")
@@ -142,7 +118,7 @@ def check_page(request: Request):
 async def check_post(request: Request):
     text = (await form_data(request)).get("text", "")
     htmx = request.headers.get("HX-Request") == "true"
-    wait = _limited(request)
+    wait = await run_in_threadpool(_limited, request)  # may hit Postgres
     if wait is not None:
         ctx = {**_page_ctx(run_check(text), not htmx), "wait_minutes": max(1, round(wait / 60)), "rate_limited": True}
         name = "checker/_result.html" if htmx else "checker/page.html"

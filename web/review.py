@@ -9,17 +9,20 @@ from __future__ import annotations
 
 import json
 import threading
+from collections import OrderedDict
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from engine import api
 from engine.models import ClaimStatus, EvidenceType, PDPPack, ProductTruth, Severity
 from engine.rules import OverrideNotAllowed, RuleSet, check_override, evaluate
 from web import view
 from web.app import form_data, render
+from web.security import guard_unsafe, owner_of
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(guard_unsafe)])
 
 SECTION_LABELS = {
     "title": "Title",
@@ -53,6 +56,8 @@ TYPE_LABELS = {
     "descriptive": "Descriptive",
 }
 MAX_REASON = 500
+MIN_EVIDENCE_CHARS = 4  # letters or digits an evidence reference must contain ('doc-7' is the shortest real one)
+MIN_REASON_CHARS = 3
 ALLOW_RED_OVERRIDE = True  # ADR-10: overridable reds may be kept with an evidence reference; non-overridable never
 
 
@@ -80,21 +85,41 @@ class ReviewState:
 
 
 class PackStore:
-    """In-memory stand-in for the Platform's pack storage (RLS, one brand workspace per user)."""
+    """In-memory stand-in for the Platform's pack storage (RLS, one brand workspace per user).
 
-    def __init__(self) -> None:
-        self._packs: dict[str, ReviewState] = {}
+    Packs are keyed by (owner, pack_id): one visitor can never read or change another's. A pack id with a
+    registered factory (the preview demo) is created fresh for each owner on first use. Owners are evicted
+    least-recently-used so an open preview cannot grow without bound.
+    """
+
+    def __init__(self, max_owners: int = 500) -> None:
+        self._packs: dict[tuple[str, str], ReviewState] = {}
+        self._owners: OrderedDict[str, None] = OrderedDict()
+        self._factories: dict[str, Callable[[], ReviewState]] = {}
+        self._max_owners = max_owners
         self._lock = threading.RLock()
 
-    def put(self, state: ReviewState) -> None:
-        with self._lock:
-            self._packs[state.pack_id] = state
+    def register(self, pack_id: str, factory: Callable[[], ReviewState]) -> None:
+        self._factories[pack_id] = factory
 
-    def get(self, pack_id: str) -> ReviewState:
+    def put(self, owner: str, state: ReviewState) -> None:
         with self._lock:
-            if pack_id not in self._packs:
+            self._owners[owner] = None
+            self._owners.move_to_end(owner)
+            while len(self._owners) > self._max_owners:
+                old, _ = self._owners.popitem(last=False)
+                for k in [k for k in self._packs if k[0] == old]:
+                    del self._packs[k]
+            self._packs[(owner, state.pack_id)] = state
+
+    def get(self, owner: str, pack_id: str) -> ReviewState:
+        with self._lock:
+            if (owner, pack_id) not in self._packs and pack_id in self._factories:
+                self.put(owner, self._factories[pack_id]())
+            if (owner, pack_id) not in self._packs:
                 raise HTTPException(404, "No such pack")
-            return self._packs[pack_id]
+            self._owners.move_to_end(owner)
+            return self._packs[(owner, pack_id)]
 
     @property
     def lock(self) -> threading.RLock:
@@ -412,13 +437,13 @@ def _apply_text(state: ReviewState, sid: str, text: str) -> None:
 
 @router.get("/packs/{pack_id}/review")
 def review_page(request: Request, pack_id: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     return render(request, "review/page.html", build_view(state))
 
 
 @router.post("/packs/{pack_id}/sentences/{sid}/check")
 async def check_sentence(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     text = (await form_data(request)).get("text", "")
     with store.lock:
         _apply_text(state, sid, text)
@@ -428,7 +453,7 @@ async def check_sentence(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/rewrite")
 async def use_rewrite(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     with store.lock:
         key, i, sentence = _sentence(state, sid)
         new = state.rewrites.get(sid)
@@ -452,7 +477,7 @@ async def use_rewrite(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/keep")
 async def keep(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     data = await form_data(request)
     reason = data.get("reason", "").strip()[:MAX_REASON]
     with store.lock:
@@ -474,7 +499,8 @@ async def keep(request: Request, pack_id: str, sid: str):
             if f.severity == Severity.RED and not ALLOW_RED_OVERRIDE:
                 raise HTTPException(403, f"{f.rule_id} cannot be overridden")
         evidence = any(f.severity == Severity.RED for f in open_flags)
-        if not reason:
+        needed = MIN_EVIDENCE_CHARS if evidence else MIN_REASON_CHARS
+        if sum(c.isalnum() for c in reason) < needed:  # one character or punctuation is not a reference
             msg = (
                 "Add an evidence reference: a document ID or an uploaded file."
                 if evidence
@@ -495,7 +521,7 @@ async def keep(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/edit-reason")
 async def edit_reason(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     with store.lock:
         _sentence(state, sid)
         old = next((v.reason for k, v in state.kept.items() if k[0] == sid), "")
@@ -508,7 +534,7 @@ async def edit_reason(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/report")
 async def report_flag(request: Request, pack_id: str, sid: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     data = await form_data(request)
     rule_id = data.get("rule_id", "")
     with store.lock:
@@ -526,7 +552,7 @@ async def report_flag(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/approve")
 async def approve(request: Request, pack_id: str):
-    state = store.get(pack_id)
+    state = store.get(owner_of(request), pack_id)
     data = await form_data(request)
     with store.lock:
         # Texts the browser holds that the server never checked (a failed re-check) are re-checked now.

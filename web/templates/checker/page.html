@@ -17,6 +17,7 @@
     </section>
     {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
     <form class="sheet-wrap" method="post" action="/check" x-data="satyaChecker" x-on:input="mirror" x-on:paste="paste">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       {%- set rate = rate_limited | default(false) -%}
       <div class="paper-wrap paper">
         {{ highlight_field("text", "text", r.text, r.backdrop, "Product listing copy to check",

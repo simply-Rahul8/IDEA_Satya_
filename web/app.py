@@ -104,7 +104,11 @@ templates.env.globals["e"] = escape
 
 def render(request: Request, name: str, ctx: dict | None = None, status: int = 200, headers: dict | None = None):
     """TemplateResponse with the page context, the CSP and no-store (checker text is private to the request)."""
-    context = {**page_context((ctx or {}).get("ruleset")), **(ctx or {})}
+    context = {
+        **page_context((ctx or {}).get("ruleset")),
+        "csrf_token": getattr(request.state, "csrf", ""),
+        **(ctx or {}),
+    }
     resp = templates.TemplateResponse(request, name, context, status_code=status)
     resp.headers["Content-Security-Policy"] = CSP
     resp.headers["Cache-Control"] = "no-store"
@@ -116,12 +120,26 @@ def render(request: Request, name: str, ctx: dict | None = None, status: int = 2
 
 
 async def form_data(request: Request, limit: int = 64_000) -> dict[str, str]:
-    """application/x-www-form-urlencoded body as a flat dict. Needs no extra dependency; caps the body size."""
+    """application/x-www-form-urlencoded body as a flat dict. Needs no extra dependency.
+
+    The size cap is enforced before the body is buffered: by Content-Length when given, and while streaming
+    when not (chunked), so an oversized upload is never held in memory. Parsed once per request.
+    """
     from urllib.parse import parse_qs
 
-    body = await request.body()
-    if len(body) > limit:
-        from fastapi import HTTPException
+    from fastapi import HTTPException
 
+    cached = getattr(request.state, "form", None)
+    if cached is not None:
+        return cached
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > limit:
         raise HTTPException(413, "Request too large")
-    return {k: v[-1] for k, v in parse_qs(body.decode("utf-8", "replace"), keep_blank_values=True).items()}
+    body = bytearray()
+    async for chunk in request.stream():
+        body += chunk
+        if len(body) > limit:
+            raise HTTPException(413, "Request too large")
+    parsed = {k: v[-1] for k, v in parse_qs(body.decode("utf-8", "replace"), keep_blank_values=True).items()}
+    request.state.form = parsed
+    return parsed
