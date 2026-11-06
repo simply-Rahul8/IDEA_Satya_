@@ -1,0 +1,53 @@
+{
+  "claims": [
+    {
+      "evidence_note": "label p2",
+      "evidence_reference": "doc-1",
+      "evidence_type": "ingredient_list",
+      "id": "c1",
+      "status": "confirmed",
+      "text": "Contains 2% niacinamide"
+    }
+  ],
+  "content_sha256": "2cb9985c220e02e0bd7f825ac722e8cef9a33f63dfbeaf2aee3d9eb61caa7ff5",
+  "disclaimer": "Not legal advice · rule set v0.1.0-draft",
+  "exported_at": "2026-11-05T12:00:00Z",
+  "flags": [
+    {
+      "citation": null,
+      "matched_text": null,
+      "override_reason": "brand supplied lab note",
+      "rule_id": "R-TEST",
+      "section": "bullet_1",
+      "sentence_index": 0,
+      "severity": "orange",
+      "source": "rule"
+    }
+  ],
+  "format": "csv",
+  "layout_id": "generic-v0",
+  "mapping": {
+    "Brand": "brand",
+    "Bullet 1": "bullet_1",
+    "Bullet 2": "bullet_2",
+    "Bullet 3": "bullet_3",
+    "Bullet 4": "bullet_4",
+    "Bullet 5": "bullet_5",
+    "Category": "category",
+    "Country Of Origin": "country_of_origin",
+    "Description": "description",
+    "How To Use": "how_to_use",
+    "Ingredients": "ingredients",
+    "Manufacturer": "manufacturer",
+    "Product Name": "product_name",
+    "SEO Description": "seo_description",
+    "SEO Title": "seo_title",
+    "Size": "size",
+    "Title": "title",
+    "Warnings And Storage": "warnings_storage"
+  },
+  "overrides": 1,
+  "red_flags": 0,
+  "rule_set_version": "v0.1.0-draft",
+  "verifier_passed": true
+}

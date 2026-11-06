@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Satya review report: {{ truth.product_name }}</title>
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; color: #1a1a1a; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.4rem; } h2 { font-size: 1.1rem; margin-top: 1.5rem; border-bottom: 1px solid #999; }
+  .stamp { font-weight: 600; border: 1px solid #1a1a1a; padding: .4rem .6rem; display: inline-block; }
+  table { border-collapse: collapse; width: 100%; } th, td { text-align: left; border: 1px solid #bbb; padding: .25rem .4rem; vertical-align: top; }
+  @media print { body { margin: 0; max-width: none; } h2 { break-after: avoid; } tr { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<p class="stamp">{{ stamp }}</p>
+<h1>{{ truth.product_name }}{% if truth.brand %} · {{ truth.brand }}{% endif %}</h1>
+<p>Result: no flagged risks under rule set {{ version }}. Red flags: {{ audit.red_flags }}. Overrides: {{ audit.overrides }}.
+Rule set status: draft until consultant sign-off. Exported {{ audit.exported_at }}; content SHA-256 {{ audit.content_sha256 }}.</p>
+
+<h2>Listing</h2>
+{% for sec in pack.sections %}
+<h3>{{ sec.key }}</h3>
+<p>{% for s in sec.sentences %}{{ s.text }} {% endfor %}</p>
+{% endfor %}
+
+<h2>Claims and evidence</h2>
+<table>
+<tr><th>Claim</th><th>Status</th><th>Evidence</th><th>Reference</th></tr>
+{% for c in audit.claims %}
+<tr><td>{{ c.text }}</td><td>{{ c.status }}</td><td>{{ c.evidence_type or "none" }}</td><td>{{ c.evidence_reference or "" }}</td></tr>
+{% endfor %}
+</table>
+
+<h2>Flags and overrides</h2>
+{% if audit.flags %}
+<table>
+<tr><th>Where</th><th>Rule</th><th>Level</th><th>Override reason</th></tr>
+{% for f in audit.flags %}
+<tr><td>{{ f.section }}[{{ f.sentence_index }}]</td><td>{{ f.rule_id }}</td><td>{{ f.severity }}</td><td>{{ f.override_reason or "" }}</td></tr>
+{% endfor %}
+</table>
+{% else %}<p>No flags raised.</p>{% endif %}
+
+<p><small>{{ stamp }}. This report records automated checks against a draft rule set. It does not certify the listing.</small></p>
+</body>
+</html>
