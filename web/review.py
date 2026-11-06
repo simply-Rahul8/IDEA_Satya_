@@ -1,28 +1,26 @@
 """Review screen (variant B, Truth <-> Copy): GET /packs/{id}/review and its HTMX actions.
 
 Sentence checks are deterministic (`engine.api.edit_sentence`); Approve re-verifies the whole pack (`verify_pack`,
-fail closed). Persistence and auth belong to Platform: this module talks to a `PackStore` and ships an in-memory one
-seeded with a clearly-labelled demo pack so the page can be previewed. Nothing here says "compliant" (P20).
+fail closed). Every pack is read and saved through the workspace-scoped repository (`web.packs`); a pack id from
+another workspace is a 404. Nothing here says "compliant" (P20).
 """
 
 from __future__ import annotations
 
 import json
-import threading
-from collections import OrderedDict
-from collections.abc import Callable
-from dataclasses import dataclass, field
+from contextlib import contextmanager
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from engine import api
 from engine.models import ClaimStatus, EvidenceType, PDPPack, ProductTruth, Severity
 from engine.rules import OverrideNotAllowed, RuleSet, check_override, evaluate
-from web import view
+from engine.repo import Conflict, Keep, NotFound, ReviewState
+from web import packs, view
 from web.app import form_data, render
-from web.security import guard_unsafe, owner_of
+from web.security import guard_unsafe
 
-router = APIRouter(dependencies=[Depends(guard_unsafe)])
+router = APIRouter(dependencies=[Depends(guard_unsafe), Depends(packs.dev_seed)])
 
 SECTION_LABELS = {
     "title": "Title",
@@ -59,74 +57,6 @@ MAX_REASON = 500
 MIN_EVIDENCE_CHARS = 4  # letters or digits an evidence reference must contain ('doc-7' is the shortest real one)
 MIN_REASON_CHARS = 3
 ALLOW_RED_OVERRIDE = True  # ADR-10: overridable reds may be kept with an evidence reference; non-overridable never
-
-
-# ---------------------------------------------------------------------------------------------------- state
-@dataclass
-class Keep:
-    reason: str
-    evidence: bool
-
-
-@dataclass
-class ReviewState:
-    pack_id: str
-    product: str
-    truth: ProductTruth
-    pack: PDPPack | None
-    ruleset: RuleSet
-    kept: dict[tuple[str, str, str], Keep] = field(default_factory=dict)  # (sid, rule_id, matched_text)
-    rewrites: dict[str, str] = field(default_factory=dict)  # sid -> engine-suggested rewrite, when supplied
-    reported: set[tuple[str, str]] = field(default_factory=set)  # (sid, rule_id)
-    approved: bool = False
-    last_edit_after_approval: bool = False
-    approve_error: str | None = None
-    last_announce: str = ""
-
-
-class PackStore:
-    """In-memory stand-in for the Platform's pack storage (RLS, one brand workspace per user).
-
-    Packs are keyed by (owner, pack_id): one visitor can never read or change another's. A pack id with a
-    registered factory (the preview demo) is created fresh for each owner on first use. Owners are evicted
-    least-recently-used so an open preview cannot grow without bound.
-    """
-
-    def __init__(self, max_owners: int = 500) -> None:
-        self._packs: dict[tuple[str, str], ReviewState] = {}
-        self._owners: OrderedDict[str, None] = OrderedDict()
-        self._factories: dict[str, Callable[[], ReviewState]] = {}
-        self._max_owners = max_owners
-        self._lock = threading.RLock()
-
-    def register(self, pack_id: str, factory: Callable[[], ReviewState]) -> None:
-        self._factories[pack_id] = factory
-
-    def put(self, owner: str, state: ReviewState) -> None:
-        with self._lock:
-            self._owners[owner] = None
-            self._owners.move_to_end(owner)
-            while len(self._owners) > self._max_owners:
-                old, _ = self._owners.popitem(last=False)
-                for k in [k for k in self._packs if k[0] == old]:
-                    del self._packs[k]
-            self._packs[(owner, state.pack_id)] = state
-
-    def get(self, owner: str, pack_id: str) -> ReviewState:
-        with self._lock:
-            if (owner, pack_id) not in self._packs and pack_id in self._factories:
-                self.put(owner, self._factories[pack_id]())
-            if (owner, pack_id) not in self._packs:
-                raise HTTPException(404, "No such pack")
-            self._owners.move_to_end(owner)
-            return self._packs[(owner, pack_id)]
-
-    @property
-    def lock(self) -> threading.RLock:
-        return self._lock
-
-
-store = PackStore()
 
 
 def sid_of(key: str, i: int) -> str:
@@ -435,17 +365,35 @@ def _apply_text(state: ReviewState, sid: str, text: str) -> None:
         state.approved, state.last_edit_after_approval = False, True
 
 
+@contextmanager
+def open_pack(request: Request, pack_id: str):
+    """The caller's own pack, saved when the block ends. Another workspace's pack id is a 404."""
+    try:
+        with packs.repo().edit(packs.workspace_of(request), pack_id) as state:
+            yield state
+    except NotFound:
+        raise HTTPException(404, "No such pack") from None
+    except Conflict:
+        raise HTTPException(409, "This pack changed in another tab. Reload and try again.") from None
+
+
+def _read(request: Request, pack_id: str) -> ReviewState:
+    try:
+        return packs.repo().get(packs.workspace_of(request), pack_id)
+    except NotFound:
+        raise HTTPException(404, "No such pack") from None
+
+
 @router.get("/packs/{pack_id}/review")
 def review_page(request: Request, pack_id: str):
-    state = store.get(owner_of(request), pack_id)
+    state = _read(request, pack_id)
     return render(request, "review/page.html", build_view(state))
 
 
 @router.post("/packs/{pack_id}/sentences/{sid}/check")
 async def check_sentence(request: Request, pack_id: str, sid: str):
-    state = store.get(owner_of(request), pack_id)
     text = (await form_data(request)).get("text", "")
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         _apply_text(state, sid, text)
         resp = _live_response(request, state, sid)
     return resp
@@ -453,8 +401,7 @@ async def check_sentence(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/rewrite")
 async def use_rewrite(request: Request, pack_id: str, sid: str):
-    state = store.get(owner_of(request), pack_id)
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         key, i, sentence = _sentence(state, sid)
         new = state.rewrites.get(sid)
         if not new:
@@ -477,10 +424,9 @@ async def use_rewrite(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/keep")
 async def keep(request: Request, pack_id: str, sid: str):
-    state = store.get(owner_of(request), pack_id)
     data = await form_data(request)
     reason = data.get("reason", "").strip()[:MAX_REASON]
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         key, i, sentence = _sentence(state, sid)
         label = _label(key, i, len(state.pack.section(key).sentences))
         open_flags = [
@@ -521,8 +467,7 @@ async def keep(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/edit-reason")
 async def edit_reason(request: Request, pack_id: str, sid: str):
-    state = store.get(owner_of(request), pack_id)
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         _sentence(state, sid)
         old = next((v.reason for k, v in state.kept.items() if k[0] == sid), "")
         for k in [k for k in state.kept if k[0] == sid]:
@@ -534,10 +479,9 @@ async def edit_reason(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/sentences/{sid}/report")
 async def report_flag(request: Request, pack_id: str, sid: str):
-    state = store.get(owner_of(request), pack_id)
     data = await form_data(request)
     rule_id = data.get("rule_id", "")
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         _, _, sentence = _sentence(state, sid)
         if rule_id not in {f.rule_id for f in sentence.flags}:
             raise HTTPException(404, "No such flag")
@@ -552,9 +496,8 @@ async def report_flag(request: Request, pack_id: str, sid: str):
 
 @router.post("/packs/{pack_id}/approve")
 async def approve(request: Request, pack_id: str):
-    state = store.get(owner_of(request), pack_id)
     data = await form_data(request)
-    with store.lock:
+    with open_pack(request, pack_id) as state:
         # Texts the browser holds that the server never checked (a failed re-check) are re-checked now.
         for sid, text in data.items():
             if sid.startswith("text-"):

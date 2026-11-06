@@ -4,10 +4,10 @@ import re
 
 import pytest
 from fastapi.testclient import TestClient
-from helpers import secure
+from helpers import secure, secure_with_demo
 
 from asgi import app
-from web import review
+from web import packs, review
 
 HX = {"HX-Request": "true"}
 CURRENT: dict[str, str] = {}
@@ -16,13 +16,13 @@ BANNED = re.compile(r"\b(compliant|safe)\b", re.I)
 
 @pytest.fixture()
 def client():
-    c = secure(TestClient(app))  # a new session gets its own fresh demo pack
+    c = secure_with_demo(TestClient(app))  # a new session and its own demo pack
     CURRENT["owner"] = c.owner
     return c
 
 
 def demo_state():
-    return review.store.get(CURRENT["owner"], "demo")
+    return packs.repo().get(CURRENT["owner"], "demo")
 
 
 def post(c, path, **data):

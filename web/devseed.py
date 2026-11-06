@@ -1,5 +1,8 @@
 # ruff: noqa: E501
-"""Preview-only demo pack so the review screen can be opened before Platform storage exists. Draft content."""
+"""Dev-only demo pack (SATYA_ENV=dev, in-memory repository), so the review screen can be opened locally.
+
+Never loaded on a non-dev path (see web.packs.dev_seed). Draft content.
+"""
 
 from engine import api
 from engine.models import (
@@ -13,7 +16,7 @@ from engine.models import (
     Sentence,
     SentenceType,
 )
-from web.review import ReviewState, store
+from engine.repo import MemoryRepository, ReviewState
 
 PACK_ID = "demo"
 
@@ -73,12 +76,7 @@ def build() -> ReviewState:
     return state
 
 
-def register() -> None:
-    """Each visitor gets their own copy of the demo pack on first use; nobody shares or overwrites it."""
-    store.register(PACK_ID, build)
-
-
-def seed(owner: str) -> ReviewState:
+def seed(store: MemoryRepository, workspace_id: str) -> ReviewState:
     state = build()
-    store.put(owner, state)
+    store.put(workspace_id, state)
     return state

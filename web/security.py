@@ -1,7 +1,7 @@
 """Request security for the web pages: browser sessions, CSRF, client IP and write rate limits (SAT-34).
 
-- Every browser gets a signed, HttpOnly session cookie. `owner_of(request)` is the single seam that scopes
-  stored packs; when Supabase Auth is wired in, it returns the signed-in user id instead.
+- Every browser gets a signed, HttpOnly session cookie. `workspace_of(request)` is the single seam that scopes
+  stored packs; when Supabase Auth is wired in, it returns the signed-in user's workspace id instead.
 - Every state-changing request must come from this site (Origin / Referer / Sec-Fetch-Site) and carry the
   session's CSRF token (X-CSRF-Token header, set by htmx, or a `csrf_token` form field).
 - The client IP is only read from a header the hosting platform sets (SATYA_TRUSTED_IP_HEADER, defaulting to
@@ -99,9 +99,10 @@ class SessionMiddleware:
         await self.app(scope, receive, send_with_cookie)
 
 
-def owner_of(request: Request) -> str:
-    """Who owns the data this request may touch. Today: the browser session; later: the Supabase user id."""
-    return request.state.sid
+def workspace_of(request: Request) -> str:
+    """The workspace every pack lookup is scoped to. Signed-in users: set `request.state.workspace_id` from the
+    Supabase session (membership checked there). Until then each browser session is its own workspace."""
+    return getattr(request.state, "workspace_id", None) or request.state.sid
 
 
 def client_ip(request: Request) -> str:

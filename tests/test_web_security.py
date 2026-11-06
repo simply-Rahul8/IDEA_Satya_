@@ -2,10 +2,10 @@
 
 import pytest
 from fastapi.testclient import TestClient
-from helpers import secure
+from helpers import secure, secure_with_demo
 
 from asgi import app
-from web import review, security
+from web import packs, review, security
 
 HX = {"HX-Request": "true"}
 SAME = {"Origin": "http://testserver"}
@@ -19,11 +19,11 @@ def raw():
 
 @pytest.fixture()
 def client(raw):
-    return secure(raw)
+    return secure_with_demo(raw)
 
 
 def pack(c):
-    return review.store.get(c.owner, "demo")
+    return packs.repo().get(c.owner, "demo")
 
 
 def bullet(c):
@@ -60,7 +60,7 @@ def test_cross_site_requests_are_refused_even_with_a_valid_token(client, headers
 
 
 def test_missing_or_wrong_token_is_refused(raw):
-    raw = TestClient(app, cookies=secure(raw).cookies)  # session cookie only, no token header
+    raw = TestClient(app, cookies=secure_with_demo(raw).cookies)  # session cookie only, no token header
     base = {"Origin": "http://testserver"}
     assert raw.post("/check", data={"text": "hi"}, headers=base).status_code == 403
     assert raw.post("/check", data={"text": "hi"}, headers={**base, "X-CSRF-Token": "0" * 32}).status_code == 403
@@ -74,7 +74,7 @@ def test_no_cookie_post_is_refused_and_creates_nothing_shared(raw):
 
 
 def test_token_in_form_field_works_for_the_no_javascript_form(raw):
-    c = secure(raw)
+    c = secure_with_demo(raw)
     token = c.headers.pop("X-CSRF-Token")
     ok = c.post("/check", data={"text": "hi", "csrf_token": token})
     assert ok.status_code == 200
@@ -90,7 +90,7 @@ def test_pages_carry_the_token_for_htmx_and_forms(client):
 
 
 def test_each_session_has_its_own_pack(client):
-    other = secure(TestClient(app))
+    other = secure_with_demo(TestClient(app))
     assert client.owner != other.owner
     r = client.post("/packs/demo/sentences/bullet_1-0/check", data={"text": "Gentle serum."}, headers=HX)
     assert r.status_code == 200
