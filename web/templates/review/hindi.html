@@ -12,10 +12,7 @@
     <p>Hindi wording and lexicon are a draft until the native Hindi reviewer signs off.</p>
   </section>
   <main id="main">
-    <nav class="tabs" aria-label="Review panes">
-      <a class="btn btn-secondary btn-sm" href="/packs/{{ pack_id }}/review">English</a>
-      <a class="btn btn-secondary btn-sm" href="/packs/{{ pack_id }}/hindi" aria-current="page">Hindi · DRAFT</a>
-    </nav>
+    <p><a href="/packs/{{ pack_id }}/review">English review</a> · Hindi (DRAFT)</p>
     {%- if error %}{{ notice("Hindi step stopped.", error, kind="error") }}{% endif %}
     {%- if can_translate %}
     <form method="post" action="/packs/{{ pack_id }}/hindi">
@@ -31,8 +28,8 @@
     {%- if blockers %}<ul>{% for b in blockers %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
     <section class="pane copy" aria-label="Hindi copy">
       {%- for row in rows %}
-      <article class="row">
-        <h3 class="section-h">{{ row.label }} · {{ row.type }}</h3>
+      <article>
+        <p class="eyebrow">{{ row.label }} · {{ row.type }}</p>
         <p lang="hi">{{ row.text }}</p>
         {%- for f in row.flags %}<p>{{ flag_badge(f.sev, rule_id=f.rule_id) }} {{ f.reason }}</p>{% endfor %}
       </article>

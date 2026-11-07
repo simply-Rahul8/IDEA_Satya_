@@ -27,7 +27,6 @@
     <div class="tabs" role="tablist" aria-label="Review panes">
       <button class="btn btn-secondary btn-sm" role="tab" id="tab-copy" aria-controls="pane-copy" aria-selected="true" tabindex="0" type="button" data-tab="copy">Copy · {{ rows | length }} sentences</button>
       <button class="btn btn-secondary btn-sm" role="tab" id="tab-truth" aria-controls="pane-truth" aria-selected="false" tabindex="-1" type="button" data-tab="truth">Product Truth · {{ ledger | length }} claims</button>
-      <a class="btn btn-secondary btn-sm" href="/packs/{{ pack_id }}/hindi">Hindi · DRAFT</a>
     </div>
     <div class="review-grid">
       <aside class="pane ledger" id="pane-truth" role="tabpanel" aria-labelledby="tab-truth" tabindex="0" hidden>{{ render_ledger(ledger, pack_id) }}</aside>
@@ -40,6 +39,7 @@
       </section>
     </div>
     {%- endif %}
+    {%- if not empty %}<p><a href="/packs/{{ pack_id }}/hindi">Hindi copy (DRAFT)</a></p>{% endif %}
     <footer class="stamp">{{ draft_banner(ruleset) }}<p>Not legal advice · rule set {{ ruleset.label }}.</p></footer>
   </main>
 </div>
