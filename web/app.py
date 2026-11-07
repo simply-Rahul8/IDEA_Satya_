@@ -118,7 +118,7 @@ def render(request: Request, name: str, ctx: dict | None = None, status: int = 2
     resp.headers["Content-Security-Policy"] = CSP
     resp.headers["Cache-Control"] = "no-store"
     resp.headers["X-Content-Type-Options"] = "nosniff"
-    resp.headers["Referrer-Policy"] = "no-referrer"
+    resp.headers["Referrer-Policy"] = "same-origin"  # nothing leaves the site; same-origin form POSTs keep a real Origin
     for k, v in (headers or {}).items():
         resp.headers[k] = v
     return resp
