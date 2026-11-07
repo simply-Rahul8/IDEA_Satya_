@@ -4,6 +4,7 @@
 <p>No flagged risks under rule set {{ ruleset.label }}. Choose which Product Truth or listing field fills each column.</p>
 {% if error %}<div class="notice" data-kind="error" role="alert"><p>{{ error }}</p></div>{% endif %}
 <form method="post" action="/packs/{{ state.pack_id }}/export" class="column-mapping">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <input type="hidden" name="layout" value="{{ layout.id }}">
   <p>Layout: {{ layout.label }}</p>
   <table class="tbl">
