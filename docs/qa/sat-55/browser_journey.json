@@ -1,0 +1,387 @@
+{
+  "1280": {
+    "metrics": {
+      "signin": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "INPUT. 20x20",
+          "INPUT. 20x20",
+          "INPUT. 20x20"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "setup": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "INPUT. 20x20",
+          "INPUT. 20x20",
+          "INPUT. 20x20"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "audit-new": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "INPUT.file-in 1x1"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "audit": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "audit-report": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "A. 89x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "fix-new": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "truth": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "review": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "A. 122x21",
+          "A. 72x21",
+          "A. 178x17",
+          "A. 135x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "hindi": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "A. 100x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "export": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "export-done": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [],
+        "h1": 0,
+        "main": 0,
+        "unlabeled": []
+      },
+      "report": {
+        "sw": 1280,
+        "iw": 1280,
+        "over": [],
+        "small": [
+          "A. 44x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      }
+    },
+    "steps": [
+      "signin without ticking consent: Agree to the Terms and Privacy notice to continue.",
+      "signed in: http://127.0.0.1:55567/setup",
+      "audit finished: http://127.0.0.1:55567/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c",
+      "claims: 2 of 3 claims confirmed, 1 cannot be confirmed. Claims that are not confirmed are left out of the co",
+      "approve button label: Approve pack",
+      "note after approve: (no #note)",
+      "hindi translate button: 1"
+    ],
+    "urls": {
+      "audit": "http://127.0.0.1:55567/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c",
+      "review": "http://127.0.0.1:55567/packs/241ca333-d670-419c-9d6b-9f69b82b075f/review"
+    },
+    "console": [
+      "HTTP 422 POST /signin/email",
+      "error @/signin/email: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "HTTP 422 POST /setup",
+      "error @/setup: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "requestfailed: http://127.0.0.1:55567/audits/cba694aa-2d8f-49b6-b05a-de4623cc2b96",
+      "HTTP 422 POST /fix",
+      "error @/fix/new: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "HTTP 422 POST /packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth/c2/confirm",
+      "error @/packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "error @/packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-47DEQpj8H",
+      "error @/packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-47DEQpj8H",
+      "HTTP 403 POST /packs/241ca333-d670-419c-9d6b-9f69b82b075f/export",
+      "error @/packs/241ca333-d670-419c-9d6b-9f69b82b075f/export: Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ],
+    "post_origins": [
+      "/signin/email origin=http://127.0.0.1:55567",
+      "/signin/email origin=http://127.0.0.1:55567",
+      "/signin/code origin=http://127.0.0.1:55567",
+      "/setup origin=http://127.0.0.1:55567",
+      "/setup origin=http://127.0.0.1:55567",
+      "/audits origin=http://127.0.0.1:55567",
+      "/audits origin=http://127.0.0.1:55567",
+      "/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c/step origin=http://127.0.0.1:55567",
+      "/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c/step origin=http://127.0.0.1:55567",
+      "/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c/step origin=http://127.0.0.1:55567",
+      "/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c/step origin=http://127.0.0.1:55567",
+      "/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c/step origin=http://127.0.0.1:55567",
+      "/audits/86d61ae9-c58b-4b68-9f4f-536076ca2d1c/step origin=http://127.0.0.1:55567",
+      "/fix origin=http://127.0.0.1:55567",
+      "/fix origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth/c2/confirm origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth/c2/confirm origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/truth/c3/confirm origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/generate/start origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/generate/step origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/generate/step origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/approve origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/hindi origin=http://127.0.0.1:55567",
+      "/packs/241ca333-d670-419c-9d6b-9f69b82b075f/export origin=http://127.0.0.1:55567"
+    ]
+  },
+  "360": {
+    "metrics": {
+      "signin": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "INPUT. 20x20",
+          "INPUT. 20x20",
+          "INPUT. 20x20"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "setup": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "INPUT. 20x20",
+          "INPUT. 20x20",
+          "INPUT. 20x20"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "audit-new": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "INPUT.file-in 1x1"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "audit": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "audit-report": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "A. 89x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "fix-new": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "truth": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "review": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "A. 122x21",
+          "A. 72x21",
+          "A. 135x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "hindi": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "A. 100x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "export": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20",
+          "SELECT. 123x20"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      },
+      "export-done": {
+        "sw": 980,
+        "iw": 980,
+        "over": [],
+        "small": [],
+        "h1": 0,
+        "main": 0,
+        "unlabeled": []
+      },
+      "report": {
+        "sw": 360,
+        "iw": 360,
+        "over": [],
+        "small": [
+          "A. 44x21"
+        ],
+        "h1": 1,
+        "main": 1,
+        "unlabeled": []
+      }
+    },
+    "steps": [
+      "signin without ticking consent: Agree to the Terms and Privacy notice to continue.",
+      "signed in: http://127.0.0.1:55567/check",
+      "audit finished: http://127.0.0.1:55567/audits/7773f117-0f17-4f76-9030-35af0d9ccad7",
+      "claims: 2 of 3 claims confirmed, 1 cannot be confirmed. Claims that are not confirmed are left out of the co",
+      "approve button label: Approve",
+      "note after approve: (no #note)",
+      "hindi translate button: 1"
+    ],
+    "urls": {
+      "audit": "http://127.0.0.1:55567/audits/7773f117-0f17-4f76-9030-35af0d9ccad7",
+      "review": "http://127.0.0.1:55567/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/review"
+    },
+    "console": [
+      "HTTP 422 POST /signin/email",
+      "error @/signin/email: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "requestfailed: http://127.0.0.1:55567/audits/e293466f-87ea-4697-8580-3e0ace31680d",
+      "HTTP 422 POST /fix",
+      "error @/fix/new: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "HTTP 422 POST /packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth/c2/confirm",
+      "error @/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "error @/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-47DEQpj8H",
+      "error @/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-47DEQpj8H",
+      "HTTP 403 POST /packs/91b4be49-2a4d-42ca-8369-3c3547a60295/export",
+      "error @/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/export: Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ],
+    "post_origins": [
+      "/signin/email origin=http://127.0.0.1:55567",
+      "/signin/email origin=http://127.0.0.1:55567",
+      "/signin/code origin=http://127.0.0.1:55567",
+      "/setup origin=http://127.0.0.1:55567",
+      "/setup origin=http://127.0.0.1:55567",
+      "/audits origin=http://127.0.0.1:55567",
+      "/audits origin=http://127.0.0.1:55567",
+      "/audits/7773f117-0f17-4f76-9030-35af0d9ccad7/step origin=http://127.0.0.1:55567",
+      "/audits/7773f117-0f17-4f76-9030-35af0d9ccad7/step origin=http://127.0.0.1:55567",
+      "/audits/7773f117-0f17-4f76-9030-35af0d9ccad7/step origin=http://127.0.0.1:55567",
+      "/audits/7773f117-0f17-4f76-9030-35af0d9ccad7/step origin=http://127.0.0.1:55567",
+      "/audits/7773f117-0f17-4f76-9030-35af0d9ccad7/step origin=http://127.0.0.1:55567",
+      "/audits/7773f117-0f17-4f76-9030-35af0d9ccad7/step origin=http://127.0.0.1:55567",
+      "/fix origin=http://127.0.0.1:55567",
+      "/fix origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth/c2/confirm origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth/c2/confirm origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/truth/c3/confirm origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/generate/start origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/generate/step origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/generate/step origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/approve origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/hindi origin=http://127.0.0.1:55567",
+      "/packs/91b4be49-2a4d-42ca-8369-3c3547a60295/export origin=http://127.0.0.1:55567"
+    ]
+  }
+}

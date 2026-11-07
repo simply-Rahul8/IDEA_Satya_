@@ -1,0 +1,191 @@
+C:\Users\MYSEL\satya-worktrees\SAT-55-fix-sat-45-qa-must-fix-1-form-posts-refused-in-real-browsers-origin-null-from-referrer-policy-no-referrer-owner-p\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+
+== 1 sign-in and consent
+  [PASS   ] sign-in page offers email code and Google
+  [PASS   ] consent checkbox is on the form and the wording says draft
+  [PASS   ] sign-in page: never says compliant or safe
+  [PASS   ] sign-in page: every POST form has a csrf_token field
+  [PASS   ] signed-out page load redirects to /signin
+  [PASS   ] signed-out API-style call is a plain 401
+  [PASS   ] no consent: 422 and no code is sent
+  [PASS   ] bad CSRF token on sign-in: 403
+  [PASS   ] cross-site Origin on sign-in: 403
+  [PASS   ] wrong code: 400, no session cookie
+  [PASS   ] right code: 303 to /setup (no brand yet), cookie is HttpOnly
+  [PASS   ] consent rows written (terms, LLM processing; updates declined)
+  [PASS   ] a code without prior consent in this browser is refused
+  [BLOCKED] real Supabase email OTP and Google PKCE round trip - needs a live Supabase project and SMTP (P28); see docs/deploy.md
+
+== 2 brand setup
+  [PASS   ] brand setup rejects a missing seller name (422)
+  [PASS   ] brand setup rejects an unknown tone preset (422)
+  [PASS   ] valid brand setup saves and redirects
+  [PASS   ] saved profile shown back (tone, phrases, seller, grievance contact)
+  [PASS   ] sign-in with a brand profile goes home, not setup
+  [PASS   ] a workspace id in the form is ignored (still the signed-in workspace)
+  [PASS   ] setup page: never says compliant or safe
+  [PASS   ] setup page: every POST form has a csrf_token field
+
+== 3 audit (upload and paste)
+  [PASS   ] A1 empty state is the drop zone with the 500-product limit
+  [PASS   ] audit upload page: never says compliant or safe
+  [PASS   ] audit upload page: every POST form has a csrf_token field
+  [PASS   ] upload of the 120-row sample creates a job
+  [PASS   ] A2 loading page has one pending cell per product and a progress bar
+  [PASS   ] job runs to done in steps
+  [PASS   ] heat-strip has 120 cells sorted by risk
+  [PASS   ] red and amber findings exist; 3 non-cosmetic products skipped
+  [PASS   ] page is stamped 'Not legal advice' with the draft rule set
+  [PASS   ] risk rows carry rule ids (EN-...)
+  [PASS   ] audit page: never says compliant or safe
+  [PASS   ] audit page: every POST form has a csrf_token field
+  [PASS   ] peek sheet for a red product shows the rule and 'Fix with Satya'
+  [PASS   ] red filter returns only red rows
+  [PASS   ] print report lists all 120 products, stamped, with no 'compliant'
+  [PASS   ] pasted text is audited: one red cell
+  [PASS   ] XLSX is refused with a plain reason
+  [PASS   ] binary file is refused
+  [PASS   ] oversize upload (2 MB limit) is refused
+  [PASS   ] 501 products: refused with split-or-first-500 choice
+  [PASS   ] unknown columns open the mapping screen
+  [PASS   ] prompt-injection and markup in a catalogue are escaped data
+  [BLOCKED] Nykaa and Amazon catalogue-download importers - need the real templates (SAT-4 / SAT-29); not built
+  [BLOCKED] Lighthouse mobile on the audit page - needs a browser: docs/qa/sat-35-journey/browser_journey.py --lighthouse (see docs/qa/verify-satya.md)
+
+== 4 product-type gate
+  [PASS   ] non-cosmetic paste to /fix is refused before extraction (P23)
+  [PASS   ] non-cosmetic paste to the audit shows the out-of-scope notice
+  [PASS   ] 'Fix with Satya' on a skipped audit row is refused
+  [PASS   ] 'Fix with Satya' from a red audit row starts a Product Truth draft
+  [PASS   ] empty paste gets a plain problem, not an error
+  [BLOCKED] gate accuracy on real, ambiguous listings (Ayurvedic or OTC cosmetics) - the gate is deterministic keyword logic; accuracy needs the labelled corpus and consultant review
+
+== 5 claim confirmation
+  [PASS   ] paste with a drug-like claim creates a Product Truth draft
+  [PASS   ] every extracted claim starts unconfirmed
+  [PASS   ] the 'cures acne scars' claim is hard-blocked with a rule id
+  [PASS   ] truth screen says why it cannot be confirmed and offers no confirm form
+  [PASS   ] truth screen: never says compliant or safe
+  [PASS   ] truth screen: every POST form has a csrf_token field
+  [PASS   ] hand-made confirm of the hard-blocked claim (test_report) is refused: 403
+  [PASS   ] hand-made confirm of the hard-blocked claim (label) is refused: 403
+  [PASS   ] hand-made confirm of the hard-blocked claim (brand_declaration) is refused: 403
+  [PASS   ] the review-page confirm route refuses it too: 403
+  [PASS   ] claim is still unconfirmed with no evidence
+  [PASS   ] test report with no reference is refused (422) and says what to add
+  [PASS   ] a one-character reference is refused
+  [PASS   ] test report with a document ID confirms
+  [PASS   ] evidence upload that is not PDF, PNG or JPEG is refused
+  [PASS   ] a typed storage path for another workspace is refused
+  [PASS   ] evidence upload (PDF) is accepted into the workspace folder
+  [PASS   ] the blocked claim never reaches the generated pack
+  [PASS   ] another workspace cannot read the truth screen (404)
+  [BLOCKED] live extraction quality (claims found, injection resistance) - mock extractor puts the listing in product_name and finds few claims; needs one live-LLM run with keys
+  [BLOCKED] evidence upload to the Supabase Storage bucket and its RLS - memory store here; needs a real Supabase project
+
+== 6 generate
+  [PASS   ] paste creates a draft with unconfirmed claims
+  [PASS   ] generate page for a draft with no pack auto-starts
+  [PASS   ] step 1 of 2 keeps the pack hidden until it is checked
+  [PASS   ] step 2 verifies and lands on the review page
+  [PASS   ] verifier passed and every sentence has an anchor
+  [PASS   ] every anchor points at a claim or a truth field
+  [PASS   ] pack has title, bullets, description, how to use, warnings and storage, SEO
+  [PASS   ] cancel drops the draft and a late step changes nothing
+  [BLOCKED] live generation quality and latency (title length, bullet style) - mock generator; needs SATYA_LLM=live with keys and the bench (python scripts/run.py bench)
+
+== 7 review and approve
+  [PASS   ] review page: 'Ready to approve. No flagged risks under rule set'
+  [PASS   ] review page: never says compliant or safe
+  [PASS   ] review page: every POST form has a csrf_token field
+  [PASS   ] review page has anchor, type and re-check controls
+  [PASS   ] editing a sentence re-checks it live and flags it red
+  [PASS   ] a red sentence blocks approval
+  [PASS   ] 'keep' on a non-overridable red is refused: 403
+  [PASS   ] a wrong-flag report is accepted and does not unblock
+  [PASS   ] restoring the sentence lets approval through
+  [PASS   ] editing after approval withdraws approval
+  [PASS   ] re-approve after the edit is undone
+  [PASS   ] brand restricted phrase ('Miracle') is flagged in review
+  [BLOCKED] review at 360 px and 1280 px, light and dark; keyboard path - needs a real browser: docs/qa/sat-35-journey/browser_journey.py (see docs/qa/verify-satya.md)
+
+== 8 Hindi
+  [PASS   ] Hindi before English approval is refused: 409
+  [PASS   ] Hindi page for an unapproved pack says approve first
+  [PASS   ] English pack is approved before Hindi
+  [PASS   ] translating an approved pack redirects to the Hindi tab
+  [PASS   ] Hindi pack exists, was re-verified, and ends with the Hindi disclaimer
+  [PASS   ] the fixed disclaimer is in Hindi
+  [PASS   ] Hindi page shows Devanagari text and the export gate state
+  [PASS   ] Hindi page: never says compliant or safe
+  [PASS   ] Hindi page: every POST form has a csrf_token field
+  [PASS   ] Hindi page says the copy is draft pending the native reviewer
+  [PASS   ] editing the English pack makes the Hindi stale (export gate blocks)
+  [FAIL   ] the Hindi pack can leave through the web (export page offers Hindi) - PLAN section 3 step 8-9: Hindi passes the export gate in the engine but no web route exports it
+  [BLOCKED] native Hindi reviewer sign-off on the copy and lexicon - SAT-5; Hindi stays DRAFT until recorded in rules/README.md (P20)
+  [BLOCKED] live Indic MT provider - mock translator only; needs keys (ADR-11)
+
+== 9 export and print report
+  [PASS   ] export page loads for an approved clean pack with the draft stamp
+  [PASS   ] export page: never says compliant or safe
+  [FAIL   ] export page: every POST form has a csrf_token field - forms without it: /packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/export
+  [PASS   ] export view offers copy and both downloads
+  [PASS   ] export result page: never says compliant or safe
+  [FAIL   ] export result page: every POST form has a csrf_token field - forms without it: /packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/export
+  [PASS   ] CSV download: text/csv, attachment, UTF-8 BOM
+  [PASS   ] a mapping to an unknown source is refused (422)
+  [PASS   ] column mapping is applied to the CSV
+  [PASS   ] print report: stamped, DRAFT, claims and evidence, 'no flagged risks under rule set'
+  [PASS   ] print report: never says compliant or safe
+  [PASS   ] print report: every POST form has a csrf_token field
+  [PASS   ] red pack: GET export is blocked with a reason (409)
+  [PASS   ] red pack: GET report is blocked with a reason (409)
+  [PASS   ] red pack: POST export is blocked with a reason (409)
+  [PASS   ] red pack: CSV download is blocked and returns HTML, not a file
+  [PASS   ] a pack with no generated listing cannot be exported (409)
+  [BLOCKED] Nykaa XLSX from the real template; Amazon layout - templates have not arrived (SAT-4, SAT-29); the generic CSV is a placeholder layout (P29)
+  [BLOCKED] opening the CSV in Excel and Google Sheets (encoding, formula safety) - needs the apps; CSV is UTF-8 with BOM and formula-neutralised
+
+== 10 audit record
+  [PASS   ] audit record downloads as JSON
+  [PASS   ] record SHA-256 matches the CSV download byte for byte
+  [PASS   ] record has rule-set version, verifier flag, zero reds, disclaimer
+  [PASS   ] record lists every claim with status and evidence
+  [PASS   ] record carries the mapping and layout id
+  [PASS   ] record never claims compliance
+  [BLOCKED] record kept as a stored, downloadable history - v1 builds the record per export (no stored history screen); confirm intent with the CTO
+
+== 11 isolation and hygiene
+  [PASS   ] another workspace gets 404 on /packs/<id>/review
+  [PASS   ] another workspace gets 404 on /packs/<id>/truth
+  [PASS   ] another workspace gets 404 on /packs/<id>/generate
+  [PASS   ] another workspace gets 404 on /packs/<id>/hindi
+  [PASS   ] another workspace gets 404 on /packs/<id>/export
+  [PASS   ] another workspace gets 404 on /packs/<id>/report
+  [PASS   ] another workspace gets 404 on POST /packs/<id>/approve
+  [PASS   ] another workspace gets 404 on POST /packs/<id>/hindi
+  [PASS   ] another workspace gets 404 on POST /packs/<id>/generate/start
+  [PASS   ] another workspace gets 404 on POST /packs/<id>/export
+  [PASS   ] another workspace gets 404 on the audit and its report
+  [PASS   ] signed-out POST to /fix is refused (no cookie, no CSRF)
+  [PASS   ] signed-in POST without a CSRF token: 403
+  [PASS   ] same-origin form POST that arrives with `Origin: null` (Sec-Fetch-Site: same-origin) is accepted
+  [PASS   ] cross-site Origin on a state-changing route: 403
+  [PASS   ] strict CSP: no unsafe-inline or unsafe-eval
+  [PASS   ] no-store and nosniff on pages
+  [PASS   ] /openapi.json and /docs are not served
+  [PASS   ] oversized form body is refused (413)
+  [PASS   ] oversized /check body is refused (413)
+  [PASS   ] public checker needs no sign-in and says draft rule set
+  [PASS   ] public checker flags a drug claim with a rule citation
+  [PASS   ] public checker result: never says compliant or safe
+  [PASS   ] public checker result: every POST form has a csrf_token field
+  [BLOCKED] public checker going live - gated on consultant sign-off (P20, SAT-24); verdicts stay draft
+  [BLOCKED] RLS on a real Supabase project (cross-tenant reads, claims hard-block columns) - schema is exercised on a throwaway Postgres only (tests/test_schema_rls.py); needs a real project
+  [BLOCKED] rate limits behind a real proxy (trusted IP header, per-instance limiter) - needs the deployed host; see SAT-34 notes
+
+verify-satya: 143 passed, 3 failed, 16 blocked
+  FAIL  8 Hindi: the Hindi pack can leave through the web (export page offers Hindi) PLAN section 3 step 8-9: Hindi passes the export gate in the engine but no web route exports it
+  FAIL  9 export and print report: export page: every POST form has a csrf_token field forms without it: /packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/export
+  FAIL  9 export and print report: export result page: every POST form has a csrf_token field forms without it: /packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/export
