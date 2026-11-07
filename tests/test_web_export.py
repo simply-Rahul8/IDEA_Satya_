@@ -100,3 +100,41 @@ def test_report_is_stamped_and_print_ready(client):
 def test_demo_pack_with_reds_is_blocked():
     c = secure_with_demo(TestClient(app))
     assert c.get("/packs/demo/export").status_code == 409
+
+
+def _plain_forms(page: str) -> list[str]:
+    return [
+        m for m in re.findall(r"<form\b[^>]*>.*?</form>", page, re.S) if re.search(r'method="post"', m[: m.index(">")])
+    ]
+
+
+def _browser_without_js(c):
+    """Same session as `c` but, like a real no-JavaScript browser, sends no X-CSRF-Token header."""
+    c.headers.pop("X-CSRF-Token")
+    return c
+
+
+def test_export_forms_carry_the_csrf_field_and_submit_without_the_header(client):
+    token = client.headers["X-CSRF-Token"]
+    _browser_without_js(client)
+    page = client.get("/packs/p1/export").text
+    done = client.post("/packs/p1/export", data={"do": "view", "csrf_token": token}).text
+    for name, html in (("export page", page), ("export result page", done)):
+        forms = _plain_forms(html)
+        assert forms and all(f'name="csrf_token" value="{token}"' in f for f in forms), name
+    assert client.post("/packs/p1/export", data={"do": "csv"}).status_code == 403  # the bug SAT-45 found
+    fields = {"csrf_token": token, "do": "csv", **_form(page)}
+    assert client.post("/packs/p1/export", data=fields).status_code == 200
+
+
+def test_every_post_form_template_has_a_csrf_field():
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent / "web" / "templates"
+    missing = [
+        f"{p.relative_to(root)}: {f[:80]}"
+        for p in sorted(root.rglob("*.html"))
+        for f in re.findall(r"<form\b[^>]*>.*?</form>", p.read_text(encoding="utf-8"), re.S)
+        if re.search(r'method="post"', f[: f.index(">")]) and "csrf_token" not in f
+    ]
+    assert not missing, missing
