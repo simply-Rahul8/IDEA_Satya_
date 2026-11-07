@@ -3,6 +3,7 @@
 <h1>Export ready</h1>
 <p>{{ result.filename }}. Content SHA-256 <code>{{ result.audit.content_sha256 }}</code>. Keep the audit record with the file.</p>
 <form method="post" action="/packs/{{ state.pack_id }}/export" class="export-acts">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <input type="hidden" name="layout" value="{{ layout.id }}">
   {% for h, s in mapping.items() %}<input type="hidden" name="map:{{ h }}" value="{{ s or '' }}">{% endfor %}
   <button class="btn btn-primary" type="submit" name="do" value="csv">Download CSV</button>
