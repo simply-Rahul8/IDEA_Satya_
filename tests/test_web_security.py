@@ -59,6 +59,26 @@ def test_cross_site_requests_are_refused_even_with_a_valid_token(client, headers
     assert r.status_code == 403, why
 
 
+def test_form_post_with_origin_null_is_accepted_only_as_same_origin_with_a_valid_token(client):
+    """Edge sends `Origin: null` on same-origin form POSTs (SAT-55); the cross-site checks stay intact."""
+    token = client.headers["X-CSRF-Token"]
+    c = TestClient(app, cookies=client.cookies)
+    url = "/packs/demo/sentences/bullet_1-0/check"
+    form = {"text": "Gentle serum.", "csrf_token": token}
+    null = {"Origin": "null"}
+    assert c.post(url, data=form, headers={**null, "Sec-Fetch-Site": "same-origin"}).status_code == 200
+    # no fetch metadata, or cross-site fetch metadata: still refused
+    assert c.post(url, data=form, headers=null).status_code == 403
+    assert c.post(url, data=form, headers={**null, "Sec-Fetch-Site": "cross-site"}).status_code == 403
+    # same-origin but no/invalid token: refused by the CSRF check
+    bad = {"text": "x", "csrf_token": "0" * 32}
+    assert c.post(url, data=bad, headers={**null, "Sec-Fetch-Site": "same-origin"}).status_code == 403
+
+
+def test_pages_use_a_same_origin_referrer_policy(client):
+    assert client.get("/check").headers["Referrer-Policy"] == "same-origin"
+
+
 def test_missing_or_wrong_token_is_refused(raw):
     raw = TestClient(app, cookies=secure_with_demo(raw).cookies)  # session cookie only, no token header
     base = {"Origin": "http://testserver"}

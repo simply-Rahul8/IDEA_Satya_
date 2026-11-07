@@ -130,9 +130,15 @@ def _allowed_hosts(request: Request) -> set[str]:
 
 
 def same_origin(request: Request) -> bool:
-    if request.headers.get("sec-fetch-site", "same-origin") not in ("same-origin", "none"):
+    fetch_site = request.headers.get("sec-fetch-site")
+    if fetch_site not in (None, "same-origin", "none"):
         return False
     source = request.headers.get("origin") or request.headers.get("referer")
+    if source == "null" and fetch_site == "same-origin":
+        # Browsers send `Origin: null` on plain same-origin form POSTs under a no-referrer policy. The browser (not
+        # the page) sets Sec-Fetch-Site, so an explicit same-origin there is trustworthy; guard_unsafe still checks the
+        # CSRF token. A missing Sec-Fetch-Site never qualifies: older clients and forged requests are still refused.
+        return True
     if not source or source == "null":
         return False  # a state-changing request that cannot say where it came from is refused
     return urlsplit(source).netloc in _allowed_hosts(request)

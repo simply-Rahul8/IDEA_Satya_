@@ -1,0 +1,981 @@
+{
+  "counts": {
+    "PASS": 143,
+    "FAIL": 3,
+    "BLOCKED": 16
+  },
+  "results": [
+    {
+      "step": "1 sign-in and consent",
+      "check": "sign-in page offers email code and Google",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "consent checkbox is on the form and the wording says draft",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "sign-in page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "sign-in page: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "signed-out page load redirects to /signin",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "signed-out API-style call is a plain 401",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "no consent: 422 and no code is sent",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "bad CSRF token on sign-in: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "cross-site Origin on sign-in: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "wrong code: 400, no session cookie",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "right code: 303 to /setup (no brand yet), cookie is HttpOnly",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "consent rows written (terms, LLM processing; updates declined)",
+      "status": "PASS",
+      "detail": "{('terms_privacy', True), ('llm_processing', True), ('product_updates', False)}"
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "a code without prior consent in this browser is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "1 sign-in and consent",
+      "check": "real Supabase email OTP and Google PKCE round trip",
+      "status": "BLOCKED",
+      "detail": "needs a live Supabase project and SMTP (P28); see docs/deploy.md"
+    },
+    {
+      "step": "2 brand setup",
+      "check": "brand setup rejects a missing seller name (422)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "brand setup rejects an unknown tone preset (422)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "valid brand setup saves and redirects",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "saved profile shown back (tone, phrases, seller, grievance contact)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "sign-in with a brand profile goes home, not setup",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "a workspace id in the form is ignored (still the signed-in workspace)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "setup page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "2 brand setup",
+      "check": "setup page: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "A1 empty state is the drop zone with the 500-product limit",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "audit upload page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "audit upload page: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "upload of the 120-row sample creates a job",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "A2 loading page has one pending cell per product and a progress bar",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "job runs to done in steps",
+      "status": "PASS",
+      "detail": "{'status': 'done', 'total': 120, 'done': 120, 'failed': 0, 'label': 'Checked 120 products'}"
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "heat-strip has 120 cells sorted by risk",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "red and amber findings exist; 3 non-cosmetic products skipped",
+      "status": "PASS",
+      "detail": "{'amber': 71, 'skipped': 3, 'red': 33, 'green': 13}"
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "page is stamped 'Not legal advice' with the draft rule set",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "risk rows carry rule ids (EN-...)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "audit page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "audit page: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "peek sheet for a red product shows the rule and 'Fix with Satya'",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "red filter returns only red rows",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "print report lists all 120 products, stamped, with no 'compliant'",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "pasted text is audited: one red cell",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "XLSX is refused with a plain reason",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "binary file is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "oversize upload (2 MB limit) is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "501 products: refused with split-or-first-500 choice",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "unknown columns open the mapping screen",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "prompt-injection and markup in a catalogue are escaped data",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "Nykaa and Amazon catalogue-download importers",
+      "status": "BLOCKED",
+      "detail": "need the real templates (SAT-4 / SAT-29); not built"
+    },
+    {
+      "step": "3 audit (upload and paste)",
+      "check": "Lighthouse mobile on the audit page",
+      "status": "BLOCKED",
+      "detail": "needs a browser: docs/qa/sat-35-journey/browser_journey.py --lighthouse (see docs/qa/verify-satya.md)"
+    },
+    {
+      "step": "4 product-type gate",
+      "check": "non-cosmetic paste to /fix is refused before extraction (P23)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "4 product-type gate",
+      "check": "non-cosmetic paste to the audit shows the out-of-scope notice",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "4 product-type gate",
+      "check": "'Fix with Satya' on a skipped audit row is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "4 product-type gate",
+      "check": "'Fix with Satya' from a red audit row starts a Product Truth draft",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "4 product-type gate",
+      "check": "empty paste gets a plain problem, not an error",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "4 product-type gate",
+      "check": "gate accuracy on real, ambiguous listings (Ayurvedic or OTC cosmetics)",
+      "status": "BLOCKED",
+      "detail": "the gate is deterministic keyword logic; accuracy needs the labelled corpus and consultant review"
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "paste with a drug-like claim creates a Product Truth draft",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "every extracted claim starts unconfirmed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "the 'cures acne scars' claim is hard-blocked with a rule id",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "truth screen says why it cannot be confirmed and offers no confirm form",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "truth screen: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "truth screen: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "hand-made confirm of the hard-blocked claim (test_report) is refused: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "hand-made confirm of the hard-blocked claim (label) is refused: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "hand-made confirm of the hard-blocked claim (brand_declaration) is refused: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "the review-page confirm route refuses it too: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "claim is still unconfirmed with no evidence",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "test report with no reference is refused (422) and says what to add",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "a one-character reference is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "test report with a document ID confirms",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "evidence upload that is not PDF, PNG or JPEG is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "a typed storage path for another workspace is refused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "evidence upload (PDF) is accepted into the workspace folder",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "the blocked claim never reaches the generated pack",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "another workspace cannot read the truth screen (404)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "live extraction quality (claims found, injection resistance)",
+      "status": "BLOCKED",
+      "detail": "mock extractor puts the listing in product_name and finds few claims; needs one live-LLM run with keys"
+    },
+    {
+      "step": "5 claim confirmation",
+      "check": "evidence upload to the Supabase Storage bucket and its RLS",
+      "status": "BLOCKED",
+      "detail": "memory store here; needs a real Supabase project"
+    },
+    {
+      "step": "6 generate",
+      "check": "paste creates a draft with unconfirmed claims",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "6 generate",
+      "check": "generate page for a draft with no pack auto-starts",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "6 generate",
+      "check": "step 1 of 2 keeps the pack hidden until it is checked",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "6 generate",
+      "check": "step 2 verifies and lands on the review page",
+      "status": "PASS",
+      "detail": "{'status': 'done', 'step': 2, 'total': 2, 'done': 2, 'label': 'Your pack is ready', 'next': '/packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/review'}"
+    },
+    {
+      "step": "6 generate",
+      "check": "verifier passed and every sentence has an anchor",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "6 generate",
+      "check": "every anchor points at a claim or a truth field",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "6 generate",
+      "check": "pack has title, bullets, description, how to use, warnings and storage, SEO",
+      "status": "PASS",
+      "detail": "['bullet_1', 'bullet_2', 'bullet_3', 'bullet_4', 'bullet_5', 'description', 'how_to_use', 'seo_description', 'seo_title', 'title', 'warnings_storage']"
+    },
+    {
+      "step": "6 generate",
+      "check": "cancel drops the draft and a late step changes nothing",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "6 generate",
+      "check": "live generation quality and latency (title length, bullet style)",
+      "status": "BLOCKED",
+      "detail": "mock generator; needs SATYA_LLM=live with keys and the bench (python scripts/run.py bench)"
+    },
+    {
+      "step": "7 review and approve",
+      "check": "review page: 'Ready to approve. No flagged risks under rule set'",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "review page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "review page: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "7 review and approve",
+      "check": "review page has anchor, type and re-check controls",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "editing a sentence re-checks it live and flags it red",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "a red sentence blocks approval",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "'keep' on a non-overridable red is refused: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "a wrong-flag report is accepted and does not unblock",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "restoring the sentence lets approval through",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "editing after approval withdraws approval",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "re-approve after the edit is undone",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "7 review and approve",
+      "check": "brand restricted phrase ('Miracle') is flagged in review",
+      "status": "PASS",
+      "detail": " Description, sentence 1, Needs a reason Product fact Needs a reason Checking\u2026 Source: Product name Needs a reason BRAND-RESTRICTED Brand rule: restricted phrase miracle : Your brand restricted the ph"
+    },
+    {
+      "step": "7 review and approve",
+      "check": "review at 360 px and 1280 px, light and dark; keyboard path",
+      "status": "BLOCKED",
+      "detail": "needs a real browser: docs/qa/sat-35-journey/browser_journey.py (see docs/qa/verify-satya.md)"
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi before English approval is refused: 409",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi page for an unapproved pack says approve first",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "English pack is approved before Hindi",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "translating an approved pack redirects to the Hindi tab",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi pack exists, was re-verified, and ends with the Hindi disclaimer",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "the fixed disclaimer is in Hindi",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi page shows Devanagari text and the export gate state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi page: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "8 Hindi",
+      "check": "Hindi page says the copy is draft pending the native reviewer",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "editing the English pack makes the Hindi stale (export gate blocks)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "8 Hindi",
+      "check": "the Hindi pack can leave through the web (export page offers Hindi)",
+      "status": "FAIL",
+      "detail": "PLAN section 3 step 8-9: Hindi passes the export gate in the engine but no web route exports it"
+    },
+    {
+      "step": "8 Hindi",
+      "check": "native Hindi reviewer sign-off on the copy and lexicon",
+      "status": "BLOCKED",
+      "detail": "SAT-5; Hindi stays DRAFT until recorded in rules/README.md (P20)"
+    },
+    {
+      "step": "8 Hindi",
+      "check": "live Indic MT provider",
+      "status": "BLOCKED",
+      "detail": "mock translator only; needs keys (ADR-11)"
+    },
+    {
+      "step": "9 export and print report",
+      "check": "export page loads for an approved clean pack with the draft stamp",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "export page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "export page: every POST form has a csrf_token field",
+      "status": "FAIL",
+      "detail": "forms without it: /packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/export"
+    },
+    {
+      "step": "9 export and print report",
+      "check": "export view offers copy and both downloads",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "export result page: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "export result page: every POST form has a csrf_token field",
+      "status": "FAIL",
+      "detail": "forms without it: /packs/8c2e7906-da7c-4089-9145-9c14d7d83a6f/export"
+    },
+    {
+      "step": "9 export and print report",
+      "check": "CSV download: text/csv, attachment, UTF-8 BOM",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "a mapping to an unknown source is refused (422)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "column mapping is applied to the CSV",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "print report: stamped, DRAFT, claims and evidence, 'no flagged risks under rule set'",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "print report: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "print report: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "9 export and print report",
+      "check": "red pack: GET export is blocked with a reason (409)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "red pack: GET report is blocked with a reason (409)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "red pack: POST export is blocked with a reason (409)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "red pack: CSV download is blocked and returns HTML, not a file",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "a pack with no generated listing cannot be exported (409)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "9 export and print report",
+      "check": "Nykaa XLSX from the real template; Amazon layout",
+      "status": "BLOCKED",
+      "detail": "templates have not arrived (SAT-4, SAT-29); the generic CSV is a placeholder layout (P29)"
+    },
+    {
+      "step": "9 export and print report",
+      "check": "opening the CSV in Excel and Google Sheets (encoding, formula safety)",
+      "status": "BLOCKED",
+      "detail": "needs the apps; CSV is UTF-8 with BOM and formula-neutralised"
+    },
+    {
+      "step": "10 audit record",
+      "check": "audit record downloads as JSON",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "10 audit record",
+      "check": "record SHA-256 matches the CSV download byte for byte",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "10 audit record",
+      "check": "record has rule-set version, verifier flag, zero reds, disclaimer",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "10 audit record",
+      "check": "record lists every claim with status and evidence",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "10 audit record",
+      "check": "record carries the mapping and layout id",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "10 audit record",
+      "check": "record never claims compliance",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "10 audit record",
+      "check": "record kept as a stored, downloadable history",
+      "status": "BLOCKED",
+      "detail": "v1 builds the record per export (no stored history screen); confirm intent with the CTO"
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on /packs/<id>/review",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on /packs/<id>/truth",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on /packs/<id>/generate",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on /packs/<id>/hindi",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on /packs/<id>/export",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on /packs/<id>/report",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on POST /packs/<id>/approve",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on POST /packs/<id>/hindi",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on POST /packs/<id>/generate/start",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on POST /packs/<id>/export",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "another workspace gets 404 on the audit and its report",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "signed-out POST to /fix is refused (no cookie, no CSRF)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "signed-in POST without a CSRF token: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "same-origin form POST that arrives with `Origin: null` (Sec-Fetch-Site: same-origin) is accepted",
+      "status": "PASS",
+      "detail": "got 303: browsers send Origin: null because pages answer Referrer-Policy: no-referrer"
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "cross-site Origin on a state-changing route: 403",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "strict CSP: no unsafe-inline or unsafe-eval",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "no-store and nosniff on pages",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "/openapi.json and /docs are not served",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "oversized form body is refused (413)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "oversized /check body is refused (413)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "public checker needs no sign-in and says draft rule set",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "public checker flags a drug claim with a rule citation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "public checker result: never says compliant or safe",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "public checker result: every POST form has a csrf_token field",
+      "status": "PASS",
+      "detail": "forms without it: "
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "public checker going live",
+      "status": "BLOCKED",
+      "detail": "gated on consultant sign-off (P20, SAT-24); verdicts stay draft"
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "RLS on a real Supabase project (cross-tenant reads, claims hard-block columns)",
+      "status": "BLOCKED",
+      "detail": "schema is exercised on a throwaway Postgres only (tests/test_schema_rls.py); needs a real project"
+    },
+    {
+      "step": "11 isolation and hygiene",
+      "check": "rate limits behind a real proxy (trusted IP header, per-instance limiter)",
+      "status": "BLOCKED",
+      "detail": "needs the deployed host; see SAT-34 notes"
+    }
+  ]
+}
