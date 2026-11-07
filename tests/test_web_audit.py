@@ -410,3 +410,13 @@ def test_fix_with_satya_from_an_audit_row_starts_a_product_truth_draft(alice, do
     bob = browser("bob")  # another workspace cannot start from this audit, and cannot see the draft
     assert bob.post("/fix", data={"audit": done, "position": str(red_i)}, headers=hx).status_code == 404
     assert bob.get(r.headers["hx-redirect"]).status_code == 404
+
+
+def test_report_page_is_stamped_lists_every_product_and_is_workspace_scoped(alice, done, pg):
+    r = alice.get(f"/audits/{done}/report")
+    t = text(r.text)
+    assert r.status_code == 200 and "Not legal advice · rule set" in t and "DRAFT" in t
+    assert r.text.count('<tr id="p-') == 120 and not BANNED.search(t)
+    bob = browser("bob")
+    assert bob.get(f"/audits/{done}/report").status_code == 404
+    assert alice.get("/audits/not-a-job/report").status_code == 404

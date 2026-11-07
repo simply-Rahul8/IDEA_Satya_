@@ -1,0 +1,16 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/draft_banner.html" import draft_banner %}
+{% block body %}
+<div class="wrap">
+  {{ topbar() }}
+  <main id="main" class="export">
+    {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
+    {% block export %}{% endblock %}
+    <footer class="stamp">
+      <p>Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} (draft, not yet reviewed by a regulatory consultant){% endif %}.</p>
+      <p>Nothing flagged red can be exported. The audit record lists every claim, its evidence, flags and overrides.</p>
+    </footer>
+  </main>
+</div>
+{% endblock %}

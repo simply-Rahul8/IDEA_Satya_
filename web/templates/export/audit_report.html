@@ -1,0 +1,18 @@
+{% extends "export/_shell.html" %}
+{% block export %}
+{% set c = report.counters %}
+<p class="report-stamp">Not legal advice · rule set {{ report.rule_set or ruleset.label }}{% if not ruleset.is_signed_off %} · DRAFT{% endif %}</p>
+<h1>Catalogue audit report</h1>
+<p>{{ c.total }} products: {{ c.red }} blocked, {{ c.amber }} to review, {{ c.green }} clear, {{ c.skipped }} not reviewed, {{ c.error }} could not be checked{% if c.pending %}, {{ c.pending }} still waiting{% endif %}.</p>
+{% if report.summary %}<p>{{ report.summary }}</p>{% endif %}
+<p class="no-print"><button class="btn btn-secondary" type="button" x-data x-on:click="window.print()">Print</button> <a href="/audits/{{ job_id }}">Back to audit</a></p>
+<div class="tbl-wrap"><table class="tbl">
+<tr><th>SKU</th><th>Product</th><th>State</th><th>Flags</th></tr>
+{% for it in report.items %}
+<tr id="p-{{ it.position }}"><td>{{ it.sku }}</td><td>{{ it.name }}</td><td>{{ it.state.value }}</td>
+<td>{% for f in it.flags %}{{ f.rule_id }} ({{ f.severity }}){% if f.citation %}: {{ f.citation }}{% endif %}{% if not loop.last %}<br>{% endif %}{% endfor %}
+{% if it.missing_fields %}<br>Missing: {{ it.missing_fields|join(", ") }}{% endif %}{% if it.note %}<br>{{ it.note }}{% endif %}</td></tr>
+{% endfor %}
+</table></div>
+<p><small>This report records automated checks against a draft rule set. It does not certify any listing.</small></p>
+{% endblock %}

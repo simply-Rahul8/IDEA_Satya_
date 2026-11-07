@@ -1,0 +1,15 @@
+{% extends "export/_shell.html" %}
+{% block export %}
+<h1>Export ready</h1>
+<p>{{ result.filename }}. Content SHA-256 <code>{{ result.audit.content_sha256 }}</code>. Keep the audit record with the file.</p>
+<form method="post" action="/packs/{{ state.pack_id }}/export" class="export-acts">
+  <input type="hidden" name="layout" value="{{ layout.id }}">
+  {% for h, s in mapping.items() %}<input type="hidden" name="map:{{ h }}" value="{{ s or '' }}">{% endfor %}
+  <button class="btn btn-primary" type="submit" name="do" value="csv">Download CSV</button>
+  <button class="btn btn-secondary" type="submit" name="do" value="audit">Download audit record</button>
+  <span x-data="satyaCopy" data-copy="{{ text }}" data-done="CSV copied."><button class="btn btn-secondary" type="button" x-on:click="copy">Copy to clipboard</button></span>
+  <a class="btn btn-secondary" href="/packs/{{ state.pack_id }}/report">Print report</a>
+</form>
+<h2>Preview</h2>
+<pre class="export-preview" tabindex="0">{{ text }}</pre>
+{% endblock %}

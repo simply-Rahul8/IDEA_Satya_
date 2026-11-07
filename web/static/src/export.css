@@ -1,0 +1,15 @@
+/* Export and print report. Tokens only. */
+.export { max-width: 56rem; margin-inline: auto; }
+.export-acts { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+.export-preview { overflow: auto; max-height: 20rem; padding: var(--s-3); border: 1px solid var(--line); white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--t-xs); }
+.tbl-wrap { overflow-x: auto; }
+.export td, .export th { overflow-wrap: anywhere; vertical-align: top; }
+.report-stamp { font-weight: 600; border: 1.5px solid currentColor; padding: var(--s-2) var(--s-3); display: inline-block; }
+@media print {
+  @page { size: A4; margin: 15mm; }
+  .export { max-width: none; }
+  .export h2 { break-after: avoid; } .export tr { break-inside: avoid; }
+  .export-preview { max-height: none; }
+}
+.export p, .export li, .export code { overflow-wrap: anywhere; }
+.export { padding-inline: var(--s-4); }

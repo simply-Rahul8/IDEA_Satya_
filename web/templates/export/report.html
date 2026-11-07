@@ -1,0 +1,19 @@
+{% extends "export/_shell.html" %}
+{% block export %}
+<p class="report-stamp">Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} · DRAFT{% endif %}</p>
+<h1>{{ truth.product_name }}{% if truth.brand %} · {{ truth.brand }}{% endif %}</h1>
+<p>No flagged risks under rule set {{ ruleset.label }}. Red flags: {{ audit.red_flags }}. Overrides: {{ audit.overrides }}.
+Rule set status: draft until consultant sign-off. Generated {{ audit.exported_at }}; default CSV SHA-256 <code>{{ audit.content_sha256 }}</code>.</p>
+<p class="no-print"><button class="btn btn-secondary" type="button" x-data x-on:click="window.print()">Print</button> <a href="/packs/{{ state.pack_id }}/export">Export</a></p>
+<h2>Listing</h2>
+{% for sec in pack.sections %}<h3>{{ sec.key }}</h3><p>{% for s in sec.sentences %}{{ s.text }} {% endfor %}</p>{% endfor %}
+<h2>Claims and evidence</h2>
+<div class="tbl-wrap"><table class="tbl"><tr><th>Claim</th><th>Status</th><th>Evidence</th><th>Reference</th></tr>
+{% for c in audit.claims %}<tr><td>{{ c.text }}</td><td>{{ c.status }}</td><td>{{ c.evidence_type or "none" }}</td><td>{{ c.evidence_reference or "" }}</td></tr>{% endfor %}
+</table></div>
+<h2>Flags and overrides</h2>
+{% if audit.flags %}<div class="tbl-wrap"><table class="tbl"><tr><th>Where</th><th>Rule</th><th>Level</th><th>Override reason</th></tr>
+{% for f in audit.flags %}<tr><td>{{ f.section }}[{{ f.sentence_index }}]</td><td>{{ f.rule_id }}</td><td>{{ f.severity }}</td><td>{{ f.override_reason or "" }}</td></tr>{% endfor %}
+</table></div>{% else %}<p>No flags raised.</p>{% endif %}
+<p><small>This report records automated checks against a draft rule set. It does not certify the listing.</small></p>
+{% endblock %}

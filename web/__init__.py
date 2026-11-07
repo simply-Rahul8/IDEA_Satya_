@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from web import account, audits, auth, checker, fix, review
+from web import account, audits, auth, checker, export, fix, review
 from web.assets import router as assets_router
 
 router = APIRouter()
@@ -14,5 +14,6 @@ router.include_router(checker.router)
 router.include_router(review.router)
 router.include_router(audits.router)
 router.include_router(fix.router)
+router.include_router(export.router)
 
 __all__ = ["assets_router", "router"]

@@ -1,0 +1,9 @@
+{% extends "export/_shell.html" %}
+{% block export %}
+<h1>Can't export {{ state.product }} yet</h1>
+<div class="notice" data-kind="error" role="alert">
+  <p>Satya holds back every listing with a flagged risk or an unconfirmed claim. Fix these first:</p>
+  <ul>{% for b in blockers %}<li>{{ b }}</li>{% endfor %}</ul>
+</div>
+<p><a class="btn btn-primary" href="/packs/{{ state.pack_id }}/review">Back to review</a></p>
+{% endblock %}

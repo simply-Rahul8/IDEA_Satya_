@@ -42,7 +42,7 @@
     Alpine.data('satyaCopy', () => ({
       async copy() {
         const text = this.$el.dataset.copy;
-        try { await navigator.clipboard.writeText(text); say('Summary copied.'); toast('Summary copied'); }
+        try { await navigator.clipboard.writeText(text); const done = this.$el.dataset.done || 'Summary copied.'; say(done); toast(done); }
         catch (e) { say('Could not copy. Select the text and copy it manually.'); }
       },
     }));

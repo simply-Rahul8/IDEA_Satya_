@@ -14,6 +14,7 @@
 <div id="gate-live"{% if oob %} hx-swap-oob="outerHTML"{% endif %}>
   {%- if s.approved %}
   {{ notice("Approved.", "The audit record is attached to your export. Editing any sentence reopens the gate.") }}
+  <p class="gate-actions"><a class="btn btn-primary btn-sm" href="/packs/{{ pack_id }}/export">Export</a> <a class="btn btn-secondary btn-sm" href="/packs/{{ pack_id }}/report">Print report</a></p>
   {%- else %}
   <p class="note" id="note" aria-live="polite">{{ icon("ok" if s.ready else ("block" if s.red else "warn")) }}<span>{{ s.note }}</span></p>
   <div class="gate-actions">{{ actions(s, pack_id, "") }}</div>
