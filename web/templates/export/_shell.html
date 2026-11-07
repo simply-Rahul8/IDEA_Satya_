@@ -6,6 +6,7 @@
   {{ topbar() }}
   <main id="main" class="export">
     {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
+    {%- if state is defined and state.pack_id %}<p class="export-nav"><a href="/packs/{{ state.pack_id }}/export"{% if lang | default("en") != "hi" %} aria-current="page"{% endif %}>English export</a> · <a href="/packs/{{ state.pack_id }}/export/hindi"{% if lang | default("en") == "hi" %} aria-current="page"{% endif %}>Hindi export</a></p>{% endif %}
     {% block export %}{% endblock %}
     <footer class="stamp">
       <p>Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} (draft, not yet reviewed by a regulatory consultant){% endif %}.</p>

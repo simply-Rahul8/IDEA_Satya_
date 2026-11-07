@@ -19,6 +19,7 @@
   <form class="claim-confirm" hx-post="/packs/{{ c.pack_id }}/truth/{{ c.id }}/confirm" hx-encoding="multipart/form-data" hx-target="#claim-{{ c.id }}" hx-swap="outerHTML" data-swap-errors>
     <label for="ev-{{ c.id }}">Evidence type</label>
     <select id="ev-{{ c.id }}" name="evidence_type" required{% if c.error_field == "type" %} aria-invalid="true" aria-describedby="err-{{ c.id }}"{% endif %}>
+      <option value=""{% if not c.values.type %} selected{% endif %} disabled>Choose evidence</option>
       {%- for v, label in evidence_choices %}<option value="{{ v.value }}"{% if c.values.type == v.value %} selected{% endif %}>{{ label }}</option>{% endfor %}
     </select>
     <label for="ref-{{ c.id }}">Document ID <span class="muted">(required for a test report, unless you upload it)</span></label>

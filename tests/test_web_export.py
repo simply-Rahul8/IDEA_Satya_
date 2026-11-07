@@ -103,7 +103,9 @@ def test_demo_pack_with_reds_is_blocked():
 
 
 def _plain_forms(page: str) -> list[str]:
-    return [m for m in re.findall(r"<form\b[^>]*>.*?</form>", page, re.S) if re.search(r'method="post"', m[: m.index(">")])]
+    return [
+        m for m in re.findall(r"<form\b[^>]*>.*?</form>", page, re.S) if re.search(r'method="post"', m[: m.index(">")])
+    ]
 
 
 def _browser_without_js(c):

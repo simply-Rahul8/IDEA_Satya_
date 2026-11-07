@@ -25,6 +25,7 @@
     }
   ],
   "format": "csv",
+  "language": "en",
   "layout_id": "generic-v0",
   "mapping": {
     "Brand": "brand",

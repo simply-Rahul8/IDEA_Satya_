@@ -89,5 +89,5 @@
   .cell, .sw { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 .tbl { position: relative; }
-.tbl .sk { overflow-wrap: anywhere; }
+.tbl .sk { white-space: nowrap; }
 @media (max-width: 39.99rem) { .tbl th, .tbl td { padding: var(--s-2); } .tbl .btn { padding: 0 var(--s-2); } .tbl .flag { white-space: normal; } }

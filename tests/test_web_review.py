@@ -171,3 +171,12 @@ def test_confirm_claim_unblocks_anchor_and_hard_block_refused(client):
 def test_docs_and_openapi_not_public_and_meta_description(client):
     assert client.get("/docs").status_code == 404 and client.get("/openapi.json").status_code == 404
     assert '<meta name="description"' in client.get("/packs/demo/review").text
+
+
+def test_blocked_claim_card_never_tells_you_to_rewrite_sentences_that_do_not_exist(client):
+    html = client.get("/packs/demo/review").text
+    cards = [c for c in html.split('<li class="claim"')[1:] if 'data-state="blocked"' in c.split(">")[0] + c[:200]]
+    assert cards
+    for card in cards:
+        card = card.split("</li>")[0]
+        assert ("Rewrite or remove the sentences" in card) == ("nothing yet" not in card)

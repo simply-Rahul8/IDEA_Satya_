@@ -45,6 +45,7 @@ def export_csv(
     layout: Layout = PLACEHOLDER_LAYOUT,
     mapping: Mapping | None = None,
     exported_at: datetime | None = None,
+    language: str = "en",
 ) -> ExportResult:
     """Raises ExportBlocked unless the pack is approvable and carries no red flag; MappingError on a bad mapping."""
     ensure_exportable(pack, truth)
@@ -56,6 +57,8 @@ def export_csv(
     content = b"\xef\xbb\xbf" + buf.getvalue().encode("utf-8")
     when = (exported_at or datetime.now(UTC)).astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     audit = build_audit(
-        fmt="csv", layout_id=layout.id, mapping=full, content=content, pack=pack, truth=truth, exported_at=when
-    )
-    return ExportResult(filename=f"satya-export-{layout.id}.csv", content=content, audit=audit)
+        fmt="csv", layout_id=layout.id, mapping=full, content=content, pack=pack, truth=truth, exported_at=when,
+        language=language,
+    )  # fmt: skip
+    suffix = "" if language == "en" else f"-{language}"
+    return ExportResult(filename=f"satya-export-{layout.id}{suffix}.csv", content=content, audit=audit)

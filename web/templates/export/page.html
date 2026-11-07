@@ -1,9 +1,9 @@
 {% extends "export/_shell.html" %}
 {% block export %}
-<h1>Export {{ state.product }}</h1>
-<p>No flagged risks under rule set {{ ruleset.label }}. Choose which Product Truth or listing field fills each column.</p>
+<h1>{% if lang == "hi" %}Export Hindi copy for {% else %}Export {% endif %}{{ state.product }}</h1>
+<p>No flagged risks under rule set {{ ruleset.label }}. Choose which Product Truth or listing field fills each column.{% if lang == "hi" %} Listing fields come from the Hindi copy (DRAFT until the native Hindi reviewer signs off). Product facts such as name, brand and ingredients stay as entered.{% endif %}</p>
 {% if error %}<div class="notice" data-kind="error" role="alert"><p>{{ error }}</p></div>{% endif %}
-<form method="post" action="/packs/{{ state.pack_id }}/export" class="column-mapping">
+<form method="post" action="{{ export_url }}" class="column-mapping">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <input type="hidden" name="layout" value="{{ layout.id }}">
   <p>Layout: {{ layout.label }}</p>
@@ -20,6 +20,6 @@
     {% endfor %}
   </table>
   <p><button class="btn btn-primary" type="submit" name="do" value="view">Export CSV</button>
-  <a class="btn btn-secondary" href="/packs/{{ state.pack_id }}/report">Print report</a></p>
+  {% if lang != "hi" %}<a class="btn btn-secondary" href="/packs/{{ state.pack_id }}/report">Print report</a>{% endif %}</p>
 </form>
 {% endblock %}

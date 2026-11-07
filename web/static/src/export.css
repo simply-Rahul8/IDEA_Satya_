@@ -13,3 +13,4 @@
 }
 .export p, .export li, .export code { overflow-wrap: anywhere; }
 .export { padding-inline: var(--s-4); }
+.column-mapping select { min-height: var(--tap); }
