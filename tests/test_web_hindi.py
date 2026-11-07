@@ -59,7 +59,7 @@ def test_approved_pack_translates_verifies_and_exports(client):
     assert hindi_export_blockers(st.approved, st.pack, st.hi_pack, st.hi_for, st.truth) == []
     export_csv(st.hi_pack, st.truth)  # the same gate the English export uses
     html = client.get("/packs/p1/hindi").text
-    assert "DRAFT" in html and "Ready to export" in html and 'lang="hi"' in html and DISCLAIMER_HI in html
+    assert "DRAFT" in html and "Passes the export gate" in html and 'lang="hi"' in html and DISCLAIMER_HI in html
     assert "compliant" not in html.lower()
 
 
