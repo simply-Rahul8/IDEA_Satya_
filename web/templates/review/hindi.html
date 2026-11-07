@@ -1,0 +1,43 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% from "components/flag_badge.html" import flag_badge %}
+{% from "components/draft_banner.html" import draft_banner %}
+{% from "components/notice.html" import notice %}
+{% block body %}
+<div class="wrap" id="hindi">
+  {{ topbar() }}
+  <section class="gate" aria-label="Hindi gate">
+    <div class="gate-title"><p class="eyebrow">Step 8 · Hindi · {{ product }}</p>
+    <h1>Hindi copy <span class="id">DRAFT</span></h1></div>
+    <p>Hindi wording and lexicon are a draft until the native Hindi reviewer signs off.</p>
+  </section>
+  <main id="main">
+    <p><a href="/packs/{{ pack_id }}/review">English review</a> · Hindi (DRAFT)</p>
+    {%- if error %}{{ notice("Hindi step stopped.", error, kind="error") }}{% endif %}
+    {%- if can_translate %}
+    <form method="post" action="/packs/{{ pack_id }}/hindi">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn btn-primary" type="submit">{% if has_hindi %}Translate again{% else %}Translate to Hindi{% endif %}</button>
+    </form>
+    {%- else %}
+    <p>Approve the English pack first. Hindi is made from the approved English text.</p>
+    <a class="btn btn-primary" href="/packs/{{ pack_id }}/review">Go to English review</a>
+    {%- endif %}
+    {%- if has_hindi %}
+    <p role="status">{% if ready %}Passes the export gate. No flagged risks under lexicon {{ lexicon }}.{% else %}Export blocked: {{ blockers | length }} thing{{ "" if blockers | length == 1 else "s" }} to fix.{% endif %}</p>
+    {%- if blockers %}<ul>{% for b in blockers %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+    <section class="pane copy" aria-label="Hindi copy">
+      {%- for row in rows %}
+      <article>
+        <p class="eyebrow">{{ row.label }} · {{ row.type }}</p>
+        <p lang="hi">{{ row.text }}</p>
+        {%- for f in row.flags %}<p>{{ flag_badge(f.sev, rule_id=f.rule_id) }} {{ f.reason }}</p>{% endfor %}
+      </article>
+      {%- endfor %}
+    </section>
+    {%- elif blockers and can_translate %}<p>Export is blocked until a Hindi pack is generated and verified.</p>
+    {%- endif %}
+    <footer class="stamp">{{ draft_banner(ruleset) }}<p>Not legal advice · rule set {{ ruleset.label }}.</p></footer>
+  </main>
+</div>
+{% endblock %}

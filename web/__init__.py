@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from web import account, audits, auth, checker, export, fix, review
+from web import account, audits, auth, checker, export, fix, hindi, review
 from web.assets import router as assets_router
 
 router = APIRouter()
@@ -12,6 +12,7 @@ router.include_router(account.protected)
 router.include_router(account.setup_router)
 router.include_router(checker.router)
 router.include_router(review.router)
+router.include_router(hindi.router)
 router.include_router(audits.router)
 router.include_router(fix.router)
 router.include_router(export.router)
