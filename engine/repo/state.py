@@ -29,6 +29,9 @@ class ReviewState:
     last_edit_after_approval: bool = False
     approve_error: str | None = None
     last_announce: str = ""
+    hi_pack: PDPPack | None = None  # Hindi copy (DRAFT), translated from the approved English pack
+    hi_for: str = ""  # digest of the English text it was translated from; a mismatch means it is stale
+    hi_error: str | None = None
     gen: dict[str, Any] = field(default_factory=dict)  # generation job: {status, step, draft, error} (see web.fix)
 
 
@@ -51,6 +54,9 @@ def to_row(state: ReviewState) -> dict[str, Any]:
             "approve_error": state.approve_error,
             "last_announce": state.last_announce,
             "gen": state.gen,
+            "hi_pack": state.hi_pack.model_dump(mode="json") if state.hi_pack else None,
+            "hi_for": state.hi_for,
+            "hi_error": state.hi_error,
         },
     }
 
@@ -74,4 +80,7 @@ def from_row(pack_id: str, row: dict[str, Any]) -> ReviewState:
         approve_error=rv.get("approve_error"),
         last_announce=rv.get("last_announce", ""),
         gen=dict(rv.get("gen") or {}),
+        hi_pack=PDPPack.model_validate(rv["hi_pack"]) if rv.get("hi_pack") and same_rules else None,
+        hi_for=rv.get("hi_for", ""),
+        hi_error=rv.get("hi_error"),
     )
