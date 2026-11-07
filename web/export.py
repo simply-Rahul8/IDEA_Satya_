@@ -16,6 +16,7 @@ from engine.export import (
     list_layouts,
 )
 from engine.repo import NotFound, ReviewState
+from engine.translate.journey import hindi_export_blockers
 from web import packs
 from web.app import form_data, render
 from web.auth import authenticate
@@ -37,12 +38,20 @@ def _blocked(request: Request, state: ReviewState, blockers: list[str], what: st
     return render(request, "export/blocked.html", ctx, status=409)
 
 
-def _gate(request: Request, state: ReviewState, what: str):
-    """The blocked page when the pack cannot leave, else None."""
+def _gate(request: Request, state: ReviewState, what: str, lang: str = "en"):
+    """The blocked page when the pack cannot leave, else None. Hindi also needs the approved English pack it was
+    translated from, so a stale or unverified Hindi pack fails closed."""
+    if lang == "hi":
+        blockers = hindi_export_blockers(state.approved, state.pack, state.hi_pack, state.hi_for, state.truth)
+        return _blocked(request, state, blockers, what) if blockers else None
     if state.pack is None:
         return _blocked(request, state, ["This pack has no generated listing yet."], what)
     blockers = export_blockers(state.pack, state.truth)
     return _blocked(request, state, blockers, what) if blockers else None
+
+
+def _pack_for(state: ReviewState, lang: str):
+    return state.hi_pack if lang == "hi" else state.pack
 
 
 def _mapping(data: dict[str, str], layout) -> dict[str, str | None]:
@@ -55,39 +64,40 @@ def _layout(data: dict[str, str]):
     return get_layout(data.get("layout") or list_layouts()[0].id)
 
 
-@router.get("/packs/{pack_id}/export")
-def export_page(request: Request, pack_id: str):
+def _page_ctx(state: ReviewState, lang: str, layout, mapping, error: str = "") -> dict:
+    what = "Hindi export" if lang == "hi" else "Export"
+    return {
+        "title": f"{what}: {state.product} · Satya", "state": state, "ruleset": state.ruleset, "layout": layout,
+        "mapping": mapping, "sources": SOURCES, "error": error, "lang": lang,
+        "export_url": f"/packs/{state.pack_id}/export" + ("/hindi" if lang == "hi" else ""),
+    }  # fmt: skip
+
+
+def _export_page(request: Request, pack_id: str, lang: str):
     state = _state(request, pack_id)
-    if (blocked := _gate(request, state, "Export")) is not None:
+    if (blocked := _gate(request, state, "Hindi export" if lang == "hi" else "Export", lang)) is not None:
         return blocked
     layout = list_layouts()[0]
-    ctx = {
-        "title": f"Export: {state.product} · Satya", "state": state, "ruleset": state.ruleset, "layout": layout,
-        "mapping": default_mapping(layout), "sources": SOURCES, "error": "",
-    }  # fmt: skip
-    return render(request, "export/page.html", ctx)
+    return render(request, "export/page.html", _page_ctx(state, lang, layout, default_mapping(layout)))
 
 
-@router.post("/packs/{pack_id}/export")
-async def export_do(request: Request, pack_id: str):
+async def _export_do(request: Request, pack_id: str, lang: str):
     """`do` = view (copy and download buttons), csv (download) or audit (the audit record, JSON)."""
     data = await form_data(request)
     state = _state(request, pack_id)
-    if (blocked := _gate(request, state, "Export")) is not None:
+    what = "Hindi export" if lang == "hi" else "Export"
+    if (blocked := _gate(request, state, what, lang)) is not None:
         return blocked
     try:
         layout = _layout(data)
         mapping = _mapping(data, layout)
-        result = export_csv(state.pack, state.truth, layout=layout, mapping=mapping)
+        result = export_csv(_pack_for(state, lang), state.truth, layout=layout, mapping=mapping, language=lang)
     except MappingError as e:
         layout = list_layouts()[0]
-        ctx = {
-            "title": f"Export: {state.product} · Satya", "state": state, "ruleset": state.ruleset, "layout": layout,
-            "mapping": _mapping(data, layout), "sources": SOURCES, "error": str(e),
-        }  # fmt: skip
+        ctx = _page_ctx(state, lang, layout, _mapping(data, layout), str(e))
         return render(request, "export/page.html", ctx, status=422)
     except ExportBlocked as e:  # raced with an edit between the gate above and the export
-        return _blocked(request, state, e.blockers, "Export")
+        return _blocked(request, state, e.blockers, what)
     do = data.get("do", "view")
     if do == "csv":
         return Response(result.content, media_type="text/csv; charset=utf-8", headers=_attachment(result.filename))
@@ -95,11 +105,30 @@ async def export_do(request: Request, pack_id: str):
         return Response(
             result.audit.to_json(), media_type="application/json", headers=_attachment(result.audit_filename)
         )
-    ctx = {
-        "title": f"Export ready: {state.product} · Satya", "state": state, "ruleset": state.ruleset, "layout": layout,
-        "mapping": result.audit.mapping, "result": result, "text": result.content.decode("utf-8-sig"),
+    ctx = _page_ctx(state, lang, layout, result.audit.mapping) | {
+        "title": f"{what} ready: {state.product} · Satya", "result": result, "text": result.content.decode("utf-8-sig"),
     }  # fmt: skip
     return render(request, "export/done.html", ctx)
+
+
+@router.get("/packs/{pack_id}/export")
+def export_page(request: Request, pack_id: str):
+    return _export_page(request, pack_id, "en")
+
+
+@router.post("/packs/{pack_id}/export")
+async def export_do(request: Request, pack_id: str):
+    return await _export_do(request, pack_id, "en")
+
+
+@router.get("/packs/{pack_id}/export/hindi")
+def export_hindi_page(request: Request, pack_id: str):
+    return _export_page(request, pack_id, "hi")
+
+
+@router.post("/packs/{pack_id}/export/hindi")
+async def export_hindi_do(request: Request, pack_id: str):
+    return await _export_do(request, pack_id, "hi")
 
 
 def _attachment(name: str) -> dict[str, str]:

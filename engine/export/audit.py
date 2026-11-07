@@ -35,6 +35,7 @@ class AuditFlag(BaseModel):
 
 class AuditRecord(BaseModel):
     format: str
+    language: str = "en"  # "en" or "hi": which pack the file was made from
     layout_id: str
     mapping: Mapping
     rule_set_version: str | None
@@ -52,7 +53,15 @@ class AuditRecord(BaseModel):
 
 
 def build_audit(
-    *, fmt: str, layout_id: str, mapping: Mapping, content: bytes, pack: PDPPack, truth: ProductTruth, exported_at: str
+    *,
+    fmt: str,
+    layout_id: str,
+    mapping: Mapping,
+    content: bytes,
+    pack: PDPPack,
+    truth: ProductTruth,
+    exported_at: str,
+    language: str = "en",
 ) -> AuditRecord:
     claims = [
         AuditClaim(
@@ -82,6 +91,7 @@ def build_audit(
     ]
     return AuditRecord(
         format=fmt,
+        language=language,
         layout_id=layout_id,
         mapping=mapping,
         rule_set_version=pack.rule_set_version,

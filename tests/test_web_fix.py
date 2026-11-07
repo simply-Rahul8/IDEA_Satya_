@@ -334,3 +334,11 @@ def test_evidence_store_fails_closed_when_hosted_without_supabase():
         evidence_store.from_env({"SUPABASE_URL": "https://x.supabase.co", "SUPABASE_SERVICE_ROLE_KEY": "k"}),
         evidence_store.SupabaseEvidenceStore,
     )
+
+
+def test_evidence_type_starts_neutral_and_missing_facts_are_listed_once(c):
+    pack_id = start(c)
+    html = c.get(f"/packs/{pack_id}/truth").text
+    assert html.count("Not stated in the listing") <= 1
+    assert re.search(r'<option value="" selected disabled>Choose evidence</option>', html)
+    assert c.post(f"/packs/{pack_id}/truth/c1/confirm", data={"evidence_type": ""}, headers=HX).status_code == 422

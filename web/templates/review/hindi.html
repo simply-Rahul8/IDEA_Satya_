@@ -24,7 +24,7 @@
     <a class="btn btn-primary" href="/packs/{{ pack_id }}/review">Go to English review</a>
     {%- endif %}
     {%- if has_hindi %}
-    <p role="status">{% if ready %}Passes the export gate. No flagged risks under lexicon {{ lexicon }}.{% else %}Export blocked: {{ blockers | length }} thing{{ "" if blockers | length == 1 else "s" }} to fix.{% endif %}</p>
+    <p role="status">{% if ready %}No flagged risks under lexicon {{ lexicon }}. <a class="btn btn-secondary" href="/packs/{{ pack_id }}/export/hindi">Export Hindi copy</a>{% else %}Export blocked: {{ blockers | length }} thing{{ "" if blockers | length == 1 else "s" }} to fix.{% endif %}</p>
     {%- if blockers %}<ul>{% for b in blockers %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
     <section class="pane copy" aria-label="Hindi copy">
       {%- for row in rows %}

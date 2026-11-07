@@ -12,7 +12,9 @@
   <h2 id="facts-h">Product facts <span class="muted">· from your listing</span></h2>
   <dl class="facts">
     <div><dt>Product</dt><dd>{{ product }}</dd></div>
-    {%- for f in facts %}<div><dt>{{ f.label }}</dt><dd>{% if f.value %}{{ f.value }}{% else %}<span class="muted">Not stated in the listing</span>{% endif %}</dd></div>{% endfor %}
+    {%- for f in facts if f.value %}<div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>{% endfor %}
+    {%- set missing = facts | rejectattr("value") | map(attribute="label") | list %}
+    {%- if missing %}<div><dt>Not stated in the listing</dt><dd class="muted">{{ missing | join(", ") }}</dd></div>{% endif %}
   </dl>
 </section>
 

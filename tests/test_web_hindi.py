@@ -59,7 +59,7 @@ def test_approved_pack_translates_verifies_and_exports(client):
     assert hindi_export_blockers(st.approved, st.pack, st.hi_pack, st.hi_for, st.truth) == []
     export_csv(st.hi_pack, st.truth)  # the same gate the English export uses
     html = client.get("/packs/p1/hindi").text
-    assert "DRAFT" in html and "Passes the export gate" in html and 'lang="hi"' in html and DISCLAIMER_HI in html
+    assert "DRAFT" in html and "Export Hindi copy" in html and 'lang="hi"' in html and DISCLAIMER_HI in html
     assert "compliant" not in html.lower()
 
 
@@ -88,3 +88,47 @@ def test_unsafe_hindi_is_flagged_and_blocks(client, monkeypatch):
     st = packs.repo().get(client.owner, "p1")
     assert any(f.rule_id.startswith("HI-") for s in st.hi_pack.sentences() for f in s.flags)
     assert hindi_export_blockers(True, st.pack, st.hi_pack, st.hi_for, st.truth)
+
+
+def _hindi_ready(c):
+    seed(c, True)
+    c.post("/packs/p1/hindi", data={}, headers=HX)
+
+
+def test_hindi_pack_leaves_through_the_web(client):
+    _hindi_ready(client)
+    assert "/packs/p1/export/hindi" in client.get("/packs/p1/hindi").text
+    page = client.get("/packs/p1/export/hindi")
+    assert page.status_code == 200 and 'action="/packs/p1/export/hindi"' in page.text and "csrf_token" in page.text
+    csv = client.post("/packs/p1/export/hindi", data={"do": "csv"})
+    assert csv.status_code == 200 and "satya-export-generic-v0-hi.csv" in csv.headers["content-disposition"]
+    st = packs.repo().get(client.owner, "p1")
+    assert DISCLAIMER_HI in csv.content.decode("utf-8-sig") and csv.content != export_csv(st.pack, st.truth).content
+    audit = client.post("/packs/p1/export/hindi", data={"do": "audit"}).json()
+    assert audit["language"] == "hi" and audit["red_flags"] == 0
+    assert audit["content_sha256"] == __import__("hashlib").sha256(csv.content).hexdigest()
+    done = client.post("/packs/p1/export/hindi", data={"do": "view"})
+    assert (
+        done.status_code == 200 and "Hindi export ready" in done.text and 'action="/packs/p1/export/hindi"' in done.text
+    )
+
+
+def test_hindi_export_fails_closed(client):
+    seed(client, True)
+    for r in (client.get("/packs/p1/export/hindi"), client.post("/packs/p1/export/hindi", data={"do": "csv"})):
+        assert r.status_code == 409 and "no Hindi pack has been generated" in r.text
+    _hindi_ready(client)
+    st = packs.repo().get(client.owner, "p1")
+    st.hi_for = "stale"  # English edited after translation
+    packs.repo().put(client.owner, st)
+    r = client.post("/packs/p1/export/hindi", data={"do": "csv"})
+    assert r.status_code == 409 and "out of date" in r.text and b"\xef\xbb\xbf" not in r.content[:3]
+    st.approved = False
+    packs.repo().put(client.owner, st)
+    assert client.get("/packs/p1/export/hindi").status_code == 409
+
+
+def test_other_workspace_cannot_export_hindi(client):
+    _hindi_ready(client)
+    other = secure(TestClient(app))
+    assert other.get("/packs/p1/export/hindi").status_code == 404

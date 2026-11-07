@@ -20,7 +20,7 @@
       <input id="ref-{{ c.id }}" name="reference" type="text" maxlength="500" autocomplete="off" value="">
       <button class="btn btn-secondary btn-sm" type="submit">Confirm claim</button>
     </form>
-    {%- elif c.state == "blocked" %}<p class="fp-note">Cannot be confirmed. Rewrite or remove the sentences that use it.</p>{% endif %}
+    {%- elif c.state == "blocked" %}<p class="fp-note">Cannot be confirmed. {% if c.used %}Rewrite or remove the sentences that use it.{% else %}Left out of your copy. Nothing to change.{% endif %}</p>{% endif %}
     <div class="used">Used in:
       {%- for u in c.used %} <button class="chip" type="button" data-used-in="{{ u.sid }}">{{ u.label }}</button>{% endfor %}
       {%- if not c.used %} nothing yet{% endif %}</div>
