@@ -2,6 +2,7 @@
 
 Marketplace layouts (Nykaa, Amazon) plug in via `layouts.register_layout` once real templates arrive."""
 
+from engine.export import marketplaces as _marketplaces  # noqa: F401  (registers marketplace layouts on import)
 from engine.export.audit import AuditRecord, build_audit
 from engine.export.csv_export import ExportResult, export_csv
 from engine.export.gate import ExportBlocked, ensure_exportable, export_blockers
