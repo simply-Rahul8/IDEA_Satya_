@@ -8,7 +8,7 @@
     <div><dt>Why it is flagged</dt><dd>{{ rule.explanation }}</dd></div>
     {%- if rule.sources %}
     <div><dt>Source</dt><dd>
-      {%- for s in rule.sources %}<p>{{ s.ref }}, {{ s.provision }}{% if not s.verified %} <span class="chip chip-type">Not yet verified</span>{% endif %}</p>{% endfor -%}
+      {%- for s in rule.sources %}<p>{% if s.url %}<a href="{{ s.url }}" rel="noopener noreferrer" target="_blank">{{ s.ref }}</a>{% else %}{{ s.ref }}{% endif %}, {{ s.provision }}</p>{% endfor -%}
     </dd></div>
     {%- endif %}
     <div><dt>What to do</dt><dd>{{ rule.rewrite_hint }}</dd></div>

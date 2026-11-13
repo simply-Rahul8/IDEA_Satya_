@@ -1,18 +1,22 @@
 # NON-OVERRIDABLE (P17). Drug / treatment claims. DRAFT until consultant sign-off (P20).
 # A cosmetic may not claim to diagnose, treat, mitigate or prevent disease or to affect body function.
+# Citations checked against the official texts (links below) on 2026-11-13; legal sign-off is still the consultant's.
 anchors:
   dc_act: &dc_act
     ref: "Drugs and Cosmetics Act, 1940"
-    provision: "s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'"
+    provision: "s.3(b)(i) defines a 'drug' as anything for the diagnosis, treatment, mitigation or prevention of disease; s.3(aaa) limits a 'cosmetic' to cleansing, beautifying, promoting attractiveness or altering the appearance"
     verified: false
+    url: "https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf"
   cosmetics_rules: &cosmetics_rules
     ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
-    provision: "r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant"
+    provision: "r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims)"
     verified: false
+    url: "https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf"
   ccpa: &ccpa
     ref: "Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA)"
-    provision: "misleading advertisement; claim substantiation"
+    provision: "Guideline 4 (conditions for a non-misleading advertisement) and Guideline 12 (claims must be capable of substantiation)"
     verified: false
+    url: "https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf"
 
 rules:
   - id: EN-DRUG-001
@@ -108,7 +112,7 @@ rules:
     title: "Claim to change a body function (hormones, immunity, circulation, metabolism)"
     severity: red
     overridable: false
-    explanation: "A cosmetic cannot claim to affect how the body works internally. That is a drug claim under the 'structure or function' limb of the drug definition."
+    explanation: "A cosmetic cannot claim to affect how the body works internally. That goes beyond what a cosmetic is (s.3(aaa)) and reads as a drug claim."
     rewrite_hint: "Limit the claim to the skin or hair surface: how it looks, feels or is cleansed."
     patterns:
       - kind: verb_condition
@@ -142,6 +146,7 @@ rules:
         - "Boosts skin radiance."
         - "Improves the look of skin texture."
     open_questions:
+      - "Which limb of the drug definition applies? s.3(b)(ii) (structure or function of the body) covers only substances the government has notified, so the draft cites s.3(b)(i) and s.3(aaa) instead. Confirm the basis for blocking body-function claims."
       - "Scalp or body massage oils often say 'improves blood circulation'. Is that a drug claim, or accepted as a massage effect? The draft treats it as a drug claim."
 
   - id: EN-DRUG-004

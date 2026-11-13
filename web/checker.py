@@ -31,10 +31,6 @@ router = APIRouter(dependencies=[Depends(guard_unsafe)])
 CHECKER_MAX_CHARS = int(
     os.environ.get("CHECKER_MAX_CHARS", "5000")
 )  # placeholder cap, Platform/Engine to confirm (P18)
-SAMPLE_TEXT = (
-    "Glow Dew Serum. This serum cures acne scars in 7 days and is clinically proven to lighten skin tone. "
-    "Our formula repairs damaged skin and gives a dewy finish. Apply two drops morning and night."
-)
 
 
 RateLimiter = MemoryLimiter  # kept for callers and tests that build their own
@@ -108,7 +104,7 @@ def run_check(text: str, ruleset: RuleSet | None = None) -> CheckResult:
     note = hindi_note(checked, flags)
     level = view.risk_level(flags)
     red, orange = view.tally(flags)
-    items = [(f, rs.rule(f.rule_id).title, view.ui_sev(f.severity)) for f in flags]
+    items = [(f, rs.rule(f.rule_id), view.ui_sev(f.severity)) for f in flags]  # the rule carries the evidence
     parts = [p for p in (f"{red} blocked" if red else "", f"{orange} to review" if orange else "") if p]
     summary = (
         f"Checked with Satya under rule set {rs.label}: {', '.join(parts)}. Not legal advice."
@@ -134,7 +130,6 @@ def _page_ctx(result: CheckResult, full_page: bool) -> dict:
     return {
         "r": result,
         "max_chars": CHECKER_MAX_CHARS,
-        "sample": SAMPLE_TEXT,
         "full_page": full_page,
         "title": "Is my claim safe? · Satya",
     }

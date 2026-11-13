@@ -30,7 +30,7 @@ def visible_text(html: str) -> str:
 
 def test_page_renders_with_draft_banner_and_no_inline_code(client):
     html = client.get("/check").text
-    assert "Draft rule set v0.1.2-draft" in html
+    assert "Draft rule set v0.1.3-draft" in html
     assert 'style="' not in html
     assert len(re.findall(r"<script(?![^>]*\bsrc=)", html)) == 1  # the theme snippet only
     assert 'x-data="satyaChecker"' in html
@@ -51,7 +51,7 @@ def test_flagged_partial_has_marks_list_and_announcement(client):
     html = client.post("/check", data={"text": FLAGGED}, headers=HX).text
     assert html.count("<mark ") == 3
     assert 'class="hl hl-red"' in html and 'class="hl hl-amber"' in html
-    assert "2 blocked, 1 to review under rule set v0.1.2-draft." in html
+    assert "2 blocked, 1 to review under rule set v0.1.3-draft." in html
     assert "hx-swap-oob" in html and 'id="backdrop-text"' in html
 
 
@@ -62,7 +62,7 @@ def test_red_listed_before_amber(client):
 
 def test_clear_result_never_says_safe_or_compliant(client):
     html = client.post("/check", data={"text": "A gentle moisturiser with ceramides."}, headers=HX).text
-    assert "No flagged risks" in html and "under rule set v0.1.2-draft" in html
+    assert "No flagged risks" in html and "under rule set v0.1.3-draft" in html
     assert not BANNED.search(visible_text(html))
 
 
@@ -111,7 +111,8 @@ def test_rate_limit_returns_429_with_retry_after_and_keeps_text(client, monkeypa
 def test_rule_sheet_is_cacheable_and_holds_no_user_text(client):
     r = client.get("/rules/EN-DRUG-001/sheet?v=v0.1.1-draft")
     assert r.status_code == 200 and "public" in r.headers["cache-control"]
-    assert "Why it is flagged" in r.text and "Not yet verified" in r.text and "cannot be overridden" in r.text
+    assert "Why it is flagged" in r.text and "cannot be overridden" in r.text
+    assert "Not yet reviewed by a regulatory consultant" in r.text  # draft status: once, in the banner
     assert client.get("/rules/NOPE/sheet").status_code == 404
 
 
@@ -204,3 +205,30 @@ def test_robots_sitemap_and_share_card(client, monkeypatch):
     assert 'property="og:image" content="https://satya.example.in/static/og.png"' in client.get("/check").text
     img = client.get("/static/og.png")
     assert img.status_code == 200 and img.headers["content-type"] == "image/png" and img.content[:4] == b"\x89PNG"
+
+
+# ------------------------------------------------------------------- analysis on demand, flags with their evidence
+def test_analysis_runs_only_from_the_start_button(client):
+    html = client.get("/check").text
+    assert 'id="start"' in html and ">Start analysis</button>" in html and "Try a sample" not in html
+    assert 'hx-trigger="satya:recheck"' in html  # never on input or paste
+    assert 'x-on:submit.prevent="analyse"' in html and 'type="submit" id="start"' in html  # no-JS posts the form
+
+
+def test_each_flag_shows_why_and_its_sources(client):
+    html = client.post("/check", data={"text": "This cream cures acne and lightens skin tone."}, headers=HX).text
+    assert html.count('class="evidence"') == 2
+    rs = checker.default_ruleset()
+    for rid in ("EN-DRUG-001", "EN-FAIR-001"):
+        rule = rs.rule(rid)
+        assert rule.sources and all(str(s.ref).replace("'", "&#39;") in html for s in rule.sources)
+    assert "Why it is flagged" in html and "What to do" in html
+    assert "Not yet verified" not in html  # stated once below, not stamped on every source
+    assert "A regulatory consultant has not yet signed off this rule set" in html
+    links = [s.url for rid in ("EN-DRUG-001", "EN-FAIR-001") for s in rs.rule(rid).sources if s.url]
+    assert links and all(f'href="{u}" rel="noopener noreferrer"' in html for u in links)
+
+
+def test_hindi_flag_says_how_it_was_found(client):
+    html = client.post("/check", data={"text": HINDI}, headers=HX).text
+    assert "Matched by the Hindi word list" in html

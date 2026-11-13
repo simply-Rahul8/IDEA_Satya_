@@ -242,7 +242,10 @@ def _rule_md(r: Rule) -> list[str]:
         f"**Rewrite direction:** {r.rewrite_hint}\n",
     ]
     o.append("**Sources (UNVERIFIED unless marked):**")
-    o.extend(f"- {c.ref}, {c.provision}" + ("" if not c.verified else " (verified)") for c in r.sources)
+    o.extend(
+        f"- {c.ref}, {c.provision}" + (f" <{c.url}>" if c.url else "") + ("" if not c.verified else " (verified)")
+        for c in r.sources
+    )
     o.append("\n**Patterns:**")
     o.extend(f"- {line}" for line in _pattern_lines(r))
     o.append("\n**Must flag (positive examples):**")

@@ -17,25 +17,24 @@
         <p class="hero-sub">Paste your product copy. Satya underlines <mark class="swipe">the phrases that marketplaces and regulators tend to flag</mark>, and shows the written rule behind each one.</p>
         {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
       </div>
-      <form class="sheet-wrap cell-form" method="post" action="/check" x-data="satyaChecker" x-on:input="mirror" x-on:paste="paste">
+      <form class="sheet-wrap cell-form" method="post" action="/check" x-data="satyaChecker" x-on:input="mirror" x-on:paste="paste" x-on:submit.prevent="analyse">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         {%- set rate = rate_limited | default(false) -%}
         <div class="paper-wrap paper">
           {{ highlight_field("text", "text", r.text, r.backdrop, "Product listing copy to check",
-               placeholder="Paste or type your product copy here…", describedby="count live-note",
-               attrs={"hx-post": "/check", "hx-trigger": "input changed delay:250ms, satya:recheck", "hx-target": "#verdict", "hx-swap": "outerHTML",
+               placeholder="Paste or type your product copy here, then press Start analysis…", describedby="count live-note",
+               attrs={"hx-post": "/check", "hx-trigger": "satya:recheck", "hx-target": "#verdict", "hx-swap": "outerHTML",
                       "hx-sync": "this:replace", "hx-indicator": "#paper-foot"}) }}
           <div class="paper-foot" id="paper-foot">
             {{ count(r, max_chars) }}
             <span class="checking" aria-hidden="true">{{ icon("spin") }}Checking…</span>
             <div class="acts">
               <button class="btn btn-ghost btn-sm" type="button" x-on:click="clear">Clear</button>
-              <button class="btn btn-secondary btn-sm" type="button" x-on:click="useSample" data-sample="{{ sample }}">Try a sample</button>
-              <noscript><button class="btn btn-primary btn-sm" type="submit">Check</button></noscript>
+              <button class="btn btn-primary btn-sm" type="submit" id="start">Start analysis</button>
             </div>
           </div>
         </div>
-        <p class="sr-only" id="live-note">Results update as you type.</p>
+        <p class="sr-only" id="live-note">Nothing is checked until you press Start analysis.</p>
         {{ cap_notice(r, max_chars) }}
         {%- if rate and full_page %}{{ notice("You've reached the check limit.", "Try again in about " ~ wait_minutes ~ " minutes. Nothing you typed is lost.") }}{% endif %}
       </form>

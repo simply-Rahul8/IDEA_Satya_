@@ -46,7 +46,7 @@ The checker and write limiters key on a hash of the caller's IP (`web/security.p
 These could only be tested with local stand-ins (QA SAT-44), so one preview run is required **before any production deploy**; QA re-tests after it.
 1. Limiter keys on the Vercel header and uses Postgres. With `SUPABASE_DB_URL` set on the preview, post to `/check` (with the page's CSRF token and cookie) more than `CHECKER_RATE_LIMIT` times with a different `X-Forwarded-For` on each: expect 429 after the limit, not 200s. Then repeat from a second network (phone hotspot): it gets its own fresh count, so the key is the caller's address and not a shared proxy address. In the Supabase SQL editor, `select key, window_start, count from rate_limits order by window_start desc limit 5;` should show `ip:check:` rows (hashed, no raw IPs). If no rows appear, the app fell back to the per-process limiter: check `SUPABASE_DB_URL`.
 2. Auth and RLS against the real project: run the section 4a checks 1 to 4 and the section 2 verification queries, and in addition confirm that as an `authenticated` user a PATCH on `claims` setting `hard_blocked=false` or `status='confirmed'` changes 0 rows (QA ran this only on a local Postgres with `local_shim.sql`).
-3. Report results in the SAT-50 task. Rule set stays `v0.1.2-draft`: never describe output as compliant.
+3. Report results in the SAT-50 task. Rule set stays `v0.1.3-draft`: never describe output as compliant.
 
 ## 4a. Persistence checks after the first preview deploy (board user, once a preview project exists)
 The Supabase repository is tested against a fake client only. After section 2 and 4 are done, check these by hand and report any failure in the SAT-38 task:

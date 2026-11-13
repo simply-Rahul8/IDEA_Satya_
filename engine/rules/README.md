@@ -1,6 +1,6 @@
 # English rules (DRAFT)
 
-**Status: DRAFT.** Rule set `satya-en`, version in `meta.yaml`. Reports quote it as `v0.1.2-draft`.
+**Status: DRAFT.** Rule set `satya-en`, version in `meta.yaml`. Reports quote it as `v0.1.3-draft`.
 Nothing here is brand-facing until the consultant signs off (plan P20). Never describe output as "compliant": say
 "No flagged risks under rule set vX. Not legal advice." (`engine/rules/wording.py`).
 

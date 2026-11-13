@@ -1,8 +1,8 @@
 # Satya consultant review pack: English rules (DRAFT)
 
-- **Rule set:** satya-en v0.1.2-draft
+- **Rule set:** satya-en v0.1.3-draft
 - **Status:** DRAFT: not reviewed, not signed off
-- **Content fingerprint:** 3ca2e47a38aa
+- **Content fingerprint:** acff9ac521c5
 - **Last updated:** 2026-11-13
 - **Rules:** 24 rules, 3 safe-phrase entries, 4 product-type signals
 - **Prepared for:** Cosmetics regulatory consultant (week-2 review, plan P20)
@@ -54,9 +54,9 @@ This pack is not legal advice. It is a draft for expert review.
 | EN-DRUG-003 | Claim to change a body function (hormones, immunity, circulation, metabolism) | RED | No (locked) | Drugs and Cosmetics Act, 1940 |
 | EN-DRUG-004 | Prescription or medicinal product language | RED | No (locked) | Drugs and Cosmetics Act, 1940; Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020) |
 | EN-DRUG-005 | Hair regrowth or reversal of hair loss | RED | No (locked) | Drugs and Cosmetics Act, 1940; Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA) |
-| EN-FAIR-001 | Claim to lighten, whiten or make skin fairer | RED | No (locked) | ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products; ASCI Code for Self-Regulation of Advertising Content in India; Consumer Protection Act, 2019 |
-| EN-FAIR-002 | Darker skin presented as a problem to remove or fix | RED | No (locked) | ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products; ASCI Code for Self-Regulation of Advertising Content in India |
-| EN-FAIR-003 | Fair or light skin linked to success, marriage, jobs or confidence | RED | No (locked) | ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products; ASCI Code for Self-Regulation of Advertising Content in India |
+| EN-FAIR-001 | Claim to lighten, whiten or make skin fairer | RED | No (locked) | ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products; ASCI Code for Self-Regulation of Advertising Content in India; Consumer Protection Act, 2019 |
+| EN-FAIR-002 | Darker skin presented as a problem to remove or fix | RED | No (locked) | ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products; ASCI Code for Self-Regulation of Advertising Content in India |
+| EN-FAIR-003 | Fair or light skin linked to success, marriage, jobs or confidence | RED | No (locked) | ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products; ASCI Code for Self-Regulation of Advertising Content in India |
 
 
 ## 4. Rules in detail
@@ -71,9 +71,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Describe the cosmetic effect instead, for example 'cleanses oily skin' or 'for acne-prone skin'.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) defines a 'drug' as anything for the diagnosis, treatment, mitigation or prevention of disease; s.3(aaa) limits a 'cosmetic' to cleansing, beautifying, promoting attractiveness or altering the appearance <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims) <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement) and Guideline 12 (claims must be capable of substantiation) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: treat*, cure*, heal, heals, healed, healing, relieve*, alleviate*, remedy, remedies, mitigate*
@@ -102,8 +102,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Describe what the product does to the skin's look or feel. Do not mention disease.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) defines a 'drug' as anything for the diagnosis, treatment, mitigation or prevention of disease; s.3(aaa) limits a 'cosmetic' to cleansing, beautifying, promoting attractiveness or altering the appearance <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement) and Guideline 12 (claims must be capable of substantiation) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: prevent*, protect, protects, protecting, fight, fights, fighting, combat*, kill, kills, killing
@@ -126,12 +126,12 @@ This pack is not legal advice. It is a draft for expert review.
 
 #### EN-DRUG-003: Claim to change a body function (hormones, immunity, circulation, metabolism) [RED, NON-OVERRIDABLE]
 
-**Why it is flagged:** A cosmetic cannot claim to affect how the body works internally. That is a drug claim under the 'structure or function' limb of the drug definition.
+**Why it is flagged:** A cosmetic cannot claim to affect how the body works internally. That goes beyond what a cosmetic is (s.3(aaa)) and reads as a drug claim.
 
 **Rewrite direction:** Limit the claim to the skin or hair surface: how it looks, feels or is cleansed.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) defines a 'drug' as anything for the diagnosis, treatment, mitigation or prevention of disease; s.3(aaa) limits a 'cosmetic' to cleansing, beautifying, promoting attractiveness or altering the appearance <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
 
 **Patterns:**
 - Verbs: regulate*, balance, balances, balancing, boost, boosts, boosting, stimulate*, improve, improves, improving, increase*, lower, lowers, lowering, reduce, reduces, reducing, restore, restores, detoxify, detoxifies
@@ -148,6 +148,7 @@ This pack is not legal advice. It is a draft for expert review.
 - Improves the look of skin texture.
 
 **Open questions:**
+- Which limb of the drug definition applies? s.3(b)(ii) (structure or function of the body) covers only substances the government has notified, so the draft cites s.3(b)(i) and s.3(aaa) instead. Confirm the basis for blocking body-function claims.
 - Scalp or body massage oils often say 'improves blood circulation'. Is that a drug claim, or accepted as a massage effect? The draft treats it as a drug claim.
 
 **Reviewer decision:** [ ] Approve  [ ] Change  [ ] Remove. Notes: ______
@@ -159,8 +160,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Remove the medicinal wording. Describe the formula by its ingredients and cosmetic purpose.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) defines a 'drug' as anything for the diagnosis, treatment, mitigation or prevention of disease; s.3(aaa) limits a 'cosmetic' to cleansing, beautifying, promoting attractiveness or altering the appearance <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims) <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
 
 **Patterns:**
 - Phrases: prescription strength, prescription-strength, prescribed by doctors, prescribed by dermatologists, doctor prescribed, doctor-prescribed, dermatologist prescribed, dermatologist-prescribed, medicated, is a medicine, acts as a medicine, works like a medicine, pharmaceutical grade, pharmaceutical-grade
@@ -186,8 +187,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Talk about the look and feel of existing hair, for example 'nourishes hair' or 'helps hair feel fuller'.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(b) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease; affecting structure or function of the body) versus s.3(aaa) definition of 'cosmetic'
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) defines a 'drug' as anything for the diagnosis, treatment, mitigation or prevention of disease; s.3(aaa) limits a 'cosmetic' to cleansing, beautifying, promoting attractiveness or altering the appearance <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement) and Guideline 12 (claims must be capable of substantiation) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: regrow*, re-grow*, regenerate*, revive*, reactivate*
@@ -219,7 +220,7 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Remove the disease. A cosmetic listing cannot refer to these conditions.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954, s.3(d) and the Schedule (diseases, disorders and conditions)
+- Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954, s.3(d): no advertisement of a drug for the diagnosis, cure, mitigation, treatment or prevention of a disease, disorder or condition listed in the Schedule <https://www.indiacode.nic.in/indiacode/bitstream/123456789/1412/1/A1954-21.pdf>
 
 **Patterns:**
 - Verbs: cure*, treat*, heal, heals, healed, healing, prevent*, reverse*, reversing, relieve*, alleviate*, mitigate*, eliminate*, fight, fights, fighting, combat*, remedy, remedies, diagnos*, manage, manages, managing, control, controls, controlling, help, helps, helping
@@ -253,7 +254,7 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Remove the claim. If the product is intimate hygiene, describe cleansing only.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954, s.3(a), (b), (c): miscarriage and conception, sexual pleasure, menstrual disorder
+- Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954, s.3(a), (b), (c): no advertisement of a drug for miscarriage or preventing conception, sexual pleasure, or menstrual disorders <https://www.indiacode.nic.in/indiacode/bitstream/123456789/1412/1/A1954-21.pdf>
 
 **Patterns:**
 - Verbs: improve*, enhance*, boost*, increase*, restore*, correct*, regulate*, induce*, prevent*, cure*, treat*, help, helps, helping, for
@@ -281,8 +282,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Remove the claim. A hair colour product may describe covering grey hair as a colouring effect.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(b)(i) definition of 'drug' (treatment, mitigation or prevention of disease). Cited for EN-DMR-003 because premature greying is not in the DMR Schedule
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.36 (false or misleading claims). Cited for EN-DMR-003 with D&C Act s.3(b)(i)
+- Drugs and Cosmetics Act, 1940, s.3(b)(i) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease). Cited for EN-DMR-003 because premature greying is not in the DMR Schedule <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.36 (prohibition against false or misleading claims). Cited for EN-DMR-003 with D&C Act s.3(b)(i) <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
 
 **Patterns:**
 - Verbs: cure*, treat*, prevent*, reverse*, stop*, reduce*, delay*, restore*, fix*
@@ -313,9 +314,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Describe the care benefit instead, for example 'helps skin look even and radiant' or 'visibly fades the look of dark spots'.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products, advertisements must not depict darker skin as inferior or link skin colour to success; edition in force to be confirmed
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter III (advertisements must not offend against public decency or portray groups adversely); clause numbers to be confirmed
-- Consumer Protection Act, 2019, s.2(28) misleading advertisement; s.21 powers of the Central Consumer Protection Authority
+- ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products, Clause 1: advertisements must not show people with darker skin as unattractive, unhappy, inferior or unsuccessful; clauses 3 and 4: no discrimination by skin colour, including by caste, community or gender. Issued 2014 and still current <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter III, clause 3.1(b): advertisements must not deride any individual or group on the basis of race, caste, colour and similar grounds <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Consumer Protection Act, 2019, s.2(28) definition of a misleading advertisement; s.21 the Central Consumer Protection Authority can order an advertisement stopped or changed and impose penalties <https://consumeraffairs.gov.in/public/upload/files/CP%20Act%202019_1732700731.pdf>
 
 **Patterns:**
 - Verbs: whiten*, lighten*
@@ -353,8 +354,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Describe the care benefit without referring to skin colour as a flaw.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products, advertisements must not depict darker skin as inferior or link skin colour to success; edition in force to be confirmed
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter III (advertisements must not offend against public decency or portray groups adversely); clause numbers to be confirmed
+- ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products, Clause 1: advertisements must not show people with darker skin as unattractive, unhappy, inferior or unsuccessful; clauses 3 and 4: no discrimination by skin colour, including by caste, community or gender. Issued 2014 and still current <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter III, clause 3.1(b): advertisements must not deride any individual or group on the basis of race, caste, colour and similar grounds <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
 
 **Patterns:**
 - Verbs: remove*, eliminate*, get rid of, fix, fixes, fixing, correct*, cure*, treat*, say goodbye to, bye bye, hide*, end, ends
@@ -382,8 +383,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Remove the link between skin colour and the life outcome.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products, advertisements must not depict darker skin as inferior or link skin colour to success; edition in force to be confirmed
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter III (advertisements must not offend against public decency or portray groups adversely); clause numbers to be confirmed
+- ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products, Clause 1: advertisements must not show people with darker skin as unattractive, unhappy, inferior or unsuccessful; clauses 3 and 4: no discrimination by skin colour, including by caste, community or gender. Issued 2014 and still current <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter III, clause 3.1(b): advertisements must not deride any individual or group on the basis of race, caste, colour and similar grounds <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
 
 **Patterns:**
 - Verbs: fair skin, fairer skin, fairness, whiter skin, lighter skin, light skin, fair complexion, fair face
@@ -414,9 +415,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Say what is in or out of the formula, for example 'free from parabens', and avoid promising safety.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Consumer Protection Act, 2019, s.2(28) misleading advertisement
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
+- Consumer Protection Act, 2019, s.2(28) definition of a misleading advertisement (false description of the product, or deliberately concealing important information) <https://consumeraffairs.gov.in/public/upload/files/CP%20Act%202019_1732700731.pdf>
 
 **Patterns:**
 - Phrases: 100 safe, 100 percent safe, completely safe, totally safe, absolutely safe, guaranteed safe, zero side effects, no side effects, no side-effects, side effect free, side-effect free, side-effects free, without side effects, without any side effects, risk free, risk-free, harmless, safe for everyone
@@ -441,8 +442,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Say what users may notice and over what period, for example 'visible results with regular use'.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: guarantee, guarantees, guaranteed, guaranteeing
@@ -473,8 +474,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Use 'visibly reduces the appearance of ...' and keep it to what a cosmetic can show.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: remove, removes, removing, erase*, eliminate*, banish*, get rid of, gets rid of, vanish*, reverse*, wipe out, wipes out
@@ -503,9 +504,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Keep the claim only if you hold the test report, and cite what was tested. Otherwise drop it.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims) <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
 
 **Patterns:**
 - Phrases: clinically proven, clinically tested, clinically approved, clinically shown, clinically effective, clinically verified, dermatologically tested, dermatologically proven, dermatologically approved, dermatologist tested, dermatologist approved, dermatologist recommended, dermatologist-recommended, recommended by dermatologists, approved by dermatologists, doctor recommended, doctor approved, recommended by doctors, scientifically proven, scientifically tested, lab tested, lab-tested, laboratory tested, patch tested, allergy tested, hypoallergenic, non-comedogenic, noncomedogenic, non comedogenic
@@ -532,9 +533,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** If you hold a registration, state the registration number, not 'approved'.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic' (cleansing, beautifying, promoting attractiveness or altering the appearance); s.3(b) definition of 'drug' <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims) <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Phrases: fda approved, fda-approved, cdsco approved, cdsco-approved, approved by fda, approved by cdsco, government approved, govt approved, approved by the government
@@ -559,8 +560,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Cite the study (sample size, method, date) or your records, or remove the number.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Regular expression: \b\d{1,3}(?:\.\d+)?\s?%\s+(?:of\s+)?(?:\w+\s+){0,2}?(?:users|women|men|people|customers|participants|respondents|volunteers|consumers)\b
@@ -595,9 +596,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Name the natural ingredients, or say 'made with plant-derived ingredients'.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims) <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
 
 **Patterns:**
 - Phrases: 100 natural, 100 percent natural, 100 organic, 100 pure, chemical free, chemical-free, free from chemicals, free of chemicals, free from all chemicals, toxin free, toxin-free, non toxic, non-toxic, nontoxic, certified organic, organic certified
@@ -623,8 +624,8 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Say 'ask your doctor if pregnant' or describe the testing done.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Phrases: safe for pregnancy, safe during pregnancy, safe in pregnancy, pregnancy safe, pregnancy-safe, safe for pregnant women, safe for breastfeeding, safe for babies, baby safe, baby-safe, safe for infants, safe for newborns, safe for children, safe for kids, safe for all skin types, safe for all ages, safe for sensitive skin
@@ -650,9 +651,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** State the tested SPF and PA rating, and say 'water resistant' only if tested.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.36 (false or misleading claims). The Rules have no SPF or sunscreen provision; r.36 applies only generically
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
+- Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020), r.36 (prohibition against false or misleading claims). The Rules do not mention SPF or sunscreen; sun protection products appear only as an import category in the Fourth Schedule <https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf>
 
 **Patterns:**
 - Phrases: total sun protection, complete sun protection, full sun protection, blocks all uv, blocks 100 uv, 100 uv protection, sunproof, sweatproof sunscreen, waterproof sunscreen
@@ -679,9 +680,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Say 'nourishes hair' or 'reduces breakage' and keep to what the product can show.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic' (cleansing, beautifying, promoting attractiveness or altering the appearance); s.3(b) definition of 'drug' <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: promote*, boost*, stimulate*, accelerate*, speed up, increase*, enhance*
@@ -710,9 +711,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Say 'cleanses excess oil' or 'for acne-prone skin' and avoid efficacy words.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic' (cleansing, beautifying, promoting attractiveness or altering the appearance); s.3(b) definition of 'drug' <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: clear, clears, clearing, eliminate*, get rid of, gets rid of, kill, kills, killing, fight, fights, fighting, control, controls, reduce, reduces, reducing, remove, removes, removing
@@ -741,9 +742,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Cite the ranking (source, period) or use a factual description.
 
 **Sources (UNVERIFIED unless marked):**
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
-- Consumer Protection Act, 2019, s.2(28) misleading advertisement
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
+- Consumer Protection Act, 2019, s.2(28) definition of a misleading advertisement (false description of the product, or deliberately concealing important information) <https://consumeraffairs.gov.in/public/upload/files/CP%20Act%202019_1732700731.pdf>
 
 **Patterns:**
 - Phrases: number 1, number one, no 1, world's best, worlds best, india's best, best in india, best in the world, best in class, unbeatable, unmatched, better than all, better than any, nothing works better, no other product
@@ -769,9 +770,9 @@ This pack is not legal advice. It is a draft for expert review.
 **Rewrite direction:** Describe skin feel, such as 'firming body lotion'. Do not mention fat or weight.
 
 **Sources (UNVERIFIED unless marked):**
-- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'
-- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
-- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), misleading advertisement; claim substantiation; endorsements
+- Drugs and Cosmetics Act, 1940, s.3(aaa) definition of 'cosmetic' (cleansing, beautifying, promoting attractiveness or altering the appearance); s.3(b) definition of 'drug' <https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf>
+- ASCI Code for Self-Regulation of Advertising Content in India, Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date) <https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf>
+- Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA), Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements) <https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf>
 
 **Patterns:**
 - Verbs: burn, burns, burning, melt, melts, melting, dissolve*, reduce, reduces, reducing, lose, shrink*, slim, slims
@@ -876,7 +877,7 @@ General questions:
 6. Report wording: is 'No flagged risks under rule set vX. Not legal advice.' acceptable on a brand-facing report, and is there any wording that must be added?
 7. Out-of-scope product types: confirm that supplements, foods, OTC drugs and AYUSH products must all be refused in v1.
 
-Rule-specific questions (33), repeated here as a checklist:
+Rule-specific questions (34), repeated here as a checklist:
 
 | Rule | Question | Your answer |
 |---|---|---|
@@ -904,6 +905,7 @@ Rule-specific questions (33), repeated here as a checklist:
 | EN-DRUG-001 | Is 'soothes' or 'relieves' acceptable for visible irritation (redness, dryness) without naming a disease? The draft flags 'relieve*' only next to a named condition. |  |
 | EN-DRUG-001 | 'Treatment' is flagged next to a condition, so 'spot treatment for acne' is red. Confirm this is the right line for 'spot treatment' products. |  |
 | EN-DRUG-002 | Standard disclaimers such as 'not intended to diagnose, treat, cure or prevent any disease' are allowlisted (AL-001). Confirm that wording is acceptable on a listing. |  |
+| EN-DRUG-003 | Which limb of the drug definition applies? s.3(b)(ii) (structure or function of the body) covers only substances the government has notified, so the draft cites s.3(b)(i) and s.3(aaa) instead. Confirm the basis for blocking body-function claims. |  |
 | EN-DRUG-003 | Scalp or body massage oils often say 'improves blood circulation'. Is that a drug claim, or accepted as a massage effect? The draft treats it as a drug claim. |  |
 | EN-DRUG-004 | Should 'medicinal herbs' or 'dermatologist-formulated' be allowlisted? The draft flags neither. |  |
 | EN-DRUG-005 | 'Promotes hair growth' and 'reduces hair fall' are handled as overridable orange claims (EN-CLAIM-010). Confirm they belong there and not here. |  |
@@ -917,7 +919,7 @@ Rule-specific questions (33), repeated here as a checklist:
 
 ## 8. Sign-off sheet
 
-- **Rule set reviewed:** satya-en v0.1.2-draft, fingerprint 3ca2e47a38aa
+- **Rule set reviewed:** satya-en v0.1.3-draft, fingerprint acff9ac521c5
 - **Decision:** [ ] Approved   [ ] Approved with the changes listed   [ ] Not approved
 - **Reviewer name and qualification:** 
 - **Date:** 

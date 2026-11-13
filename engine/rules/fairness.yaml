@@ -1,17 +1,20 @@
 # NON-OVERRIDABLE (P17). Fairness / skin-lightening and colourism. DRAFT until consultant sign-off (P20).
 anchors:
   asci_fairness: &asci_fairness
-    ref: "ASCI Guidelines for Advertisements for Skin Lightening or Fairness Products"
-    provision: "advertisements must not depict darker skin as inferior or link skin colour to success; edition in force to be confirmed"
+    ref: "ASCI Guidelines for Advertising of Skin Lightening or Fairness Improvement Products"
+    provision: "Clause 1: advertisements must not show people with darker skin as unattractive, unhappy, inferior or unsuccessful; clauses 3 and 4: no discrimination by skin colour, including by caste, community or gender. Issued 2014 and still current"
     verified: false
+    url: "https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf"
   asci_code: &asci_code
     ref: "ASCI Code for Self-Regulation of Advertising Content in India"
-    provision: "Chapter III (advertisements must not offend against public decency or portray groups adversely); clause numbers to be confirmed"
+    provision: "Chapter III, clause 3.1(b): advertisements must not deride any individual or group on the basis of race, caste, colour and similar grounds"
     verified: false
+    url: "https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf"
   cpa: &cpa
     ref: "Consumer Protection Act, 2019"
-    provision: "s.2(28) misleading advertisement; s.21 powers of the Central Consumer Protection Authority"
+    provision: "s.2(28) definition of a misleading advertisement; s.21 the Central Consumer Protection Authority can order an advertisement stopped or changed and impose penalties"
     verified: false
+    url: "https://consumeraffairs.gov.in/public/upload/files/CP%20Act%202019_1732700731.pdf"
 
 rules:
   - id: EN-FAIR-001

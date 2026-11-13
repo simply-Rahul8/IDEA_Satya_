@@ -53,11 +53,23 @@ main { padding-block: var(--s-6) var(--s-9); }
 .checker .flags button > span { padding: var(--s-3) var(--s-4); }
 .checker .flags button > .ic { margin-inline-end: var(--s-4); }
 .checker .flags button:hover { background: var(--accent); }
-.checker .flags li:last-child button { border-bottom: 0; }
+.checker .flags > li { border-bottom: 1px solid var(--ink); }
+.checker .flags > li:last-child { border-bottom: 0; }
+.checker .flags button { border-bottom: 1px dashed var(--line-strong); }
+/* Evidence under each flag: why, how found, sources, what to do. Labels in a fixed column like the badges above. */
+.checker .evidence { margin: 0; padding: var(--s-3) var(--s-4) var(--s-4); display: grid; gap: var(--s-2); background: var(--surface); font-size: var(--t-sm); }
+.checker .evidence > div { display: grid; grid-template-columns: 13.5rem minmax(0, 1fr); gap: var(--s-4); }
+.checker .evidence dt { font-weight: 900; text-transform: uppercase; letter-spacing: .02em; font-size: var(--t-xs); padding-top: .15em; }
+.checker .evidence dd { margin: 0; color: var(--ink-2); }
+.checker .evidence ul { margin: 0; padding-inline-start: 1.1em; display: grid; gap: var(--s-1); }
+.checker .evidence .chip { min-height: 1.4rem; margin-inline-start: .3em; }
+.checker .ev-intro { margin: var(--s-5) 0 0; color: var(--ink-2); font-size: var(--t-sm); max-width: 62ch; }
+.checker .verdict.is-stale { opacity: .45; }
 .checker .flags q { font-family: var(--font-display); font-weight: 700; }
 @media (max-width: 30rem) {
   .checker .flags button { grid-template-columns: minmax(0, 1fr) auto; }
   .checker .flags button > .flag { border-right: 0; border-bottom: 1px solid var(--ink); justify-self: stretch; }
+  .checker .evidence > div { grid-template-columns: 1fr; gap: var(--s-1); }
 }
 .checker .v-foot { border-top: 1px solid var(--ink); }
 .checker .v-acts .btn { min-height: 3rem; border-color: var(--ink); text-decoration: none; }

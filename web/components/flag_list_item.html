@@ -1,12 +1,23 @@
 {% from "components/flag_badge.html" import flag_badge %}
 {% from "components/icon.html" import icon %}
-{#- One flagged phrase in the checker verdict. Opens the citation sheet; the cacheable sheet holds no user text, so the
-    phrase travels in data-quote and is written into the sheet client-side. -#}
-{% macro flag_list_item(flag, title, sev, ruleset_label) -%}
+{#- One flagged phrase in the checker verdict, with its evidence: why the rule flags it and the sources the rule cites.
+    The button opens the citation sheet; the cacheable sheet holds no user text, so the phrase travels in data-quote and
+    is written into the sheet client-side. -#}
+{% macro flag_list_item(flag, rule, sev, ruleset_label) -%}
 <li><button type="button" data-sheet="/rules/{{ flag.rule_id }}/sheet?v={{ ruleset_label }}" data-quote="{{ flag.text }}"
-  aria-label="{{ flag.text }}: {{ 'Blocked' if sev == 'red' else 'Review' }}, {{ title }}. Open citation">
+  aria-label="{{ flag.text }}: {{ 'Blocked' if sev == 'red' else 'Review' }}, {{ rule.title }}. Open citation">
   {{ flag_badge(sev, rule_id=flag.rule_id) }}
-  <span><q>{{ flag.text }}</q><small>{{ title }}</small></span>
+  <span><q>{{ flag.text }}</q><small>{{ rule.title }}</small></span>
   {{ icon("arrow") }}
-</button></li>
+</button>
+<dl class="evidence">
+  <div><dt>Why it is flagged</dt><dd>{{ rule.explanation }}</dd></div>
+  {%- if flag.rule_set != ruleset_label %}
+  <div><dt>How it was found</dt><dd>Matched by the Hindi word list {{ flag.rule_set }} and reported under the English rule {{ rule.id }}.</dd></div>
+  {%- endif %}
+  <div><dt>Source{{ "s" if rule.sources | length > 1 }}</dt><dd><ul>
+    {%- for s in rule.sources %}<li>{% if s.url %}<a href="{{ s.url }}" rel="noopener noreferrer" target="_blank">{{ s.ref }}</a>{% else %}{{ s.ref }}{% endif %}: {{ s.provision }}</li>{% endfor -%}
+  </ul></dd></div>
+  <div><dt>What to do</dt><dd>{{ rule.rewrite_hint }}</dd></div>
+</dl></li>
 {%- endmacro %}

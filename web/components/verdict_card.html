@@ -25,7 +25,9 @@
     </div>
   </div>
   {%- if v.rows %}
-  <ul class="flags">{% for flag, title, sev in v.rows %}{{ flag_list_item(flag, title, sev, ruleset.label) }}{% endfor %}</ul>
+  <p class="ev-intro">Each flag below names the written rule it matched, why that wording is a risk, and the law or code the rule rests on, linked to the official text so you can read it yourself.
+    {%- if not ruleset.is_signed_off %} A regulatory consultant has not yet signed off this rule set, so treat it as a draft.{% endif %}</p>
+  <ul class="flags">{% for flag, rule, sev in v.rows %}{{ flag_list_item(flag, rule, sev, ruleset.label) }}{% endfor %}</ul>
   {%- else %}
   <p class="caveat">Nothing in this text matched a rule in the rule set. That is a text check only: it does not cover your label, claims you have not pasted here, or what a marketplace decides.</p>
   {%- endif %}

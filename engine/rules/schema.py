@@ -40,6 +40,8 @@ class Citation(Strict):
     provision: str = Field(min_length=1)
     # Every citation starts unverified; the consultant flips this (and records it in README sign-off log).
     verified: bool = False
+    # The official text of the source, so a reader can check the provision themselves.
+    url: str | None = Field(default=None, pattern=r"^https://")
 
 
 class VerbCondition(Strict):

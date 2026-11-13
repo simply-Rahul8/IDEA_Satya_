@@ -1,6 +1,6 @@
 # Satya — going live on Vercel
 
-**As of:** 2026-11-13 · **Rule set:** `v0.1.2-draft` · **Hindi word list:** `hi-v0.1.0-draft` · **Tests:** 682 passing ·
+**As of:** 2026-11-13 · **Rule set:** `v0.1.3-draft` · **Hindi word list:** `hi-v0.1.0-draft` · **Tests:** 682 passing ·
 **Lighthouse (mobile):** Performance 96 · Accessibility 100 · Best Practices 100 · SEO 100
 
 This is the step-by-step to make Satya available to the public on Vercel, and an honest answer to "is it finished,
@@ -102,7 +102,7 @@ listings after launch.
 
 ### G1. Consultant sign-off on the rules (your plan's rule, P20)
 Your plan says the public checker goes live **only after** a cosmetics-regulatory consultant reviews and signs the
-rule set (tasks SAT-3, SAT-24, SAT-14; drafts in [`board-pack/`](board-pack/), pack regenerated at v0.1.2-draft in
+rule set (tasks SAT-3, SAT-24, SAT-14; drafts in [`board-pack/`](board-pack/), pack regenerated at v0.1.3-draft in
 [`consultant-pack/`](consultant-pack/)). Until then the page says "Draft rule set… not yet reviewed by a regulatory
 consultant… Not legal advice."
 - A **preview URL** for you and testers: fine now.
@@ -185,7 +185,7 @@ In the deployment's details, confirm the function region is **bom1 (Mumbai)**.
 
 ### Step 4 — Smoke-test the preview (10 minutes)
 Open `<preview-url>/check` on a laptop and a phone:
-1. The page loads with the SATYA logo, the big headline and the **Draft rule set v0.1.2-draft** notice.
+1. The page loads with the SATYA logo, the big headline and the **Draft rule set v0.1.3-draft** notice.
 2. Paste row 1 from §2 → **High risk**, "fairer skin" **Blocked**, "by 90%" to review.
 3. Paste row 3 → **No flagged risks**.
 4. Paste row 5 → refused as Ayurvedic.
@@ -224,4 +224,4 @@ HTTPS is automatic. Set `SATYA_PUBLIC_URL` to it and redeploy.
 - Signed-in pages carry the new theme but not the new layout.
 - Performance is 96, not 100: the remaining cost is loading one stylesheet and two JS libraries, which strict CSP
   rules out inlining.
-- The rule set stays **v0.1.2-draft** until the consultant signs (G1).
+- The rule set stays **v0.1.3-draft** until the consultant signs (G1).

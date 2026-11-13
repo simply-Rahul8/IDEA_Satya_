@@ -55,7 +55,13 @@
         const b = $('#backdrop-text');
         b.textContent = e.target.value + (e.target.value.endsWith('\n') ? ' ' : '');
         if (!CSS.supports('field-sizing', 'content')) { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }
+        const c = $('#count'), max = Number(c.dataset.max), n = e.target.value.length; // the server count only arrives on analysis
+        c.textContent = `${n.toLocaleString('en-US')} / ${max.toLocaleString('en-US')}${n > max ? ` · ${(n - max).toLocaleString('en-US')} over` : ''}`;
+        c.classList.toggle('is-over', n > max);
+        const v = $('#verdict[data-variant]');
+        if (v && !v.classList.contains('is-stale')) { v.classList.add('is-stale'); say('Text changed. Press Start analysis to check it again.'); }
       },
+      analyse() { fire(this.ta, 'satya:recheck'); }, // analysis runs only on this button, never on paste or typing
       paste(e) {
         if (e.target.id !== 'text' || !e.clipboardData) return;
         e.preventDefault(); // plain text only: pasted markup is data, never interpreted (P19)
@@ -70,13 +76,9 @@
         say('');
         this.ta.focus();
       },
-      useSample() {
-        this.ta.value = this.$el.dataset.sample;
-        fire(this.ta, 'input');
-      },
     }));
 
-    /* Click an example phrase to load it into the checker and flag it live. */
+    /* Click an example phrase to load it into the checker; Start analysis checks it. */
     Alpine.data('satyaTry', () => ({
       use() {
         const chip = this.$event.target.closest('[data-phrase]');
@@ -85,7 +87,7 @@
         ta.value = chip.dataset.phrase;
         fire(ta, 'input');
         ta.scrollIntoView({ block: 'center', behavior: reduced() ? 'auto' : 'smooth' });
-        ta.focus();
+        $('#start').focus(); // loaded, not checked: the next step is Start analysis
       },
     }));
 

@@ -5,20 +5,24 @@
 anchors:
   dmr_act: &dmr_act
     ref: "Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954"
-    provision: "s.3(d) and the Schedule (diseases, disorders and conditions)"
+    provision: "s.3(d): no advertisement of a drug for the diagnosis, cure, mitigation, treatment or prevention of a disease, disorder or condition listed in the Schedule"
     verified: false
+    url: "https://www.indiacode.nic.in/indiacode/bitstream/123456789/1412/1/A1954-21.pdf"
   dmr_act_abc: &dmr_act_abc
     ref: "Drugs and Magic Remedies (Objectionable Advertisements) Act, 1954"
-    provision: "s.3(a), (b), (c): miscarriage and conception, sexual pleasure, menstrual disorder"
+    provision: "s.3(a), (b), (c): no advertisement of a drug for miscarriage or preventing conception, sexual pleasure, or menstrual disorders"
     verified: false
+    url: "https://www.indiacode.nic.in/indiacode/bitstream/123456789/1412/1/A1954-21.pdf"
   dc_act_drug: &dc_act_drug
     ref: "Drugs and Cosmetics Act, 1940"
-    provision: "s.3(b)(i) definition of 'drug' (treatment, mitigation or prevention of disease). Cited for EN-DMR-003 because premature greying is not in the DMR Schedule"
+    provision: "s.3(b)(i) definition of 'drug' (diagnosis, treatment, mitigation or prevention of disease). Cited for EN-DMR-003 because premature greying is not in the DMR Schedule"
     verified: false
+    url: "https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf"
   cosmetics_rules_r36: &cosmetics_rules_r36
     ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
-    provision: "r.36 (false or misleading claims). Cited for EN-DMR-003 with D&C Act s.3(b)(i)"
+    provision: "r.36 (prohibition against false or misleading claims). Cited for EN-DMR-003 with D&C Act s.3(b)(i)"
     verified: false
+    url: "https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf"
   dmr_conditions: &dmr_conditions
     - "diabet*"
     - "cancer"

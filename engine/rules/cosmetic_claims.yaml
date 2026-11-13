@@ -2,28 +2,34 @@
 anchors:
   asci_code: &asci_code
     ref: "ASCI Code for Self-Regulation of Advertising Content in India"
-    provision: "Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed"
+    provision: "Chapter I, clause 1.1 (advertisements must be truthful, honest and capable of substantiation) and clause 1.2 (research cited with its source and date)"
     verified: false
+    url: "https://www.ascionline.in/wp-content/uploads/guidelines/ASCI_Codes_Guidelines_Book.pdf"
   ccpa: &ccpa
     ref: "Guidelines for Prevention of Misleading Advertisements and Endorsements for Misleading Advertisements, 2022 (CCPA)"
-    provision: "misleading advertisement; claim substantiation; endorsements"
+    provision: "Guideline 4 (conditions for a non-misleading advertisement), Guideline 12 (claims must be capable of substantiation; research cited with source and date) and Guideline 13 (due diligence for endorsements)"
     verified: false
+    url: "https://consumeraffairs.gov.in/public/upload/files/CCPA_Notification_1732707665.pdf"
   cpa: &cpa
     ref: "Consumer Protection Act, 2019"
-    provision: "s.2(28) misleading advertisement"
+    provision: "s.2(28) definition of a misleading advertisement (false description of the product, or deliberately concealing important information)"
     verified: false
+    url: "https://consumeraffairs.gov.in/public/upload/files/CP%20Act%202019_1732700731.pdf"
   cosmetics_rules: &cosmetics_rules
     ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
-    provision: "r.34 (labelling) and r.36 (false or misleading claims); pin-points from the agent pre-review, to be confirmed by the consultant"
+    provision: "r.34 (manner of labelling) and r.36 (prohibition against false or misleading claims)"
     verified: false
+    url: "https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf"
   cosmetics_rules_r36: &cosmetics_rules_r36
     ref: "Cosmetics Rules, 2020 (G.S.R. 763(E), 15 Dec 2020)"
-    provision: "r.36 (false or misleading claims). The Rules have no SPF or sunscreen provision; r.36 applies only generically"
+    provision: "r.36 (prohibition against false or misleading claims). The Rules do not mention SPF or sunscreen; sun protection products appear only as an import category in the Fourth Schedule"
     verified: false
+    url: "https://cdsco.gov.in/opencms/resources/UploadCDSCOWeb/2022/cos_rules/Cosmetics%20Rules%202020.pdf"
   dc_act: &dc_act
     ref: "Drugs and Cosmetics Act, 1940"
-    provision: "s.3(aaa) definition of 'cosmetic'; s.3(b) definition of 'drug'"
+    provision: "s.3(aaa) definition of 'cosmetic' (cleansing, beautifying, promoting attractiveness or altering the appearance); s.3(b) definition of 'drug'"
     verified: false
+    url: "https://cdsco.gov.in/opencms/export/sites/CDSCO_WEB/Pdf-documents/acts_rules/2016DrugsandCosmeticsAct1940Rules1945.pdf"
 
 rules:
   - id: EN-CLAIM-001
