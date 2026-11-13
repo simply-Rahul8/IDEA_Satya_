@@ -240,3 +240,7 @@ def test_privacy_notice_is_linked_listed_and_honest(client):
     assert "Draft:</strong> not yet reviewed by a lawyer" in page.text and not BANNED.search(visible_text(page.text))
     assert 'href="/privacy"' in client.get("/check").text
     assert "Allow: /privacy" in client.get("/robots.txt").text and "/privacy</loc>" in client.get("/sitemap.xml").text
+
+
+def test_privacy_notice_names_a_contact(client):
+    assert 'href="mailto:rahuljinkachika46@gmail.com"' in client.get("/privacy").text
