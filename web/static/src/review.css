@@ -12,7 +12,7 @@
 .skip-links { display: flex; gap: var(--s-4); font-size: var(--t-xs); padding-block: var(--s-2); }
 .tabs { display: flex; gap: var(--s-2); margin-block: var(--s-4); }
 .tabs .btn { flex: 1; }
-.tabs .btn[aria-selected="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.tabs .btn[aria-selected="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--ink); }
 .review-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
 .section-h { font-size: var(--t-xl); color: var(--ink-2); display: flex; gap: var(--s-3); align-items: center; margin: var(--s-6) 0 var(--s-3); }
 .section-h::after { content: ""; flex: 1; border-top: 1px solid var(--line); }

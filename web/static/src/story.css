@@ -1,0 +1,38 @@
+/* Checker motion, Brutal register: hard cuts, never a glide. A marker stroke swipes across the
+   copy in stop-motion steps, the verdict lands like a rubber stamp, and an ink ticker runs the real
+   rule families (with a pause, WCAG 2.2.2). Under reduced motion, or without JS, all of it is still. */
+
+/* ---------- The marker stroke (signature) ---------- */
+/* One background swept across wrapped lines: box-decoration-break stays "slice" so the stroke runs
+   line one, then line two, like a highlighter. */
+mark.swipe { color: var(--on-accent); background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 100% 100%; padding: 0 .1em; }
+@media (prefers-reduced-motion: no-preference) {
+  mark.swipe { animation: swipe .9s steps(16, end) .4s both; }
+}
+@keyframes swipe { from { background-size: 0% 100%; } }
+
+/* ---------- The verdict lands like a stamp ---------- */
+.checker .verdict.is-rising { animation: stamp .26s var(--snap) both; }
+@keyframes stamp { from { opacity: 0; transform: scale(1.07) rotate(-1.5deg); } to { opacity: 1; transform: none; } }
+
+/* ---------- The ticker: an ink band running the rule families ---------- */
+.ticker { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; margin-top: var(--s-6); background: var(--ink); color: var(--bg); border: var(--rule-bar) solid var(--ink); }
+.ticker-view { overflow: clip; grid-row: 1; grid-column: 1; padding-block: var(--s-4); }
+.ticker-rail { display: flex; flex-wrap: wrap; }
+.ticker ul { display: flex; flex-wrap: wrap; margin: 0; padding: 0 0 0 var(--s-5); list-style: none; }
+.ticker ul[aria-hidden="true"] { display: none; }
+.ticker li { display: inline-flex; align-items: baseline; gap: .5em; white-space: nowrap; font: 400 var(--t-sm)/1.6 var(--font-sans); }
+.ticker li b { font: 900 var(--t-lg)/1 var(--font-display); text-transform: uppercase; letter-spacing: -.02em; }
+.ticker li::after { content: "/"; margin-inline: var(--s-4); opacity: .45; }
+/* The pause is a paper cell flush at the band's end: one seam, no strip. Pressed (paused) fills yellow. */
+.ticker-btn { grid-row: 1; grid-column: 2; display: none; align-self: stretch; padding: 0 var(--s-5); border: 0; background: var(--bg); color: var(--ink); font: 700 var(--t-sm)/1 var(--font-sans); cursor: pointer; }
+.ticker-btn:hover, .ticker-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+/* With JS and motion allowed, the two copies run as one seamless loop; hover, focus or Pause stops it. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .ticker-btn { display: block; }
+  .js .ticker-rail { flex-wrap: nowrap; width: max-content; animation: ticker 40s linear infinite; }
+  .js .ticker ul { flex-wrap: nowrap; }
+  .js .ticker ul[aria-hidden="true"] { display: flex; }
+  .ticker:hover .ticker-rail, .ticker:focus-within .ticker-rail, .ticker.is-paused .ticker-rail { animation-play-state: paused; }
+}
+@keyframes ticker { to { transform: translateX(-50%); } }

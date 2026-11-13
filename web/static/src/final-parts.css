@@ -107,7 +107,7 @@ html { scroll-padding-top: calc(var(--gate-h) + var(--s-3)); scroll-padding-bott
 .tally-row { display: flex; flex-wrap: wrap; gap: var(--s-2); }
 .flags { list-style: none; margin: var(--s-5) 0 0; padding: 0; display: grid; gap: var(--s-2); }
 .flags button { width: 100%; text-align: start; display: grid; grid-template-columns: auto 1fr auto; gap: var(--s-3); align-items: center; min-height: var(--tap); padding: var(--s-3) var(--s-4); background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-md); color: var(--ink); font: inherit; cursor: pointer; }
-.flags button:hover { border-color: var(--accent); }
+.flags button:hover { border-color: var(--ink); background: var(--accent); }
 .flags q { font-family: var(--font-display); font-size: var(--t-md); }
 .flags small { display: block; color: var(--ink-2); font-size: var(--t-xs); }
 @media (max-width: 30rem) { .flags button { grid-template-columns: 1fr auto; } .flags .flag { grid-column: 1 / -1; justify-self: start; } }

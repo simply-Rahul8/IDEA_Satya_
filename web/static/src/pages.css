@@ -4,30 +4,91 @@
 .topbar-end { display: flex; align-items: center; gap: var(--s-3); }
 .hint { font-size: var(--t-xs); color: var(--ink-2); margin: 0 0 var(--s-2); }
 main { padding-block: var(--s-6) var(--s-9); }
-.stamp { margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--line); font-size: var(--t-xs); color: var(--ink-2); display: grid; gap: var(--s-2); }
-.icon-btn[aria-pressed="true"] { background: var(--accent-soft); }
+.stamp { margin-top: var(--s-8); padding-top: var(--s-5); border-top: var(--rule-bar) solid var(--ink); font-size: var(--t-xs); color: var(--ink-2); display: grid; gap: var(--s-2); }
+.icon-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
-/* ---------- Checker (variant A) ---------- */
-.checker .hero { max-width: 44rem; margin-inline: auto; text-align: center; }
-.checker .hero h1 { font-size: var(--t-3xl); margin: var(--s-3) 0 var(--s-4); }
-.checker .hero h1 em { font-style: italic; color: var(--accent-ink); }
-.checker .hero p:not(.eyebrow) { font-size: var(--t-md); color: var(--ink-2); max-width: 36rem; margin-inline: auto; }
-.pre-launch { max-width: 44rem; margin: var(--s-5) auto 0; }
-.sheet-wrap { max-width: 44rem; margin: var(--s-6) auto 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
-.verdict-wrap, .noscript-copy, .checker .stamp { max-width: 44rem; margin-inline: auto; }
-.verdict-wrap { margin-top: var(--s-6); }
+/* ---------- Checker: Brutal — a poster head on a 3px rule, the form as the grid ---------- */
+.checker .hero-head { font-size: clamp(2.6rem, 1rem + 7.2vw, 6.6rem); line-height: .94; letter-spacing: -.045em; text-transform: uppercase; margin: 0 0 var(--s-4); }
+.hero-cells { display: grid; grid-template-columns: minmax(0, 1fr); border: var(--rule-bar) solid var(--ink); background: var(--surface); }
+.cell-copy { display: flex; flex-direction: column; gap: var(--s-4); padding: var(--s-5); border-bottom: var(--rule-bar) solid var(--ink); }
+.cell-label { font: 400 var(--t-sm)/1.3 var(--font-sans); color: var(--ink-3); }
+.checker .hero-sub { font-size: var(--t-lg); line-height: 1.4; max-width: 34ch; }
+.checker .pre-launch { margin: auto 0 0; }
+.checker .draft { border: 1px solid var(--ink); background: transparent; }
+.checker .sheet-wrap { position: relative; display: flex; flex-direction: column; margin: 0; }
+.checker .paper-wrap { flex: 1; display: flex; flex-direction: column; }
+.checker .paper { flex: 1; border: 0; border-radius: 0; box-shadow: none; background: var(--surface); }
+/* Focus: the whole input cell lights, flush with its rules. Drawn on top, since the field paints over an outline. */
+.checker .paper:focus-within { outline: none; }
+.checker .sheet-wrap:has(#text:focus-visible)::after { content: ""; position: absolute; inset: 0; border: var(--rule-bar) solid var(--focus); pointer-events: none; z-index: 3; }
+.checker .paper .backdrop, .checker .paper textarea { min-height: 17rem; }
+/* Counter, Clear and Try sit as one boxed row; "Checking…" takes the counter's slot instead of its own. */
+.checker .paper-foot { flex-wrap: nowrap; gap: var(--s-2); padding: var(--s-3); border-top: var(--rule-bar) solid var(--ink); }
+.checker .paper-foot .acts { flex-wrap: nowrap; }
+.checker .paper-foot .checking { display: none; }
+.checker .paper-foot.htmx-request .checking { display: inline-flex; align-items: center; gap: .4em; font: 700 var(--t-xs)/1 var(--font-sans); }
+.checker .paper-foot.htmx-request .count { display: none; }
+.checker .paper-foot .btn { min-height: 3rem; }
+.checker .paper-foot .btn-secondary { background: var(--ink); color: var(--bg); }
+.checker .paper-foot .btn-secondary:hover { background: var(--accent); color: var(--on-accent); }
+.checker .count { font: 700 var(--t-xs)/1 var(--font-sans); font-variant-numeric: tabular-nums; }
+@media (min-width: 56rem) {
+  .hero-cells { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .cell-copy { border-bottom: 0; border-right: var(--rule-bar) solid var(--ink); }
+  .checker .paper-foot { padding: var(--s-3) var(--s-5); }
+}
+
+/* The verdict: a statement on a 3px rule (not a card), its flags a boxed table, rule IDs in 900. */
+.checker { padding-bottom: var(--s-7); }
+.verdict-wrap, .noscript-copy { margin-top: var(--s-6); }
+.checker .verdict-wrap:not(:has(.verdict)) { margin-top: 0; }
+.checker .verdict { border: 0; border-top: var(--rule-bar) solid var(--ink); background: transparent; padding: var(--s-5) 0 0; }
+.checker .v-label h2 { font-size: clamp(2rem, 1.2rem + 3vw, 3.5rem); text-transform: uppercase; letter-spacing: -.04em; }
+.checker .flag { border: 0; font-weight: 900; }
+.checker .flag .id { font-family: var(--font-sans); font-weight: 900; opacity: 1; }
+.checker .tally-row .flag { font-size: var(--t-sm); padding: .55em .9em; }
+.checker .flags { gap: 0; border: var(--rule-bar) solid var(--ink); }
+.checker .flags button { gap: 0; padding: 0; grid-template-columns: 13.5rem minmax(0, 1fr) auto; border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; background: var(--surface); }
+.checker .flags button > .flag { align-self: stretch; font-size: var(--t-xs); padding: var(--s-3) var(--s-4); border-right: 1px solid var(--ink); }
+.checker .flags button > span { padding: var(--s-3) var(--s-4); }
+.checker .flags button > .ic { margin-inline-end: var(--s-4); }
+.checker .flags button:hover { background: var(--accent); }
+.checker .flags li:last-child button { border-bottom: 0; }
+.checker .flags q { font-family: var(--font-display); font-weight: 700; }
+@media (max-width: 30rem) {
+  .checker .flags button { grid-template-columns: minmax(0, 1fr) auto; }
+  .checker .flags button > .flag { border-right: 0; border-bottom: 1px solid var(--ink); justify-self: stretch; }
+}
+.checker .v-foot { border-top: 1px solid var(--ink); }
+.checker .v-acts .btn { min-height: 3rem; border-color: var(--ink); text-decoration: none; }
+
+/* Try a flagged line: a bento of cells sharing their rules; the heading is the ink cell. */
+.try-cells { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: var(--s-6); border: var(--rule-bar) solid var(--ink); }
+.try-h { background: var(--ink); color: var(--bg); font-size: var(--t-xl); line-height: 1; text-transform: uppercase; padding: var(--s-5); }
+.try-cell { display: grid; gap: var(--s-2); align-content: start; text-align: start; padding: var(--s-5); background: var(--surface); color: var(--ink); border: 0; border-top: var(--rule-bar) solid var(--ink); font: inherit; cursor: pointer; }
+.try-cell:hover { background: var(--accent); color: var(--on-accent); }
+.try-cell:active { transform: translateY(2px); }
+.try-n { font: 900 var(--t-2xl)/1 var(--font-display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.try-what { color: var(--ink-3); font-size: var(--t-sm); }
+.try-ex { font: 700 var(--t-md)/1.3 var(--font-display); }
+.try-cell:hover .try-what { color: var(--on-accent); }
+@media (min-width: 56rem) {
+  .try-cells { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); }
+  .try-cell { border-top: 0; border-left: var(--rule-bar) solid var(--ink); }
+}
+
+#cap-notice:empty { display: none; }
 .paper-wrap .paper { overflow: hidden; }
 .paper .backdrop { top: 0; left: 0; right: 0; }
 .paper-foot .acts { display: flex; gap: var(--s-2); flex-wrap: wrap; }
 .paper-foot .checking { visibility: hidden; }
 .paper-foot.htmx-request .checking { visibility: visible; }
-#cap-notice:empty { display: none; }
 .verdict { margin-top: 0; }
 .verdict[data-variant] { animation: none; }
 .verdict.is-rising { animation: rise var(--dur-3) var(--ease) both; }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .verdict-wrap[aria-busy="true"] .verdict { opacity: .85; }
-.verdict .eyebrow { margin-bottom: var(--s-3); }
+.verdict .v-kicker { margin: 0 0 var(--s-3); font: 400 var(--t-sm)/1.3 var(--font-sans); color: var(--ink-3); }
 .verdict .caveat { margin-top: var(--s-5); color: var(--ink-2); }
 .v-foot { margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--line); display: grid; gap: var(--s-3); font-size: var(--t-xs); color: var(--ink-2); }
 .v-acts { display: flex; flex-wrap: wrap; gap: var(--s-2); }
@@ -36,25 +97,30 @@ main { padding-block: var(--s-6) var(--s-9); }
 .noscript-copy .hl { padding: 0 .08em; }
 .backdrop .hl { padding: 0; cursor: text; }
 
-/* ---------- Citation sheet: native <dialog> ---------- */
-.sheet-dlg { border: 0; padding: var(--s-5) var(--s-5) var(--s-6); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-2); overflow: auto;
-  margin: 0; inset: auto 0 0 0; width: 100%; max-width: none; max-height: 82dvh; border-radius: var(--r-lg) var(--r-lg) 0 0;
-  transform: translateY(104%); transition: transform var(--dur-3) var(--ease); }
+/* ---------- Citation sheet: native <dialog>, framed by a rule, never a shadow ---------- */
+.sheet-dlg { border: 0; border-top: var(--rule-bar) solid var(--ink); padding: var(--s-5) var(--s-5) var(--s-6); background: var(--surface); color: var(--ink); overflow: auto;
+  margin: 0; inset: auto 0 0 0; width: 100%; max-width: none; max-height: 82dvh; border-radius: 0;
+  transform: translateY(104%); transition: transform var(--dur-2) var(--snap); }
 .sheet-dlg.is-open { transform: none; }
 .sheet-dlg::backdrop { background: var(--scrim); }
 .sheet-close { position: absolute; top: var(--s-3); right: var(--s-3); }
 .sheet-dlg h2 { font-size: var(--t-xl); margin: var(--s-3) 0; padding-inline-end: var(--tap); }
 .sheet-dlg dl { margin: var(--s-4) 0; display: grid; gap: var(--s-4); }
-.sheet-dlg dt { font: 600 var(--t-xs)/1 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-1); }
+.sheet-dlg dt { font: 400 var(--t-xs)/1.2 var(--font-sans); color: var(--ink-3); margin-bottom: var(--s-1); }
 .sheet-dlg dd { margin: 0; display: grid; gap: var(--s-2); }
 .sheet-dlg .quote { margin: var(--s-3) 0; }
 @media (min-width: 48rem) {
-  .sheet-dlg { inset: 0 0 0 auto; width: min(var(--sheet-w), 92vw); height: 100dvh; max-height: none; border-radius: var(--r-lg) 0 0 var(--r-lg); transform: translateX(104%); padding: var(--s-6); }
+  .sheet-dlg { inset: 0 0 0 auto; width: min(var(--sheet-w), 92%); height: 100dvh; max-height: none; border-top: 0; border-left: var(--rule-bar) solid var(--ink); transform: translateX(104%); padding: var(--s-6); }
 }
+
+/* ---------- Error pages: the status set big as the page's one ornament ---------- */
+.err { display: grid; gap: var(--s-4); justify-items: start; padding-block: var(--s-7) var(--s-9); }
+.err-code { font: 900 clamp(5rem, 2.5rem + 12vw, 11rem)/.85 var(--font-display); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.err h1 { font-size: var(--t-2xl); text-transform: uppercase; letter-spacing: -.03em; padding-top: var(--s-4); border-top: var(--rule-bar) solid var(--ink); }
+.err-text { font-size: var(--t-lg); max-width: 40ch; }
 
 /* ---------- Toast ---------- */
 .toast:empty { display: none; }
 
 .paper textarea { field-sizing: content; }
 .paper-in { position: relative; }
-.paper-wrap.paper .paper-in textarea, .paper-wrap.paper .paper-in .backdrop { border-radius: var(--r-lg) var(--r-lg) 0 0; }

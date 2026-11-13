@@ -8,6 +8,7 @@ Platform confirms it (specs: screen-checker section 5).
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from types import SimpleNamespace
 
@@ -16,6 +17,7 @@ from markupsafe import Markup
 from starlette.concurrency import run_in_threadpool
 
 from engine.brand import BRAND_RULE_ID
+from engine.normalize.lexicon import check_hindi, default_lexicon
 from engine.product_type import GateStatus, check_product_type
 from engine.ratelimit import MemoryLimiter, ip_key, make_limiter
 from engine.rules import RuleSet, default_ruleset, evaluate
@@ -41,6 +43,34 @@ RateLimiter = MemoryLimiter  # kept for callers and tests that build their own
 limiter = make_limiter(
     int(os.environ.get("CHECKER_RATE_LIMIT", "120")), int(os.environ.get("CHECKER_RATE_WINDOW_S", "600"))
 )
+
+
+_DEVANAGARI = re.compile("[ऀ-ॿ]")
+
+
+def _hindi_flags(text: str, english: list[Flag]) -> list[Flag]:
+    """Hindi, transliterated and Hinglish claims from the draft Hindi lexicon, reported under the English rule each
+    maps to, so the mark, the row and the citation sheet work as for English. A phrase an English rule already
+    flagged is not repeated."""
+    seen = [(f.start, f.end, f.rule_id) for f in english]
+    return [
+        Flag(rule_id=h.maps_to, category=h.category, severity=h.severity, overridable=h.overridable,
+             start=h.start, end=h.end, text=h.text, message=h.message, rule_set=h.lexicon)
+        for h in check_hindi(text)
+        if not any(r == h.maps_to and s < h.end and h.start < e for s, e, r in seen)
+    ]  # fmt: skip
+
+
+def hindi_note(text: str, flags: list[Flag]) -> str:
+    """Never let Hindi copy read as fully checked: the lexicon is a small draft (SAT-5)."""
+    lx = default_lexicon()
+    if not (_DEVANAGARI.search(text) or any(f.rule_set == lx.label for f in flags)):
+        return ""
+    reviewed = "" if lx.is_signed_off else ", not yet checked by a native Hindi reviewer"
+    return (
+        f"Hindi checks are an early draft (word list {lx.label}{reviewed}) and cover only a few claim types. "
+        "Read Hindi copy against the English rules too."
+    )
 
 
 @dataclass
@@ -73,7 +103,9 @@ def run_check(text: str, ruleset: RuleSet | None = None) -> CheckResult:
         say = f"Not reviewed: {verdict['gate_title']}. Rule set {rs.label}."
         return CheckResult(text, len(text), over, [], view.build_backdrop(text, []), verdict, say)
 
-    flags = view.sort_flags(evaluate(checked, rs))
+    english = evaluate(checked, rs)
+    flags = view.sort_flags(english + _hindi_flags(checked, english))
+    note = hindi_note(checked, flags)
     level = view.risk_level(flags)
     red, orange = view.tally(flags)
     items = [(f, rs.rule(f.rule_id).title, view.ui_sev(f.severity)) for f in flags]
@@ -82,7 +114,7 @@ def run_check(text: str, ruleset: RuleSet | None = None) -> CheckResult:
         f"Checked with Satya under rule set {rs.label}: {', '.join(parts)}. Not legal advice."
         if parts
         else f"Checked with Satya: no flagged risks under rule set {rs.label}. Not legal advice."
-    )
+    ) + (f" {note}" if note else "")
     verdict = {
         "variant": "flagged" if flags else "clear",
         "sig": view.result_signature(flags),
@@ -92,6 +124,7 @@ def run_check(text: str, ruleset: RuleSet | None = None) -> CheckResult:
         "red": red,
         "orange": orange,
         "summary": summary,
+        "hindi_note": note,
     }
     backdrop = view.build_backdrop(text, view.marks_from_flags(flags))  # marks only exist inside the cap
     return CheckResult(text, len(text), over, flags, backdrop, verdict, view.announce(flags, rs))

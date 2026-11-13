@@ -29,7 +29,7 @@ Status of regulatory text: draft until consultant sign-off (P20). Use separate k
 Create a project (Python/FastAPI), copy the DSN into `SENTRY_DSN` for preview only. `send_default_pii` is off so listing text is not sent.
 
 ## 4. Vercel preview (region bom1, P14)
-1. Import the repo is not possible (no remote). Use `vercel` CLI from a clean checkout: `vercel link`, then `vercel` (preview, **not** `--prod`).
+1. Use the `vercel` CLI from a clean, pushed checkout: `vercel link`, then `vercel` (preview, **not** `--prod`). Git auto-deploy is off in `vercel.json`, so every deploy is deliberate. The go-live path is in [`GO-LIVE.md`](GO-LIVE.md).
 2. Set env vars for the Preview environment only: `SATYA_ENV=preview`, `SATYA_LLM` (keep `mock` until the Engine live providers exist), `SUPABASE_URL`, `SUPABASE_ANON_KEY` (now required: the app uses it to ask Supabase Auth who a token belongs to), `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL`, `SENTRY_DSN`, `RATE_LIMIT_*`, and **`SATYA_SESSION_SECRET`** (long random string; the app refuses to start requests without it when `SATYA_ENV` is preview/production). Add `SATYA_ALLOWED_ORIGINS` only if the site is served from a custom domain besides the Vercel host. `SUPABASE_DB_URL` also makes rate limits shared across instances; without it they are per instance.
    Pack persistence (SAT-38) needs only `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`: with them the app stores packs in Supabase; without them a preview/production deploy refuses to serve pack pages (the in-memory store is for local use only). With any of the three Supabase variables missing, a hosted deploy answers pack routes with 500 rather than serving an anonymous workspace. Never set `SATYA_ENV=dev` on a hosted environment: it seeds a demo pack, and only into an in-memory store.
 3. `vercel.json` pins `regions: ["bom1"]`. Check the function region in the deployment details.
@@ -38,7 +38,7 @@ Create a project (Python/FastAPI), copy the DSN into `SENTRY_DSN` for preview on
 ## 4-bis. Client IP for rate limits (SAT-50, ADR-14)
 The checker and write limiters key on a hash of the caller's IP (`web/security.py: client_ip`). The app never reads `X-Forwarded-For`. It reads the header named in `SATYA_TRUSTED_IP_HEADER` (default `x-vercel-forwarded-for` when `VERCEL` is set, last entry), and otherwise `request.client`.
 - **uvicorn trusts `X-Forwarded-For` from 127.0.0.1 by default and rewrites `request.client`**, so a rotating header bypasses the limiter (QA SAT-44: 130 x 200). **Anywhere the app is served by uvicorn, pass `--no-proxy-headers`** (`scripts/run.py` holds this as `SERVER_ARGS`, and `python scripts/run.py dev` uses it). Do not set `FORWARDED_ALLOW_IPS` or `--forwarded-allow-ips` to anything wider than a proxy you control.
-- **Vercel** runs `asgi.py` directly through `@vercel/python`, not uvicorn, so the flag does not apply there; the limiter relies on `x-vercel-forwarded-for`, which Vercel sets and overwrites on every request. No `SATYA_TRUSTED_IP_HEADER` is needed.
+- **Vercel** runs `asgi.py` directly through its Python runtime (zero-config entrypoint detection), not uvicorn, so the flag does not apply there; the limiter relies on `x-vercel-forwarded-for`, which Vercel sets and overwrites on every request. No `SATYA_TRUSTED_IP_HEADER` is needed.
 - **Any other host behind a proxy** (not planned): run uvicorn with `--no-proxy-headers` and set `SATYA_TRUSTED_IP_HEADER` to a header that only the proxy can set, with the proxy stripping any client-supplied copy.
 - `tests/test_proxy_headers.py` starts real uvicorn and fails if the pinned arguments stop blocking a rotating header.
 
@@ -46,7 +46,7 @@ The checker and write limiters key on a hash of the caller's IP (`web/security.p
 These could only be tested with local stand-ins (QA SAT-44), so one preview run is required **before any production deploy**; QA re-tests after it.
 1. Limiter keys on the Vercel header and uses Postgres. With `SUPABASE_DB_URL` set on the preview, post to `/check` (with the page's CSRF token and cookie) more than `CHECKER_RATE_LIMIT` times with a different `X-Forwarded-For` on each: expect 429 after the limit, not 200s. Then repeat from a second network (phone hotspot): it gets its own fresh count, so the key is the caller's address and not a shared proxy address. In the Supabase SQL editor, `select key, window_start, count from rate_limits order by window_start desc limit 5;` should show `ip:check:` rows (hashed, no raw IPs). If no rows appear, the app fell back to the per-process limiter: check `SUPABASE_DB_URL`.
 2. Auth and RLS against the real project: run the section 4a checks 1 to 4 and the section 2 verification queries, and in addition confirm that as an `authenticated` user a PATCH on `claims` setting `hard_blocked=false` or `status='confirmed'` changes 0 rows (QA ran this only on a local Postgres with `local_shim.sql`).
-3. Report results in the SAT-50 task. Rule set stays `v0.1.1-draft`: never describe output as compliant.
+3. Report results in the SAT-50 task. Rule set stays `v0.1.2-draft`: never describe output as compliant.
 
 ## 4a. Persistence checks after the first preview deploy (board user, once a preview project exists)
 The Supabase repository is tested against a fake client only. After section 2 and 4 are done, check these by hand and report any failure in the SAT-38 task:

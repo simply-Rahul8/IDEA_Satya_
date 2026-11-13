@@ -1,9 +1,9 @@
 # Satya consultant review pack: English rules (DRAFT)
 
-- **Rule set:** satya-en v0.1.1-draft
+- **Rule set:** satya-en v0.1.2-draft
 - **Status:** DRAFT: not reviewed, not signed off
-- **Content fingerprint:** 2aa67fe75bb2
-- **Last updated:** 2026-11-05
+- **Content fingerprint:** 3ca2e47a38aa
+- **Last updated:** 2026-11-13
 - **Rules:** 24 rules, 3 safe-phrase entries, 4 product-type signals
 - **Prepared for:** Cosmetics regulatory consultant (week-2 review, plan P20)
 
@@ -554,9 +554,9 @@ This pack is not legal advice. It is a draft for expert review.
 
 #### EN-CLAIM-006: Statistics or survey results: evidence required [ORANGE, overridable]
 
-**Why it is flagged:** Percentages of users or '9 out of 10' claims need a study you can show, with the sample and method.
+**Why it is flagged:** Percentages of users, '9 out of 10', 'by 90%' and customer-count claims ('1 lakh customers') need evidence you can show: the study with its sample and method, or your sales records.
 
-**Rewrite direction:** Cite the study (sample size, method, date) or remove the number.
+**Rewrite direction:** Cite the study (sample size, method, date) or your records, or remove the number.
 
 **Sources (UNVERIFIED unless marked):**
 - ASCI Code for Self-Regulation of Advertising Content in India, Chapter I (truthful and honest representation, claim substantiation); clause numbers to be confirmed
@@ -566,15 +566,22 @@ This pack is not legal advice. It is a draft for expert review.
 - Regular expression: \b\d{1,3}(?:\.\d+)?\s?%\s+(?:of\s+)?(?:\w+\s+){0,2}?(?:users|women|men|people|customers|participants|respondents|volunteers|consumers)\b
 - Regular expression: \b\d{1,3}\s+(?:out\s+of|in)\s+\d{1,3}\s+(?:users|women|men|people|customers|consumers|dermatologists|doctors)\b
 - Regular expression: \b\d{1,3}(?:\.\d+)?\s?%\s+(?:saw|reported|noticed|agreed|felt|showed|experienced|reduction|improvement|increase)\b
+- Regular expression: \b(?:by|up\s+to|upto)\s+\d{1,3}(?:\.\d+)?\s?%(?!\s*off\b)
+- Regular expression: \b\d[\d,]*(?:\.\d+)?\s?(?:k|lakh|lakhs|lac|lacs|crore|crores|million|mn|thousand)?\+?\s+(?:happy\s+|satisfied\s+|loyal\s+|real\s+)?(?:users|customers|women|men|people|buyers|consumers|families|mothers|moms)\b
 
 **Must flag (positive examples):**
 - 93% of women saw smoother skin.
 - 9 out of 10 users agree.
 - 87% reduction in wrinkles.
+- Reduces acne by 90% in four weeks.
+- Trusted by 1 lakh happy customers.
+- Loved by 10,000+ women across India.
 
 **Must not flag (negative examples):**
 - Contains 2% niacinamide.
 - Available in 3 sizes.
+- Get up to 50% off this week.
+- A pack of 2 for men and women.
 
 **Open questions:**
 - Do ingredient percentages ('10% vitamin C') need their own rule? The draft does not flag them.
@@ -910,7 +917,7 @@ Rule-specific questions (33), repeated here as a checklist:
 
 ## 8. Sign-off sheet
 
-- **Rule set reviewed:** satya-en v0.1.1-draft, fingerprint 2aa67fe75bb2
+- **Rule set reviewed:** satya-en v0.1.2-draft, fingerprint 3ca2e47a38aa
 - **Decision:** [ ] Approved   [ ] Approved with the changes listed   [ ] Not approved
 - **Reviewer name and qualification:** 
 - **Date:** 

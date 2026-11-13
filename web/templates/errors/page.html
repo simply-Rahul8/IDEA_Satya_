@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body %}
+<div class="wrap">
+  {{ topbar() }}
+  <main id="main" class="err">
+    <p class="err-code" aria-hidden="true">{{ code }}</p>
+    <h1>{{ heading }}</h1>
+    <p class="err-text">{{ text }}</p>
+    <p><a class="btn btn-primary" href="/check">Check a listing</a></p>
+  </main>
+</div>
+{% endblock %}

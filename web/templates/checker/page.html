@@ -10,38 +10,79 @@
 <div class="wrap">
   {{ topbar() }}
   <main id="main" class="checker">
-    <section class="hero">
-      <p class="eyebrow">Is my claim safe?</p>
-      <h1>Check your listing copy <em>before</em> a marketplace does.</h1>
-      <p>Paste your product copy. Satya underlines the phrases that marketplaces and regulators tend to flag, and shows the rule behind each one.</p>
-    </section>
-    {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
-    <form class="sheet-wrap" method="post" action="/check" x-data="satyaChecker" x-on:input="mirror" x-on:paste="paste">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-      {%- set rate = rate_limited | default(false) -%}
-      <div class="paper-wrap paper">
-        {{ highlight_field("text", "text", r.text, r.backdrop, "Product listing copy to check",
-             placeholder="Paste or type your product copy here…", describedby="count live-note",
-             attrs={"hx-post": "/check", "hx-trigger": "input changed delay:250ms, satya:recheck", "hx-target": "#verdict", "hx-swap": "outerHTML",
-                    "hx-sync": "this:replace", "hx-indicator": "#paper-foot"}) }}
-        <div class="paper-foot" id="paper-foot">
-          {{ count(r, max_chars) }}
-          <span class="checking" aria-hidden="true">{{ icon("spin") }}Checking…</span>
-          <div class="acts">
-            <button class="btn btn-ghost btn-sm" type="button" x-on:click="clear">Clear</button>
-            <button class="btn btn-secondary btn-sm" type="button" x-on:click="useSample" data-sample="{{ sample }}">Try a sample</button>
-            <noscript><button class="btn btn-primary btn-sm" type="submit">Check</button></noscript>
+    <h1 class="hero-head">Is my claim safe?</h1>
+    <div class="hero-cells">
+      <div class="cell-copy">
+        <p class="cell-label">For Indian D2C beauty brands</p>
+        <p class="hero-sub">Paste your product copy. Satya underlines <mark class="swipe">the phrases that marketplaces and regulators tend to flag</mark>, and shows the written rule behind each one.</p>
+        {%- if not ruleset.is_signed_off %}<div class="pre-launch">{{ draft_banner(ruleset) }}</div>{% endif %}
+      </div>
+      <form class="sheet-wrap cell-form" method="post" action="/check" x-data="satyaChecker" x-on:input="mirror" x-on:paste="paste">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {%- set rate = rate_limited | default(false) -%}
+        <div class="paper-wrap paper">
+          {{ highlight_field("text", "text", r.text, r.backdrop, "Product listing copy to check",
+               placeholder="Paste or type your product copy here…", describedby="count live-note",
+               attrs={"hx-post": "/check", "hx-trigger": "input changed delay:250ms, satya:recheck", "hx-target": "#verdict", "hx-swap": "outerHTML",
+                      "hx-sync": "this:replace", "hx-indicator": "#paper-foot"}) }}
+          <div class="paper-foot" id="paper-foot">
+            {{ count(r, max_chars) }}
+            <span class="checking" aria-hidden="true">{{ icon("spin") }}Checking…</span>
+            <div class="acts">
+              <button class="btn btn-ghost btn-sm" type="button" x-on:click="clear">Clear</button>
+              <button class="btn btn-secondary btn-sm" type="button" x-on:click="useSample" data-sample="{{ sample }}">Try a sample</button>
+              <noscript><button class="btn btn-primary btn-sm" type="submit">Check</button></noscript>
+            </div>
           </div>
         </div>
-      </div>
-      <p class="sr-only" id="live-note">Results update as you type.</p>
-      {{ cap_notice(r, max_chars) }}
-      {%- if rate and full_page %}{{ notice("You've reached the check limit.", "Try again in about " ~ wait_minutes ~ " minutes. Nothing you typed is lost.") }}{% endif %}
-    </form>
+        <p class="sr-only" id="live-note">Results update as you type.</p>
+        {{ cap_notice(r, max_chars) }}
+        {%- if rate and full_page %}{{ notice("You've reached the check limit.", "Try again in about " ~ wait_minutes ~ " minutes. Nothing you typed is lost.") }}{% endif %}
+      </form>
+    </div>
     <div class="verdict-wrap" aria-busy="false">{{ verdict_slot(r, ruleset) }}</div>
     {%- if r.verdict and r.flags and r.text %}
     <section class="noscript-copy" aria-label="Your text with flagged phrases marked"><p class="copy-marked">{{ r.backdrop }}</p></section>
     {%- endif %}
+    <section class="try-cells" x-data="satyaTry" aria-labelledby="try-h">
+      <h2 class="try-h" id="try-h">Try a line that gets flagged</h2>
+      <button type="button" class="try-cell" x-on:click="use" data-phrase="This serum cures acne scars in 7 days.">
+        <span class="try-n">01</span><span class="try-what">Cure claims</span><span class="try-ex">“cures acne scars”</span>
+      </button>
+      <button type="button" class="try-cell" x-on:click="use" data-phrase="A daily cream that lightens skin tone in two weeks.">
+        <span class="try-n">02</span><span class="try-what">Skin lightening</span><span class="try-ex">“lightens skin tone”</span>
+      </button>
+      <button type="button" class="try-cell" x-on:click="use" data-phrase="Dermatologically tested and clinically proven on sensitive skin.">
+        <span class="try-n">03</span><span class="try-what">Proof without evidence</span><span class="try-ex">“clinically proven”</span>
+      </button>
+    </section>
+    <section class="ticker" x-data="satyaTicker" aria-label="What Satya reads for">
+      <button type="button" class="ticker-btn" x-on:click="toggle" x-bind:aria-pressed="paused" aria-pressed="false" x-text="label">Pause</button>
+      <div class="ticker-view">
+        <div class="ticker-rail">
+          <ul>
+            <li><b>Cure and treatment claims</b> EN-DRUG-001</li>
+            <li><b>Diseases named in the DMR Act</b> EN-DMR-001</li>
+            <li><b>Skin lightening and fairness</b> EN-FAIR-001</li>
+            <li><b>Tested or proven without evidence</b> EN-CLAIM-004</li>
+            <li><b>Guaranteed or permanent results</b> EN-CLAIM-002</li>
+            <li><b>Natural and chemical-free absolutes</b> EN-CLAIM-007</li>
+            <li><b>Number one and superlatives</b> EN-CLAIM-012</li>
+            <li><b>Hair growth and hair-fall</b> EN-CLAIM-010</li>
+          </ul>
+          <ul aria-hidden="true">
+            <li><b>Cure and treatment claims</b> EN-DRUG-001</li>
+            <li><b>Diseases named in the DMR Act</b> EN-DMR-001</li>
+            <li><b>Skin lightening and fairness</b> EN-FAIR-001</li>
+            <li><b>Tested or proven without evidence</b> EN-CLAIM-004</li>
+            <li><b>Guaranteed or permanent results</b> EN-CLAIM-002</li>
+            <li><b>Natural and chemical-free absolutes</b> EN-CLAIM-007</li>
+            <li><b>Number one and superlatives</b> EN-CLAIM-012</li>
+            <li><b>Hair growth and hair-fall</b> EN-CLAIM-010</li>
+          </ul>
+        </div>
+      </div>
+    </section>
     <template id="tpl-error">{{ notice("Couldn't check just now.", "Your text is still here. Try again in a moment.", kind="error", actions=[("Try again", {"data-retry": ""})]) }}</template>
     <footer class="stamp">
       <p>Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} (draft, not yet reviewed by a regulatory consultant){% endif %}.</p>

@@ -6,7 +6,7 @@
     gate_title, gate_text. Wording never says safe, compliant, approved or passed. -#}
 {% macro verdict_card(v, ruleset) -%}
 <article class="card verdict" id="verdict" aria-labelledby="verdict-h" data-variant="{{ v.variant }}" data-sig="{{ v.sig }}">
-  <p class="eyebrow">Verdict · rule set {{ ruleset.label }}</p>
+  <p class="v-kicker">Verdict under rule set {{ ruleset.label }}</p>
   {%- if v.variant == "out_of_scope" %}
   <div class="v-top">
     <div class="v-label"><h2 id="verdict-h">{{ v.gate_title }}</h2></div>
@@ -28,6 +28,9 @@
   <ul class="flags">{% for flag, title, sev in v.rows %}{{ flag_list_item(flag, title, sev, ruleset.label) }}{% endfor %}</ul>
   {%- else %}
   <p class="caveat">Nothing in this text matched a rule in the rule set. That is a text check only: it does not cover your label, claims you have not pasted here, or what a marketplace decides.</p>
+  {%- endif %}
+  {%- if v.hindi_note %}
+  <p class="caveat hi-note">{{ icon("info") }} {{ v.hindi_note }}</p>
   {%- endif %}
   {%- endif %}
   <div class="v-foot">

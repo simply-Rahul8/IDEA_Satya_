@@ -7,6 +7,7 @@
   const say = (msg) => { const el = $('#sr-status'); if (el) el.textContent = msg; };
   const fire = (el, type) => el.dispatchEvent(new Event(type, { bubbles: true }));
   const toast = (msg) => window.dispatchEvent(new CustomEvent('satya:toast', { detail: msg }));
+  document.documentElement.classList.add('js'); // motion that needs a JS pause control (the ticker) keys off this
 
   document.addEventListener('alpine:init', () => {
     Alpine.data('satyaTheme', () => ({
@@ -73,6 +74,26 @@
         this.ta.value = this.$el.dataset.sample;
         fire(this.ta, 'input');
       },
+    }));
+
+    /* Click an example phrase to load it into the checker and flag it live. */
+    Alpine.data('satyaTry', () => ({
+      use() {
+        const chip = this.$event.target.closest('[data-phrase]');
+        const ta = $('#text');
+        if (!chip || !ta) return;
+        ta.value = chip.dataset.phrase;
+        fire(ta, 'input');
+        ta.scrollIntoView({ block: 'center', behavior: reduced() ? 'auto' : 'smooth' });
+        ta.focus();
+      },
+    }));
+
+    /* The rule-family ticker's pause (WCAG 2.2.2: moving content needs a stop control). */
+    Alpine.data('satyaTicker', () => ({
+      paused: false,
+      get label() { return this.paused ? 'Play' : 'Pause'; },
+      toggle() { this.paused = !this.paused; this.$root.classList.toggle('is-paused', this.paused); },
     }));
   });
 

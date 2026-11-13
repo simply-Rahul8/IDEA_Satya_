@@ -129,6 +129,7 @@ rules:
       - "Is 'दूर करे' (removes) for pimples and acne a treatment claim? The English rule does not flag 'removes'; this draft does not flag 'दूर कर*' either."
       - "Is 'खुजली' (itching) a condition (flag) or a symptom a cosmetic may soothe (allow)? Left out of the draft."
       - "Please list the spellings and colloquial forms of these conditions that listings actually use (मुँहासे, मुहाँसे, दाने, फुंसी, छाले)."
+      - "Is 'jad se khatam' / 'जड़ से खत्म' (eliminates from the root), as in 'pimples ko jad se khatam karta hai', a cure claim (block) or an efficacy and permanence claim (review)? The draft flags neither; the public checker shows a draft notice on Hindi copy."
 
   - id: HI-DMR-001
     category: dmr_disease

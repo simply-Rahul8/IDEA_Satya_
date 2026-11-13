@@ -189,9 +189,11 @@ def test_demo_pack_does_not_exist_unless_dev_env(monkeypatch):
     assert c.get("/packs/demo/review").status_code == 404
     monkeypatch.setenv("SATYA_ENV", "preview")
     monkeypatch.setenv("SATYA_SESSION_SECRET", "x" * 32)
-    # Hosted without Supabase Auth configured (SAT-46): refused outright (500), never an anonymous workspace.
+    # Hosted without Supabase Auth configured (SAT-46): refused outright, never an anonymous workspace. A handled
+    # 503 ("not open yet") so a checker-only public deploy shows a page, not a crash.
     hosted = TestClient(app, cookies=c.cookies, raise_server_exceptions=False)
-    assert hosted.get("/packs/demo/review").status_code == 500
+    r = hosted.get("/packs/demo/review")
+    assert r.status_code == 503 and "Rosewater" not in r.text
 
 
 def test_dev_env_seeds_one_demo_pack_per_workspace(monkeypatch):

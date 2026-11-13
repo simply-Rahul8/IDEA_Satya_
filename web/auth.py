@@ -88,13 +88,17 @@ _rest: Rest | None = None
 _lock = threading.Lock()
 
 
+class NotConfigured(RuntimeError):
+    """Hosted without Supabase Auth: workspace routes are refused, never served as an anonymous workspace."""
+
+
 def _configured() -> tuple[AuthClient, Rest] | None:
     url = os.environ.get("SUPABASE_URL", "")
     anon, service = os.environ.get("SUPABASE_ANON_KEY", ""), os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
     if url and anon and service:
         return HttpAuthClient(url, anon), PostgrestClient(url, service)
     if _hosted():
-        raise RuntimeError("SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are required when hosted")
+        raise NotConfigured("SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are required when hosted")
     return None
 
 
@@ -169,7 +173,11 @@ def sign_in(token: str) -> tuple[AuthUser, str] | None:
 async def authenticate(request: Request) -> None:
     """Router dependency for every route that serves workspace data. Sets `request.state.workspace_id` and
     `.user_id` for a verified user; otherwise 401 (no workspace), except local dev/test with no Supabase configured."""
-    if _setup() is None:
+    try:
+        setup = _setup()
+    except NotConfigured:  # a public deploy of the checker alone: a clear "not open yet", not a crash
+        raise HTTPException(503, "Sign-in is not set up") from None
+    if setup is None:
         request.state.anonymous_ok = True  # local dev/test only: `_configured` raised already when hosted
         return
     signed = await run_in_threadpool(sign_in, token_from(request))

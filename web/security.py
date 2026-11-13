@@ -99,6 +99,40 @@ class SessionMiddleware:
         await self.app(scope, receive, send_with_cookie)
 
 
+_BASELINE_HEADERS = (
+    ("x-content-type-options", "nosniff"),
+    ("referrer-policy", "same-origin"),
+    ("x-frame-options", "DENY"),
+    ("permissions-policy", "camera=(), microphone=(), geolocation=(), payment=()"),
+    ("cross-origin-opener-policy", "same-origin"),
+    # Pages set their own CSP in web.app.render; anything else (errors, assets, redirects) gets a deny-all one.
+    ("content-security-policy", "default-src 'none'; frame-ancestors 'none'; base-uri 'none'"),
+)
+
+
+class SecurityHeadersMiddleware:
+    """Baseline security headers on every response; a header a route already set is kept. HSTS only over HTTPS."""
+
+    def __init__(self, app: ASGIApp):
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+        https = scope.get("scheme") == "https" or Request(scope).headers.get("x-forwarded-proto") == "https"
+
+        async def send_with_headers(message: Message) -> None:
+            if message["type"] == "http.response.start":
+                headers = MutableHeaders(scope=message)
+                for k, v in _BASELINE_HEADERS:
+                    headers.setdefault(k, v)
+                if https:
+                    headers.setdefault("strict-transport-security", "max-age=63072000")
+            await send(message)
+
+        await self.app(scope, receive, send_with_headers)
+
+
 def workspace_of(request: Request) -> str:
     """The workspace every pack lookup is scoped to: the verified user's workspace (`web.auth.authenticate` sets
     `request.state.workspace_id` after checking the Supabase session and membership). Only local dev/test with no

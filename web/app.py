@@ -112,6 +112,7 @@ def render(request: Request, name: str, ctx: dict | None = None, status: int = 2
     context = {
         **page_context((ctx or {}).get("ruleset")),
         "csrf_token": getattr(request.state, "csrf", ""),
+        "site": assets.site_url(request),
         **(ctx or {}),
     }
     resp = templates.TemplateResponse(request, name, context, status_code=status)

@@ -18,7 +18,7 @@
 .sent-text:focus-visible { outline: 3px solid var(--focus); }
 .anchors { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
 .chip.is-unanchored { border-style: dashed; color: var(--amber-fg); background: var(--amber-bg); border-color: var(--amber-line); cursor: default; }
-[data-claim].is-source { outline: 3px solid var(--accent); outline-offset: 3px; background: var(--accent-soft); animation: pulse var(--dur-4) var(--ease); }
+[data-claim].is-source { outline: 3px solid var(--ink); outline-offset: 3px; background: var(--accent-soft); animation: pulse var(--dur-4) var(--ease); }
 [data-sent].is-linked { box-shadow: -4px 0 0 var(--accent); }
 @keyframes pulse { 0% { outline-offset: 12px; outline-color: transparent; } 100% { outline-offset: 3px; } }
 .approve-bar { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-5); align-items: center; justify-content: space-between; }
