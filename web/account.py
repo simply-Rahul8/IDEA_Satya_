@@ -204,7 +204,10 @@ def _signin_page(
 
 
 async def _me(request: Request) -> tuple[auth.AuthUser, str] | None:
-    return await run_in_threadpool(auth.sign_in, auth.token_from(request))
+    try:
+        return await run_in_threadpool(auth.sign_in, auth.token_from(request))
+    except auth.NotConfigured:
+        raise HTTPException(503, "Sign-in is not set up") from None
 
 
 async def _landing(ws: str) -> str:
@@ -239,12 +242,26 @@ public = APIRouter()
 protected = APIRouter(dependencies=[Depends(guard_unsafe)])
 
 
+def _signin_open() -> bool:
+    try:
+        return _get_flow() is not None or bool(auth._setup())
+    except auth.NotConfigured:  # hosted before Supabase is set up
+        return False
+
+
 @public.get("/")
 async def home(request: Request):
-    if _get_flow() is None and not auth._setup():
-        return _redirect(HOME)  # local dev with no Supabase: there is no signed-out state
+    if not _signin_open():
+        return _redirect(HOME)  # no sign-in configured: the public checker is the front door
     me = await _me(request)
     return _redirect(await _landing(me[1]) if me else "/signin")
+
+
+@public.get("/privacy")
+def privacy(request: Request):
+    desc = "What Satya does with the text you check, and what it stores."
+    ctx = {"title": "Privacy · Satya", "notice_version": NOTICE_VERSION, "meta_description": desc}
+    return render(request, "privacy.html", ctx)
 
 
 @public.get("/signin")

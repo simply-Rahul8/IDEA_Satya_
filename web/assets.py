@@ -114,8 +114,8 @@ def serve_share_image() -> Response:
     return Response(_share_image(), media_type="image/png", headers={"Cache-Control": "public, max-age=86400"})
 
 
-# Only the public checker is for search engines; workspace pages are private and need sign-in.
-_ROBOTS = "User-agent: *\nAllow: /check\n" + "".join(
+# Only the public checker and the privacy notice are for search engines; workspace pages are private and need sign-in.
+_ROBOTS = "User-agent: *\nAllow: /check\nAllow: /privacy\n" + "".join(
     f"Disallow: {p}\n" for p in ("/packs/", "/audits", "/fix", "/account", "/signin", "/session", "/rules/")
 )
 
@@ -127,8 +127,8 @@ def robots(request: Request) -> Response:
 
 @router.get("/sitemap.xml", include_in_schema=False)
 def sitemap(request: Request) -> Response:
-    loc = escape(f"{site_url(request)}/check")
-    xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>{loc}</loc></url></urlset>\n'  # noqa: E501
+    urls = "".join(f"<url><loc>{escape(site_url(request) + p)}</loc></url>" for p in ("/check", "/privacy"))
+    xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n'
     return Response(xml, media_type="application/xml")
 
 

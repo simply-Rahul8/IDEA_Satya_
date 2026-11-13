@@ -85,7 +85,7 @@
     <template id="tpl-error">{{ notice("Couldn't check just now.", "Your text is still here. Try again in a moment.", kind="error", actions=[("Try again", {"data-retry": ""})]) }}</template>
     <footer class="stamp">
       <p>Not legal advice · rule set {{ ruleset.label }}{% if not ruleset.is_signed_off %} (draft, not yet reviewed by a regulatory consultant){% endif %}.</p>
-      <p>How it works: your copy is matched against written rules. No AI model is used on this page.</p>
+      <p>How it works: your copy is matched against written rules. No AI model is used on this page, and your text is not stored. <a href="/privacy">Privacy</a></p>
     </footer>
   </main>
 </div>

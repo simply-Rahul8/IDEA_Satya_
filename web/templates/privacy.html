@@ -1,0 +1,54 @@
+{% extends "_base.html" %}
+{% from "components/topbar.html" import topbar %}
+{#- DRAFT (P20, DPDP): plain statements of what the code does today. A lawyer reviews this before accounts open. -#}
+{% block body %}
+<div class="wrap">
+  {{ topbar() }}
+  <main id="main" class="legal">
+    <h1>Privacy</h1>
+    <p class="legal-meta">Notice {{ notice_version }} · updated 13 November 2026 · <strong>Draft:</strong> not yet reviewed by a lawyer.</p>
+
+    <h2>The short version</h2>
+    <p>The claim checker reads the text you paste, checks it, and forgets it. We don't save it, log it, or send it to
+      an AI model or anyone else. There are no ads, analytics or tracking scripts on this site.</p>
+
+    <h2>The text you check</h2>
+    <ul>
+      <li>When you press <b>Start analysis</b>, your text goes to our server over an encrypted (HTTPS) connection.</li>
+      <li>It is matched against Satya's written rules in memory, and the result comes straight back to your browser.</li>
+      <li>It is not written to a database or to our logs, and no AI model sees it. The check uses rules only.</li>
+      <li>Nothing is checked until you press the button. Pasting or typing stays in your browser.</li>
+    </ul>
+
+    <h2>What we do keep, and why</h2>
+    <ul>
+      <li><b>A session cookie</b> (<code>satya_sid</code>): a random number that protects the checker form from
+        cross-site attacks. It holds nothing about you and can't be read by scripts on the page.</li>
+      <li><b>A one-way scramble (hash) of your IP address</b>, held in memory only for the rate-limit window
+        (10 minutes), so one visitor can't overload the checker. We never store the IP address itself.</li>
+      <li><b>Your light or dark theme choice</b>, saved in your own browser only if you switch it.</li>
+    </ul>
+
+    <h2>Hosting</h2>
+    <p>Satya runs on Vercel, on servers in Mumbai, India. Like any web host, Vercel keeps standard request logs
+      (IP address, page address, browser type and time) to run and secure the service; your pasted text is not part of
+      them. See <a href="https://vercel.com/legal/privacy-policy" rel="noopener noreferrer" target="_blank">Vercel's privacy policy</a>.
+      Fonts and scripts are served from this site, not from third parties.</p>
+
+    <h2>Brand accounts (not open yet)</h2>
+    <p>Sign-in and the brand workspace are not open to the public. When they open, they will store your email address,
+      your brand details and a record of what you agreed to. Sending product text to an AI model will be optional and
+      off unless you tick it. This section will be completed, with how long data is kept, before accounts open.</p>
+
+    <h2>Your rights</h2>
+    <p>Under India's Digital Personal Data Protection Act, 2023 you can ask what personal data we hold about you, and
+      ask us to correct or erase it. The checker keeps nothing that identifies you, so there is nothing to retrieve from
+      it. A contact for privacy requests will be published here before accounts open.</p>
+
+    <h2>Changes</h2>
+    <p>If this notice changes, the version and date above change with it.</p>
+
+    <p><a class="btn btn-primary" href="/check">Check a listing</a></p>
+  </main>
+</div>
+{% endblock %}

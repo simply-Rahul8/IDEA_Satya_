@@ -126,6 +126,12 @@ main { padding-block: var(--s-6) var(--s-9); }
 }
 
 /* ---------- Error pages: the status set big as the page's one ornament ---------- */
+.legal { max-width: 68ch; padding-block: var(--s-6) var(--s-9); display: grid; gap: var(--s-4); }
+.legal h1 { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); text-transform: uppercase; letter-spacing: -.04em; }
+.legal h2 { margin-top: var(--s-4); padding-top: var(--s-3); border-top: var(--rule-bar) solid var(--ink); font-size: var(--t-lg); text-transform: uppercase; }
+.legal-meta { color: var(--ink-2); font-size: var(--t-sm); }
+.legal ul { margin: 0; padding-inline-start: 1.2em; display: grid; gap: var(--s-2); }
+.legal code { font-size: .9em; }
 .err { display: grid; gap: var(--s-4); justify-items: start; padding-block: var(--s-7) var(--s-9); }
 .err-code { font: 900 clamp(5rem, 2.5rem + 12vw, 11rem)/.85 var(--font-display); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
 .err h1 { font-size: var(--t-2xl); text-transform: uppercase; letter-spacing: -.03em; padding-top: var(--s-4); border-top: var(--rule-bar) solid var(--ink); }

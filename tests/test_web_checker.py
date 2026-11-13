@@ -232,3 +232,11 @@ def test_each_flag_shows_why_and_its_sources(client):
 def test_hindi_flag_says_how_it_was_found(client):
     html = client.post("/check", data={"text": HINDI}, headers=HX).text
     assert "Matched by the Hindi word list" in html
+
+
+def test_privacy_notice_is_linked_listed_and_honest(client):
+    page = client.get("/privacy")
+    assert page.status_code == 200 and "we don't save it, log it" in page.text.replace("We don't", "we don't")
+    assert "Draft:</strong> not yet reviewed by a lawyer" in page.text and not BANNED.search(visible_text(page.text))
+    assert 'href="/privacy"' in client.get("/check").text
+    assert "Allow: /privacy" in client.get("/robots.txt").text and "/privacy</loc>" in client.get("/sitemap.xml").text

@@ -209,3 +209,14 @@ def test_dev_seed_is_skipped_with_a_supabase_repository(monkeypatch):
     monkeypatch.setenv("SATYA_ENV", "dev")
     packs.reset(SupabaseRepository(FakeRest()))
     assert secure(TestClient(app)).get("/packs/demo/review").status_code == 404
+
+
+def test_hosted_without_supabase_home_and_signin_never_crash(monkeypatch):
+    for k in ("SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"):
+        monkeypatch.delenv(k, raising=False)
+    monkeypatch.setenv("SATYA_ENV", "production")
+    monkeypatch.setenv("SATYA_SESSION_SECRET", "x" * 32)
+    c = TestClient(app, raise_server_exceptions=True)  # a 500 here would raise
+    home = c.get("/", follow_redirects=False)
+    assert home.status_code in (302, 303, 307) and home.headers["location"] == "/check"
+    assert c.get("/signin", headers={"Accept": "text/html"}).status_code == 503
