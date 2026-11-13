@@ -1,5 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["bom1"],
-  "github": { "enabled": false }
+  "regions": ["bom1"]
 }

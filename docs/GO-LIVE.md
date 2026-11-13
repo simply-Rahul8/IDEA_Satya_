@@ -211,8 +211,8 @@ HTTPS is automatic. Set `SATYA_PUBLIC_URL` to it and redeploy.
 - Health check for an uptime monitor: `<site>/healthz` returns `{"status": "ok"}`.
 - Watch Vercel Logs (and Sentry if set) for the first days.
 - If any secret was ever pasted anywhere outside Vercel's settings, rotate it.
-- Every deploy is a deliberate `vercel` / `vercel --prod` (Git auto-deploy is off in `vercel.json`; set
-  `"github": {"enabled": true}` if you later want every push to `main` to deploy).
+- The project is connected to GitHub: every push to `main` deploys to production and other branches get preview
+  links. Push to `main` only what should go live.
 
 ---
 
